@@ -3,6 +3,10 @@ package org.einnovator.sso.client;
 
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.GroupManagerImpl;
+import org.einnovator.sso.client.manager.InvitationManager;
+import org.einnovator.sso.client.manager.InvitationManagerImpl;
+import org.einnovator.sso.client.manager.PermissionManager;
+import org.einnovator.sso.client.manager.PermissionManagerImpl;
 import org.einnovator.sso.client.manager.RoleManager;
 import org.einnovator.sso.client.manager.RoleManagerImpl;
 import org.einnovator.sso.client.manager.SsoCacheResolver;
@@ -151,6 +155,16 @@ public class SsoClientSecurityConfigurer {
 	@Bean
 	public RoleManager roleManager() {
 		return new RoleManagerImpl();
+	}
+	
+	@Bean
+	public PermissionManager permissionManager() {
+		return new PermissionManagerImpl();
+	}
+
+	@Bean
+	public InvitationManager invitationManager() {
+		return new InvitationManagerImpl(ssoCacheManager());
 	}
 	
 	@Bean

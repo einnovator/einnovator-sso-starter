@@ -84,4 +84,18 @@
 	</dependencies>
 
 
+	<profiles>
+		<profile>
+			<id>ci</id>
+			<activation>
+				<property>
+					<name>CI</name>
+					<value>true</value>
+				</property>
+			</activation>
+			
+			<repositories>
+			</repositories>
+		</profile>
+	</profiles>
 </project>

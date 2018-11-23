@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.List;
 
 import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.SsoClientConfiguration;
 import org.einnovator.sso.client.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
@@ -17,11 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.domain.Page;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=SsoClientSecurityConfigurer.class, webEnvironment=WebEnvironment.MOCK)
 @SuppressWarnings("unused")
+@TestPropertySource(properties = { "sso.server=http://localhost:28081/auth", "sso.server_=http://localhost:28083/" })
 public class UserManagerTests {
 
 	private final String TEST_USER = "tdd@einnovator.org";
@@ -30,9 +33,16 @@ public class UserManagerTests {
 	
 	private final String TEST_PASSWORD = "Einnovator123!!";
 	
+	private final String CLIENT_ID = "greenfence";
+
+	private final String CLIENT_SECRET = "greenfence$123";
+
 	@Autowired
 	private SsoClient client;
-	
+
+	@Autowired
+	private SsoClientConfiguration config;
+
 	@Autowired
 	private UserManager userManager;
 
@@ -45,12 +55,15 @@ public class UserManagerTests {
 	
 	@Before
 	public void init() {
+		config.setClientId(CLIENT_ID);
+		config.setClientSecret(CLIENT_SECRET);
 		client.getToken(TEST_USER2, TEST_PASSWORD);
 	}
 	
 	@Test
 	public void getUserTest() {
-		User user = userManager.getUser(TEST_USER2);
+		String username = TEST_USER2;
+		User user = userManager.getUser(username);
 		assertNotNull(user);
 		System.out.println(user);
 	}
