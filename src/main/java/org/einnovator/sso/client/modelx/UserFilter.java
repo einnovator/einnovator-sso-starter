@@ -10,6 +10,8 @@ public class UserFilter extends UserOptions {
 
 	private String q;
 	
+	private String groupId;
+	
 	private GenderType gender;
 	
 	private Date startBirthdate;
@@ -40,6 +42,14 @@ public class UserFilter extends UserOptions {
 
 	public void setQ(String q) {
 		this.q = q;
+	}
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 	public GenderType getGender() {

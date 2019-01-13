@@ -1,4 +1,4 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.config;
 
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;

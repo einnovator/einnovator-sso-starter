@@ -1,5 +1,7 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.support;
 
+import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.ehcache.EhCacheCacheManager;

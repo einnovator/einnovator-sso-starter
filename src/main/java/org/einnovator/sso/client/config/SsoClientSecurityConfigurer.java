@@ -1,6 +1,7 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.config;
 
 
+import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.GroupManagerImpl;
 import org.einnovator.sso.client.manager.InvitationManager;
@@ -12,7 +13,11 @@ import org.einnovator.sso.client.manager.RoleManagerImpl;
 import org.einnovator.sso.client.manager.SsoCacheResolver;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.manager.UserManagerImpl;
+import org.einnovator.sso.client.web.SsoClientLogoutHandler;
+import org.einnovator.sso.client.web.SsoCorsFilter;
+import org.einnovator.sso.client.web.SsoLogoutController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
@@ -41,13 +46,17 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.web.cors.CorsConfigurationSource;
 
 
+
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(value=SsoClientConfiguration.class)
 @EnableCaching
 @Import(OAuth2ResourcesConfigurer.class)
-public class SsoClientSecurityConfigurer {
+public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*/ {
 
+
+	@Value("${spring.cache.ehcache.config:ehcache-sso-starter.xml}")
+	private String cacheConfigLocation;
 
 	@Autowired
 	private SsoClientConfiguration config;
@@ -156,7 +165,7 @@ public class SsoClientSecurityConfigurer {
 	public RoleManager roleManager() {
 		return new RoleManagerImpl();
 	}
-	
+
 	@Bean
 	public PermissionManager permissionManager() {
 		return new PermissionManagerImpl();
@@ -166,17 +175,18 @@ public class SsoClientSecurityConfigurer {
 	public InvitationManager invitationManager() {
 		return new InvitationManagerImpl(ssoCacheManager());
 	}
-	
+
 	@Bean
 	public SsoLogoutController logoutController() {
 		return new SsoLogoutController(config);
 	}
 
+
 	@Bean
 	@Primary
 	public CacheManager ssoCacheManager() {
 		EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean();
-		cacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
+		cacheManagerFactoryBean.setConfigLocation(new ClassPathResource(cacheConfigLocation));
 		cacheManagerFactoryBean.setShared(true);
 		cacheManagerFactoryBean.afterPropertiesSet();
 		return new EhCacheCacheManager(cacheManagerFactoryBean.getObject());
@@ -192,5 +202,4 @@ public class SsoClientSecurityConfigurer {
 	public SsoCorsFilter corsFilter(CorsConfigurationSource config) {
 		return new SsoCorsFilter(config);
 	}
-
 }

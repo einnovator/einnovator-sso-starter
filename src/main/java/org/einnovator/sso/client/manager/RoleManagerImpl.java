@@ -8,7 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
@@ -37,7 +38,7 @@ public class RoleManagerImpl implements RoleManager {
 
 	private static final String ROLE_SUPERUSER = "superuser";
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private UserManager userManager;
@@ -50,6 +51,15 @@ public class RoleManagerImpl implements RoleManager {
 
 	public RoleManagerImpl() {
 	}
+	
+
+	public RoleManagerImpl(UserManager userManager, GroupManager groupManager, SsoClient client) {
+		this.userManager = userManager;
+		this.groupManager = groupManager;
+		this.client = client;
+	}
+
+
 
 	@Override
 	public boolean hasAnyRole(Principal principal, String... roles) {

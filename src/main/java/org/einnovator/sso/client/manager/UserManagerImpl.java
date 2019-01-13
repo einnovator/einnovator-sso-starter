@@ -3,7 +3,8 @@ package org.einnovator.sso.client.manager;
 import java.net.URI;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
@@ -25,17 +26,23 @@ public class UserManagerImpl implements UserManager {
 
 	public static final String CACHE_USER = "User";
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private SsoClient client;
 	
 	private CacheManager cacheManager;
 	
-	public UserManagerImpl(CacheManager cacheManager) {
+	public UserManagerImpl(SsoClient ssoClient, CacheManager cacheManager) {
+		this.client = ssoClient;
 		this.cacheManager = cacheManager;
 	}
 	
+	public UserManagerImpl(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
+	}
+
+
 	@Override
 	@Cacheable(value=CACHE_USER, key="#id", cacheManager="ssoCacheManager")
 	public User getUser(String id) {

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.einnovator.sso.client.modelx.GroupPredicates;
 import org.einnovator.util.model.EntityBase;
-import org.springframework.core.style.ToStringCreator;
+import org.einnovator.util.model.ToStringCreator;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -70,9 +70,9 @@ public class User extends EntityBase {
 	
 	private Boolean enabled;
 
-	private String currentOrganization;
+	private String currentGroup;
 
-	private String profileOrganization;
+	private String profileGroup;
 
 	private Boolean authenticated;
 
@@ -365,20 +365,20 @@ public class User extends EntityBase {
 		return username;
 	}
 	
-	public String getCurrentOrganization() {
-		return currentOrganization;
+	public String getCurrentGroup() {
+		return currentGroup;
 	}
 
-	public void setCurrentOrganization(String currentOrganization) {
-		this.currentOrganization = currentOrganization;
+	public void setCurrentGroup(String currentGroup) {
+		this.currentGroup = currentGroup;
 	}
 
-	public String getProfileOrganization() {
-		return profileOrganization;
+	public String getProfileGroup() {
+		return profileGroup;
 	}
 
-	public void setProfileOrganization(String profileOrganization) {
-		this.profileOrganization = profileOrganization;
+	public void setProfileGroup(String profileGroup) {
+		this.profileGroup = profileGroup;
 	}
 	
 	public String getDescription() {
@@ -466,14 +466,14 @@ public class User extends EntityBase {
 		if (membership==null || membership.isEmpty()) {
 			return null;
 		}
-		if (profileOrganization!=null) {
-			Member member = getMembership(profileOrganization);
+		if (profileGroup!=null) {
+			Member member = getMembership(profileGroup);
 			if (member!=null) {
 				return member;
 			}
 		}
-		if (currentOrganization!=null) {
-			Member member = getMembership(currentOrganization);
+		if (currentGroup!=null) {
+			Member member = getMembership(currentGroup);
 			if (member!=null) {
 				return member;
 			}
@@ -492,14 +492,14 @@ public class User extends EntityBase {
 		if (membership==null || membership.isEmpty()) {
 			return null;
 		}
-		if (currentOrganization!=null) {
-			Member member = getMembership(currentOrganization);
+		if (currentGroup!=null) {
+			Member member = getMembership(currentGroup);
 			if (member!=null) {
 				return member;
 			}
 		}
-		if (profileOrganization!=null) {
-			Member member = getMembership(profileOrganization);
+		if (profileGroup!=null) {
+			Member member = getMembership(profileGroup);
 			if (member!=null) {
 				return member;
 			}
@@ -567,8 +567,8 @@ public class User extends EntityBase {
 				.append("social2", social2)
 				.append("securityQuestion", securityQuestion)
 				.append("securityAnswer", securityAnswer)
-				.append("currentOrganization", currentOrganization)
-				.append("profileOrganization", profileOrganization)
+				.append("currentGroup", currentGroup)
+				.append("profileGroup", profileGroup)
 				.append("membership", membership)
 				.append("roles", roles);
 	} 

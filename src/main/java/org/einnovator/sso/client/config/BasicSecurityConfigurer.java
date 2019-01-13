@@ -1,11 +1,12 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.config;
 
 
 import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,7 +19,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class BasicSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@SuppressWarnings("unused")
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

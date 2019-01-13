@@ -1,10 +1,11 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.config;
 
 import java.util.Arrays;
 import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.einnovator.sso.client.web.SsoClientLogoutHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;

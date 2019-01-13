@@ -13,8 +13,8 @@ import java.util.UUID;
 
 import org.einnovator.util.UriUtils;
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.SsoClientConfiguration;
-import org.einnovator.sso.client.SsoClientSecurityConfigurer;
+import org.einnovator.sso.client.config.SsoClientConfiguration;
+import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.model.Address;
 import org.einnovator.sso.client.model.AddressBuilder;
 import org.einnovator.sso.client.model.Group;

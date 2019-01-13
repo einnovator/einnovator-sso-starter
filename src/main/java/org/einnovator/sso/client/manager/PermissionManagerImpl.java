@@ -2,7 +2,8 @@ package org.einnovator.sso.client.manager;
 
 import java.net.URI;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ import org.einnovator.sso.client.modelx.UserFilter;
 
 public class PermissionManagerImpl implements PermissionManager {
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 
 	@Autowired

@@ -1,4 +1,4 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.cors.CorsConfigurationSource;

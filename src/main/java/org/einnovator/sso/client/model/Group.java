@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.einnovator.util.model.EntityBase;
-import org.springframework.core.style.ToStringCreator;
+import org.einnovator.util.model.ToStringCreator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -539,5 +539,6 @@ public class Group extends EntityBase {
 		}
 		return groups2;
 	}
+
 
 }

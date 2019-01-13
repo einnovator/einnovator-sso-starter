@@ -5,8 +5,7 @@ public enum GroupType {
 	ORGANIZATION("Organization"),
 	OPERATION("Operation"),
 	TEAM("Team"),
-	FOLLOWS("Follows"),
-	FOLLOWER("Follower"),
+	GROUP("Group"),	
 	CONTACTS("Contacts");
 	
 	private final String displayValue;

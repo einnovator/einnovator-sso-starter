@@ -3,7 +3,8 @@ package org.einnovator.sso.client.web;
 import java.security.Principal;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.einnovator.util.ListOptions;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
@@ -23,7 +24,7 @@ public class SsoQueryRestController {
 
 	public static final Integer DEFAULT_PAGE_SIZE = 20;
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private UserManager userManager;

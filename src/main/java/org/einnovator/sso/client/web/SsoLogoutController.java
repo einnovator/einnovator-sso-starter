@@ -1,4 +1,4 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.web;
 
 import java.security.Principal;
 
@@ -6,7 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.einnovator.sso.client.config.SsoClientConfiguration;
+import org.einnovator.sso.client.config.SsoEndpoints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class SsoLogoutController {
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private SsoClientConfiguration config;

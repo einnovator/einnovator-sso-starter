@@ -1,7 +1,7 @@
 package com.einnovator.sso.client;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.SsoClientSecurityConfigurer;
+import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

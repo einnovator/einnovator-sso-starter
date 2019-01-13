@@ -1,4 +1,4 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.web;
 
 import static org.einnovator.util.UriUtils.makeURI;
 
@@ -8,7 +8,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.einnovator.sso.client.config.SsoClientConfiguration;
+import org.einnovator.sso.client.config.SsoEndpoints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -22,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class SsoClientLogoutHandler extends SimpleUrlLogoutSuccessHandler implements LogoutHandler, LogoutSuccessHandler {
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private SsoClientConfiguration config;

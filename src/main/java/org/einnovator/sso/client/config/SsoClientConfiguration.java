@@ -1,4 +1,4 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.config;
 
 
 import java.util.Arrays;

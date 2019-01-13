@@ -3,7 +3,8 @@ package org.einnovator.sso.client.manager;
 import java.net.URI;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
@@ -32,7 +33,7 @@ public class GroupManagerImpl implements GroupManager {
 	public static final String CACHE_GROUP_MEMBER = "GroupMember";
 
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private SsoClient client;

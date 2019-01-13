@@ -13,11 +13,14 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.einnovator.util.ListOptions;
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.UriUtils;
+import org.einnovator.sso.client.config.SsoClientConfiguration;
+import org.einnovator.sso.client.config.SsoEndpoints;
 import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Invitation;
@@ -62,7 +65,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class SsoClient {
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	private SsoClientConfiguration config;
 

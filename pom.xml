@@ -84,6 +84,17 @@
 	</dependencies>
 
 
+
+	<build>
+	  <extensions>
+	    <extension>
+	      <groupId>io.packagecloud.maven.wagon</groupId>
+	      <artifactId>maven-packagecloud-wagon</artifactId>
+	      <version>0.0.4</version>
+	    </extension>
+	  </extensions>
+	</build>
+
 	<profiles>
 		<profile>
 			<id>ci</id>
@@ -94,8 +105,28 @@
 				</property>
 			</activation>
 			
+			<distributionManagement>
+				<repository>
+				  <id>ci</id>
+				  <url>
+				    packagecloud+https://packagecloud.io/einnovator/einnovator
+				  </url>
+				</repository>
+				<snapshotRepository>
+				  <id>ci</id>
+				  <url>
+				    packagecloud+https://packagecloud.io/einnovator/einnovator
+				  </url>
+				</snapshotRepository>
+			</distributionManagement>
+			
+						
 			<repositories>
 			</repositories>
+			
+			
 		</profile>
 	</profiles>
+	
+	
 </project>

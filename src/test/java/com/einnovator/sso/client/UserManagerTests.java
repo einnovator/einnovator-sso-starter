@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import java.util.List;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.SsoClientConfiguration;
-import org.einnovator.sso.client.SsoClientSecurityConfigurer;
+import org.einnovator.sso.client.config.SsoClientConfiguration;
+import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.User;

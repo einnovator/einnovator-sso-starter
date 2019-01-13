@@ -1,11 +1,12 @@
-package org.einnovator.sso.client;
+package org.einnovator.sso.client.config;
 
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -28,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableResourceServer
 public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 
-	private Logger logger = Logger.getLogger(this.getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	public static final String RESOURCE_OPENDID = "userinfo";
 	

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.SsoClientSecurityConfigurer;
+import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.RoleManager;
 import org.einnovator.sso.client.manager.UserManager;

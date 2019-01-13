@@ -1,7 +1,7 @@
 package org.einnovator.sso.client.model;
 
 import org.einnovator.util.model.ObjectBase;
-import org.springframework.core.style.ToStringCreator;
+import org.einnovator.util.model.ToStringCreator;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

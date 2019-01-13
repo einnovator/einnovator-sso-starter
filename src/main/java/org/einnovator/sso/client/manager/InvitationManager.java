@@ -11,12 +11,15 @@ import org.springframework.data.domain.Pageable;
 public interface InvitationManager {
 
 	URI invite(Invitation invitation, Boolean sendMail, String redirectUri);
+
 	Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable);
+	
 	Invitation getInvitation(String id);
 
 	Invitation updateInvitation(Invitation invitation);
 
 	InvitationStats getInvitationStats();
+	
 	URI getInvitationToken(String id, Boolean sendMail);
 
 }
