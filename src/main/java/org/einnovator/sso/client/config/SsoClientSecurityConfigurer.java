@@ -34,7 +34,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -84,19 +83,12 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 			super(config, logoutHandler, filter);
 		}
 	}
-
-	@Bean(name="ssoClientHttpRequestFactory")
-	public ClientHttpRequestFactory clientHttpRequestFactory() {
-		ConnectionConfiguration connectionConf = config.getConnection();
-		return connectionConf.makeClientHttpRequestFactory();
-	}
-	
 	
 	
 	@Bean
 	public OAuth2RestTemplate ssoOAuth2RestTemplate() {
 		OAuth2RestTemplate template = new OAuth2RestTemplate(ssoAuthProvider(), oauth2ClientContext);			
-		template.setRequestFactory(clientHttpRequestFactory());
+		template.setRequestFactory(config.getConnection().makeClientHttpRequestFactory());
 		return template;
 	}
 

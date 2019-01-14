@@ -1,5 +1,11 @@
 package org.einnovator.sso.client.config;
 
+
+/**
+ * SSO API endpoints.
+ * 
+ * @author Jorge Simao {jorge.simao@einnovator.org}
+ */
 public class SsoEndpoints {
 
 	public static String user(String id, SsoClientConfiguration config) {

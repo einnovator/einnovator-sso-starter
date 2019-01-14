@@ -4,6 +4,9 @@ package org.einnovator.sso.client.config;
 import java.util.Arrays;
 import java.util.List;
 
+import org.einnovator.util.config.ConnectionConfiguration;
+import org.einnovator.util.model.ObjectBase;
+import org.einnovator.util.model.ToStringCreator;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,7 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  * @author Jorge Simao {jorge.simao@einnovator.org}
  */
 @ConfigurationProperties("sso")
-public class SsoClientConfiguration {
+public class SsoClientConfiguration extends ObjectBase {
 
 	public static String OAUTH_TOKEN_NAME = "oauth_token";
 
@@ -46,6 +49,9 @@ public class SsoClientConfiguration {
 	
 	@NestedConfigurationProperty
 	private ConnectionConfiguration connection = new ConnectionConfiguration();
+
+	@NestedConfigurationProperty
+	private AccessConfiguration access;
 
 	public SsoClientConfiguration() {
 	}
@@ -138,21 +144,43 @@ public class SsoClientConfiguration {
 		this.sessionCreationPolicy = sessionCreationPolicy;
 	}
 
+	/**
+	 * Get the value of property {@code access}.
+	 *
+	 * @return the access
+	 */
+	public AccessConfiguration getAccess() {
+		return access;
+	}
+
+	/**
+	 * Set the value of property {@code access}.
+	 *
+	 * @param access the access to set
+	 */
+	public void setAccess(AccessConfiguration access) {
+		this.access = access;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.einnovator.util.model.ObjectBase#toString(org.einnovator.util.model.ToStringCreator)
+	 */
 	@Override
-	public String toString() {
-		return this.getClass().getSimpleName() + " [" 
-				+ (server != null ? "server=" + server + ", " : "")
-				+ (clientId != null ? "clientId=" + clientId + ", " : "")
-				+ (clientSecret != null ? "clientSecret=" + clientSecret + ", " : "")
-				+ (scopes != null ? "scopes=" + scopes + ", " : "")
-				+ (redirectUri != null ? "redirectUri=" + redirectUri + ", " : "")
-				+ (ignore != null ? "ignore=" + Arrays.toString(ignore) + ", " : "")
-				+ (ignoreInclude != null ? "ignoreInclude=" + Arrays.toString(ignoreInclude) + ", " : "")
-				+ (csrfIgnore != null ? "csrfIgnore=" + Arrays.toString(csrfIgnore) + ", " : "")
-				+ (csrfEnabled != null ? "csrfEnabled=" + csrfEnabled + ", " : "")
-				+ (sessionCreationPolicy != null ? "sessionCreationPolicy=" + sessionCreationPolicy + ", " : "")
-				+ (connection != null ? "connection=" + connection : "") 
-				+ "]";
+	public ToStringCreator toString(ToStringCreator creator) {
+		return creator
+				.append("server", server)
+				.append("clientId", clientId)
+				.append("clientSecret", clientSecret)
+				.append("scopes", scopes)
+				.append("redirectUri", redirectUri)
+				.append("ignore", ignore)
+				.append("ignoreInclude", ignoreInclude)
+				.append("csrfIgnore", csrfIgnore)
+				.append("csrfEnabled", csrfEnabled)
+				.append("sessionCreationPolicy", sessionCreationPolicy)
+				.append("access", access)
+				.append("connection", connection)
+				;
 	}
 
 	
