@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.einnovator.util.ListOptions;
+import org.einnovator.util.PageOptions;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.Member;
@@ -33,7 +33,7 @@ public class SsoQueryRestController {
 	private GroupManager groupManager;
 
 	@GetMapping("/user")
-	public Page<User> queryUsers(UserFilter filter, ListOptions options, Principal principal) {
+	public Page<User> queryUsers(UserFilter filter, PageOptions options, Principal principal) {
 		if (principal==null) {
 			logger.error("queryUsers: " + HttpStatus.UNAUTHORIZED.getReasonPhrase());
 			return null;
@@ -45,7 +45,7 @@ public class SsoQueryRestController {
     }
 	
 	@GetMapping("/group/{groupId}")
-	public List<User> queryGroupMembers(@PathVariable String groupId, @RequestParam String q, ListOptions options, Principal principal) {
+	public List<User> queryGroupMembers(@PathVariable String groupId, @RequestParam String q, PageOptions options, Principal principal) {
 		if (principal==null) {
 			logger.error("queryGroupMembers: " + HttpStatus.UNAUTHORIZED.getReasonPhrase());
 			return null;
@@ -67,7 +67,7 @@ public class SsoQueryRestController {
     }
 	
 	@GetMapping("/query")
-	public Object query(Principal principal, UserFilter filter, ListOptions options) {
+	public Object query(Principal principal, UserFilter filter, PageOptions options) {
 		if (principal==null) {
 			logger.error("query: " + HttpStatus.UNAUTHORIZED.getReasonPhrase());
 			return null;

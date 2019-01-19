@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleFilter;
@@ -49,6 +50,9 @@ public class RoleManagerImpl implements RoleManager {
 	@Autowired
 	private SsoClient client;
 
+	@Autowired
+	private SsoClientConfiguration config;
+	
 	public RoleManagerImpl() {
 	}
 	
@@ -303,6 +307,9 @@ public class RoleManagerImpl implements RoleManager {
 	public boolean isAdmin(Principal principal) {
 		if (principal == null) {
 			return false;
+		}
+		if (config.getAccess().isAdmin(principal.getName())) {
+			return true;
 		}
 		String[] admin = getAdmin();
 		if (hasAnyRole(admin)) {

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.einnovator.util.ListOptions;
+import org.einnovator.util.PageOptions;
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.UriUtils;
@@ -208,7 +208,7 @@ public class SsoClient {
 				params.putAll(MappingUtils.toMapFormatted(filter));
 			}
 			if (pageable!=null) {
-				params.putAll(MappingUtils.toMapFormatted(new ListOptions(pageable)));
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
 			}
 			uri = appendQueryParameters(uri, params);			
 		}
@@ -275,7 +275,7 @@ public class SsoClient {
 				params.putAll(MappingUtils.toMapFormatted(filter));
 			}
 			if (pageable!=null) {
-				params.putAll(MappingUtils.toMapFormatted(new ListOptions(pageable)));
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
 			}
 			uri = appendQueryParameters(uri, params);			
 		}
@@ -301,7 +301,7 @@ public class SsoClient {
 				params.putAll(MappingUtils.toMapFormatted(filter));
 			}
 			if (pageable!=null) {
-				params.putAll(MappingUtils.toMapFormatted(new ListOptions(pageable)));
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
 			}
 			uri = appendQueryParameters(uri, params);			
 		}
@@ -475,7 +475,7 @@ public class SsoClient {
 				params.putAll(MappingUtils.toMapFormatted(filter));
 			}
 			if (pageable!=null) {
-				params.putAll(MappingUtils.toMapFormatted(new ListOptions(pageable)));
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
 			}
 			uri = appendQueryParameters(uri, params);			
 		}
@@ -565,7 +565,7 @@ public class SsoClient {
 				params.putAll(MappingUtils.toMapFormatted(filter));
 			}
 			if (pageable != null) {
-				params.putAll(MappingUtils.toMapFormatted(new ListOptions(pageable)));
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
 			}
 			if (groupId!=null) {
 				params.put("groupId", groupId);
@@ -608,7 +608,7 @@ public class SsoClient {
 				params.putAll(MappingUtils.toMapFormatted(filter));
 			}
 			if (pageable!=null) {
-				params.putAll(MappingUtils.toMapFormatted(new ListOptions(pageable)));
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
 			}
 			uri = appendQueryParameters(uri, params);			
 		}
@@ -633,7 +633,7 @@ public class SsoClient {
 				params.putAll(MappingUtils.toMapFormatted(filter));
 			}
 			if (pageable!=null) {
-				params.putAll(MappingUtils.toMapFormatted(new ListOptions(pageable)));
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
 			}
 			uri = appendQueryParameters(uri, params);			
 		}

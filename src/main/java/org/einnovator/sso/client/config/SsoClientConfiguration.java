@@ -51,7 +51,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	private ConnectionConfiguration connection = new ConnectionConfiguration();
 
 	@NestedConfigurationProperty
-	private AccessConfiguration access;
+	private AccessConfiguration access = new AccessConfiguration();
 
 	public SsoClientConfiguration() {
 	}

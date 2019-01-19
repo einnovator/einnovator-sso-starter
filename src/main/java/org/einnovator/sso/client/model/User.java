@@ -460,6 +460,11 @@ public class User extends EntityBase {
 		this.roles = roles;
 	}
 
+	@JsonIgnore
+	public Group getOrganization() {
+		Member member = getProfileMembership();
+		return member!=null ? member.getGroup() : null;
+	}
 	
 	@JsonIgnore
 	public Member getProfileMembership() {
