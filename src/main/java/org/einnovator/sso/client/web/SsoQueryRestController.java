@@ -10,6 +10,7 @@ import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
+import org.einnovator.sso.client.modelx.MemberFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,9 +51,9 @@ public class SsoQueryRestController {
 			logger.error("queryGroupMembers: " + HttpStatus.UNAUTHORIZED.getReasonPhrase());
 			return null;
 		}
-		UserFilter filter = new UserFilter();
+		MemberFilter filter = new MemberFilter();
 		filter.setQ(q);
-		Page<Member> members =  groupManager.listGroupMembers(groupId, options.toPageRequest(), filter);
+		Page<Member> members =  groupManager.listGroupMembers(groupId, filter,  options.toPageRequest());
 		if (members==null || members.getContent()==null) {
 			return null;
 		}

@@ -10,7 +10,6 @@ import org.einnovator.sso.client.manager.PermissionManager;
 import org.einnovator.sso.client.manager.PermissionManagerImpl;
 import org.einnovator.sso.client.manager.RoleManager;
 import org.einnovator.sso.client.manager.RoleManagerImpl;
-import org.einnovator.sso.client.manager.SsoCacheResolver;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.manager.UserManagerImpl;
 import org.einnovator.sso.client.web.SsoClientLogoutHandler;
@@ -182,11 +181,6 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 		cacheManagerFactoryBean.setShared(true);
 		cacheManagerFactoryBean.afterPropertiesSet();
 		return new EhCacheCacheManager(cacheManagerFactoryBean.getObject());
-	}
-	
-	@Bean
-	public SsoCacheResolver ssoCacheResolver() {
-		return new SsoCacheResolver(ssoCacheManager());
 	}
 	
 	@Bean

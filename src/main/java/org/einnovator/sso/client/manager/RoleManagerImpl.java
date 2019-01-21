@@ -3,8 +3,10 @@ package org.einnovator.sso.client.manager;
 import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -17,15 +19,31 @@ import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleFilter;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
+import org.einnovator.util.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.PayloadApplicationEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 
-public class RoleManagerImpl implements RoleManager {
+public class RoleManagerImpl extends ManagerBase implements RoleManager {
+
+	public static final String CACHE_ROLE = "Role";
+	public static final String CACHE_GROUP_ROLES = "GroupRoles";
 
 	public static final String ROLE_PREFIX = "ROLE_";
 
@@ -52,7 +70,10 @@ public class RoleManagerImpl implements RoleManager {
 
 	@Autowired
 	private SsoClientConfiguration config;
-	
+
+	@Autowired
+	private CacheManager cacheManager;
+
 	public RoleManagerImpl() {
 	}
 	
@@ -64,6 +85,21 @@ public class RoleManagerImpl implements RoleManager {
 	}
 
 
+
+	public RoleManagerImpl(SsoClient client, UserManager userManager, CacheManager cacheManager) {
+		this.client = client;
+		this.userManager = userManager;
+		this.cacheManager = cacheManager;
+	}
+
+	public RoleManagerImpl(SsoClient client, UserManager userManager) {
+		this.client = client;
+		this.userManager = userManager;
+	}
+
+	public RoleManagerImpl(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
+	}
 
 	@Override
 	public boolean hasAnyRole(Principal principal, String... roles) {
@@ -143,6 +179,8 @@ public class RoleManagerImpl implements RoleManager {
 		}
 		return false;
 	}
+	
+	
 
 	@Override
 	public boolean hasAnyPermissionInGroup(Principal principal, String groupId, String... perms) {
@@ -159,11 +197,6 @@ public class RoleManagerImpl implements RoleManager {
 		return hasAnyPermission(SsoClient.getPrincipal(), perms);
 	}
 
-	@Override
-	public boolean hasAnyPermissionInGroup(String groupId, String... perms) {
-		return hasAnyPermissionInGroup(SsoClient.getPrincipal(), groupId, perms);
-	}
-
 	private boolean hasAnyPermissionInternal(Principal principal, String perm) {
 		Collection<? extends GrantedAuthority> authorities = principal != null ? SsoClient.getAuthorities(principal)
 				: SsoClient.getAuthorities();
@@ -171,6 +204,7 @@ public class RoleManagerImpl implements RoleManager {
 			authorities = SsoClient.getAuthorities();
 		}
 		if (authorities != null) {
+			authorities = addPermissions(authorities);
 			for (GrantedAuthority authority : authorities) {
 				if (perm.equals(authority.getAuthority())) {
 					return true;
@@ -195,6 +229,15 @@ public class RoleManagerImpl implements RoleManager {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.einnovator.sso.client.manager.RoleManager#hasAnyPermissionInGroup(java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public boolean hasAnyPermissionInGroup(String groupId, String... perms) {
+		return hasAnyPermissionInGroup(SsoClient.getPrincipal(), groupId, perms);
+	}
+
+	
 	@Override
 	public List<Permission> getPermissionsUserInGroup(String userId, String groupId) {
 		List<Role> roles = listRolesForUserInGroup(userId, groupId);
@@ -318,19 +361,6 @@ public class RoleManagerImpl implements RoleManager {
 		return false;
 	}
 
-	@Override
-	public boolean isSuperuser(Principal principal) {
-		if (principal == null) {
-			return false;
-		}
-		String[] superuser = getSuperuser();
-		if (hasAnyRole(superuser)) {
-			return true;
-		}
-		return false;
-	}
-
-
 
 	@Override
 	public boolean isMember(String userId, String... groups) {
@@ -414,14 +444,6 @@ public class RoleManagerImpl implements RoleManager {
 		return false;
 	}
 
-	@Override
-	public boolean isSuperuser(String userId) {
-		String[] superuser = getSuperuser();
-		if (hasAnyRoleUser(userId, superuser)) {
-			return true;
-		}
-		return false;
-	}
 
 	@Override
 	public URI createRole(Role role) {
@@ -545,16 +567,6 @@ public class RoleManagerImpl implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyPermissionUserInAnyGroup(String username, List<String> groupIds, String... perms) {
-		for (String groupId: groupIds) {
-			if (hasAnyPermissionUserInGroup(username, groupId, perms)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
 	public boolean hasAnyPermissionInAnyGroup(Principal principal, List<String> groupIds, String... perms) {
 		for (String groupId: groupIds) {
 			if (hasAnyPermissionInGroup(principal, groupId, perms)) {
@@ -568,6 +580,167 @@ public class RoleManagerImpl implements RoleManager {
 	@Override
 	public boolean hasAnyPermissionInAnyGroup(List<String> groupId, String... perms) {
 		return hasAnyPermissionInAnyGroup((Principal)null, groupId, perms);
+	}
+
+
+	@Override
+	public List<Role> listGlobalRoles() {
+		return listRolesForGroup(null);
+	}
+
+	@Override
+	public List<Role> listRolesForGroup(String groupId) {
+		String key = groupId != null ? groupId : "";
+		Role[] roles = getCacheValue(Role[].class, getGroupRolesCache(), key);
+		if (roles != null) {
+			return new ArrayList<>(Arrays.asList(roles));
+		}
+		try {
+			RoleFilter filter = new RoleFilter();
+			if (groupId == null) {
+				filter.setGlobal(true);
+			}
+			filter.setOrgId(groupId);
+			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE));
+			if (page == null || page.getContent() == null) {
+				return null;
+			}
+			putCacheValue(page.getContent().toArray(new Role[page.getContent().size()]), getGroupRolesCache(), key);
+			return page.getContent();
+		} catch (HttpStatusCodeException e) {
+			if (e.getStatusCode() != HttpStatus.NOT_FOUND) {
+				logger.error("listRolesForGroup:" + groupId + "  " + e);
+			}
+			return null;
+		} catch (RuntimeException e) {
+			logger.error("listRolesForGroup: " + groupId + "  " + e);
+			return null;
+		}
+	}
+
+
+	@Override
+	public boolean hasAnyPermissionUserInAnyGroup(String username, List<String> groupIds, String... perms) {
+		for (String groupId : groupIds) {
+			if (hasAnyPermissionUserInGroup(username, groupId, perms)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Cache getRoleCache() {
+		Cache cache = cacheManager.getCache(CACHE_ROLE);
+		return cache;
+	}
+
+	public Cache getGroupRolesCache() {
+		Cache cache = cacheManager.getCache(CACHE_GROUP_ROLES);
+		return cache;
+	}
+
+	public final Collection<GrantedAuthority> addPermissions(Collection<? extends GrantedAuthority> authorities) {
+		if (authorities == null) {
+			return null;
+		}
+		Collection<GrantedAuthority> authorities2 = new LinkedHashSet<>();
+		for (GrantedAuthority authority : authorities) {
+			authorities2.add(authority);
+			if (Role.isRole(authority)) {
+				String roleId = Role.getRoleName(authority);
+				String groupId = Role.getGroup(authority);
+				List<Role> roles = groupId != null ? listRolesForGroup(groupId) : listGlobalRoles();
+				Role role = Role.findRole(roleId, roles);
+				if (role != null && role.getPermissions() != null) {
+					for (Permission perm : role.getPermissions()) {
+						authorities2.add(Role.makeGrantedAuthority(perm, role.getGroup()));
+					}
+				}
+			}
+		}
+		return authorities2;
+	}
+
+	@EventListener
+	public void onEvent(ApplicationEvent event) {
+		if (!this.getClass().equals(RoleManagerImpl.class)) {
+			return;
+		}
+		if (event instanceof PayloadApplicationEvent) {
+			Role role = getNotificationSource(((PayloadApplicationEvent<?>) event).getPayload(), Role.class);
+			logger.debug("onEvent:" + role + " " + ((PayloadApplicationEvent<?>) event).getPayload());
+			if (role != null) {
+				updateCaches(role);
+			}
+			return;
+		}
+
+		if (event instanceof AuthenticationSuccessEvent) {
+			Authentication authentication = ((AuthenticationSuccessEvent) event).getAuthentication();
+
+			logger.info("onEvent:" + authentication + " " + event);
+
+			SecurityContext context = SecurityContextHolder.getContext();
+			if (authentication instanceof OAuth2Authentication) {
+				OAuth2Authentication oauth2Authentication = (OAuth2Authentication) authentication;
+				Authentication userAuthentication = oauth2Authentication.getUserAuthentication();
+				if (userAuthentication instanceof UsernamePasswordAuthenticationToken) {
+					userAuthentication = makeUsernamePasswordAuthenticationToken(
+							(UsernamePasswordAuthenticationToken) userAuthentication);
+				}
+				authentication = new OAuth2Authentication(oauth2Authentication.getOAuth2Request(), userAuthentication);
+			} else if (authentication instanceof UsernamePasswordAuthenticationToken) {
+				authentication = makeUsernamePasswordAuthenticationToken(
+						(UsernamePasswordAuthenticationToken) authentication);
+			}
+			context.setAuthentication(authentication);
+//			logger.info("onEvent: updated authentication:" + authentication.getPrincipal() + " "
+//					+ authentication.getAuthorities() + " " + authentication);
+
+		}
+	}
+
+	UsernamePasswordAuthenticationToken makeUsernamePasswordAuthenticationToken(
+			UsernamePasswordAuthenticationToken authentication) {
+		UsernamePasswordAuthenticationToken authToken = authentication;
+		Collection<GrantedAuthority> authorities2 = addPermissions(authToken.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(authToken.getPrincipal(), authToken.getCredentials(),
+				authorities2);
+	}
+
+	private void updateCaches(Role role) {
+		Cache cache = getRoleCache();
+		if (cache != null && role.getUuid() != null) {
+			Role role2 = getCacheValue(Role.class, cache, role.getUuid());
+			if (role2 != null) {
+				MappingUtils.updateObjectFrom(role2, role);
+				if (role.getPermissions() != null) {
+					role2.setPermissions(role.getPermissions());
+				}
+			} else {
+				putCacheValue(role.getUuid(), cache, role.getUuid());
+			}
+		}
+		Cache cache2 = getGroupRolesCache();
+		if (cache2 != null) {
+
+			String key = role.getGroup() != null ? role.getGroup().getUuid()
+					: Boolean.TRUE.equals(role.getGlobal()) ? "" : null;
+			if (key != null) {
+				Role[] roles = getCacheValue(Role[].class, getGroupRolesCache(), key);
+				if (roles != null) {
+					Role role2 = Role.findRole(role.getUuid(), roles);
+					if (role2 != null) {
+						MappingUtils.updateObjectFrom(role2, role);
+						if (role.getPermissions() != null) {
+							role2.setPermissions(role.getPermissions());
+						}
+					}
+				}
+			}
+
+		}
+
 	}
 
 

@@ -8,6 +8,7 @@ import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
 import org.springframework.cache.Cache;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -32,5 +33,7 @@ public interface UserManager {
 	void clearCache();
 	
 	Cache getUserCache();
+
+	void onEvent(ApplicationEvent event);
 
 }

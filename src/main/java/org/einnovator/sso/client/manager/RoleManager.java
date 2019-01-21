@@ -79,18 +79,18 @@ public interface RoleManager {
 
 	boolean isMember(String username, String... groups);
 
+	
+	List<Role> listGlobalRoles();
+
+	List<Role> listRolesForGroup(String groupId);
+
 	// Generic utility roles
 	boolean isAdmin(Principal principal);
-
-	boolean isSuperuser(Principal principal);
 
 	// User specified
 
 	// Generic utility roles
 	boolean isAdmin(String username);
-
-	boolean isSuperuser(String username);
-
 
 	boolean isClient(Principal principal);
 	

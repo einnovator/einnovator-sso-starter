@@ -1,6 +1,7 @@
 package org.einnovator.sso.client.modelx;
 
 import org.einnovator.util.model.ObjectBase;
+import org.einnovator.util.model.ToStringCreator;
 
 public class UserOptions extends ObjectBase {
 
@@ -77,5 +78,18 @@ public class UserOptions extends ObjectBase {
 		this.permissions = permissions;
 	}
 	
-
+	/* (non-Javadoc)
+	 * @see org.einnovator.util.model.ObjectBase#toString(org.einnovator.util.model.ToStringCreator)
+	 */
+	@Override
+	public ToStringCreator toString(ToStringCreator creator) {
+		return super.toString(creator)
+				.append("orgs", orgs)
+				.append("ops", ops)
+				.append("teams", teams)
+				.append("roles", roles)
+				.append("permissions", permissions)
+				;				
+	}
+	
 }

@@ -2,13 +2,19 @@ package org.einnovator.sso.client.modelx;
 
 import org.einnovator.sso.client.model.Address;
 import org.einnovator.sso.client.model.GroupType;
+import org.einnovator.util.model.ToStringCreator;
 
-public class GroupFilter {
+public class GroupFilter extends GroupOptions {
+
+
+	public static final GroupFilter TREE = new GroupFilter(true);
+
+	public static final GroupFilter OPERATIONS = new GroupFilter(true, GroupType.OPERATION);
+
+	public static final GroupFilter TEAMS = new GroupFilter(true, GroupType.TEAM);
 
 	private String q;
 
-	private GroupType type;
-	
 	private String owner;
 
 	private String parent;
@@ -30,13 +36,12 @@ public class GroupFilter {
 	public GroupFilter() {
 	}
 
-
-	public GroupType getType() {
-		return type;
+	public GroupFilter(Boolean tree) {
+		super(tree);
 	}
 
-	public void setType(GroupType type) {
-		this.type = type;
+	public GroupFilter(Boolean tree, GroupType type) {
+		super(tree, type);
 	}
 
 	public Boolean getSelected() {
@@ -119,18 +124,19 @@ public class GroupFilter {
 		this.address = address;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.einnovator.sso.client.modelx.GroupOptions#toString0(org.einnovator.util.model.ToStringCreator)
+	 */
 	@Override
-	public String toString() {
-		return this.getClass().getSimpleName() + " [" 
-				+ (owner != null ? "owner=" + owner + ", " : "")
-				+ (parent != null ? "parent=" + parent + ", " : "") 
-				+ (root != null ? "root=" + root + ", " : "") 
-				+ (q != null ? "q=" + q + ", " : "")
-				+ (featured != null ? "featured=" + featured : "")
-				+ (hidden != null ? "hidden=" + hidden : "")
-				+ (sub != null ? "sub=" + sub : "")
-				+ (address != null && !address.isEmpty() ? "address=" + address : "")
-				+ "]";
+	public ToStringCreator toString(ToStringCreator creator) {
+		return super.toString(creator)
+				.append("owner", owner)
+				.append("parent", parent)
+				.append("q", q)
+				.append("featured", featured)
+				.append("hidden", hidden)
+				.append("sub", sub)
+				.append("address", !address.isEmpty() ? address : null);
 	}
 	
 }

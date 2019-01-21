@@ -32,6 +32,7 @@ import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleFilter;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.GroupFilter;
+import org.einnovator.sso.client.modelx.MemberFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -248,10 +249,19 @@ public class SsoClient {
 		ResponseEntity<Group> result = exchange(request, Group.class);
 		return result.getHeaders().getLocation();
 	}
-	
+
 	public Group getGroup(String groupId) {
+		return getGroup(groupId, null);
+	}
+
+	public Group getGroup(String groupId, GroupFilter filter) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.group(groupId, config));
+		
+		if (filter!=null) {
+			uri = appendQueryParameters(uri, filter);
+		}
+
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Group> result = exchange(request, Group.class);
 		return result.getBody();
@@ -292,7 +302,7 @@ public class SsoClient {
 		exchange(request, Void.class);
 	}
 	
-	public Page<Member> listGroupMembers(String groupId, Pageable pageable, UserFilter filter) {
+	public Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config));
 		if (filter!=null || pageable!=null) {
@@ -311,7 +321,7 @@ public class SsoClient {
 		return PageUtil.create(result.getBody(),  Member.class);
 	}
 
-	public Integer countGroupMembers(String groupId, UserFilter filter) {
+	public Integer countGroupMembers(String groupId, MemberFilter filter) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.countMembers(groupId, config));
 		if (filter!=null) {
@@ -380,7 +390,7 @@ public class SsoClient {
 	public Integer countGroups(GroupFilter filter) {
 		URI uri = makeURI(SsoEndpoints.countGroups(config));
 		if (filter!=null) {
-			uri = appendQueryParameters(uri, MappingUtils.toMapFormatted(filter));			
+			uri = appendQueryParameters(uri, filter);			
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Integer> result = exchange(request, Integer.class);
@@ -497,6 +507,20 @@ public class SsoClient {
 		URI uri = makeURI(SsoEndpoints.invitation(invitation.getUuid(), config));
 		RequestEntity<Invitation> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(invitation);
 
+		exchange(request, Invitation.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void updateInvitation(Invitation invitation, Boolean publish) {
+		URI uri = makeURI(SsoEndpoints.invitation(invitation.getUuid(), config));
+		if (publish != null ) {
+			Map<String, Object> params = new LinkedHashMap<>();
+			if (publish != null) {
+				params.put("publish", publish);
+			}
+			uri = appendQueryParameters(uri, MappingUtils.convert(params, LinkedHashMap.class));
+		}
+		RequestEntity<Invitation> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(invitation);
 		exchange(request, Invitation.class);
 	}
 

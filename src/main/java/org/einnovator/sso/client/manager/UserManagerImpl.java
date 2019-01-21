@@ -6,23 +6,26 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
+import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.PayloadApplicationEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 
-@CacheConfig(cacheManager="ssoCacheManager", cacheResolver="ssoCacheResolver")
-public class UserManagerImpl implements UserManager {
+public class UserManagerImpl extends ManagerBase implements UserManager {
 
 	public static final String CACHE_USER = "User";
 
@@ -43,15 +46,22 @@ public class UserManagerImpl implements UserManager {
 	}
 
 
+	@Autowired
+	private SsoClient ssoClient;
+	
 	@Override
 	@Cacheable(value=CACHE_USER, key="#id", cacheManager="ssoCacheManager")
 	public User getUser(String id) {
-		try {
-			User user = client.getUser(id);		
-			if (user==null) {
-				logger.error("getUser" + id);
-			}
+		if (id==null) {
+			return null;
+		}
+		User user = getCacheValue(User.class, getUserCache(), id);
+		if (user!=null) {
 			return user;
+		}
+		try {
+			user = ssoClient.getUser(id);	
+			return putCacheValue(user, getUserCache(), id);
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode()!=HttpStatus.NOT_FOUND) {
 				logger.error("getUser:" + id + "  " + e);				
@@ -64,25 +74,39 @@ public class UserManagerImpl implements UserManager {
 	}
 
 	@Override
-	//@Cacheable(value=CACHE_USER, key="#id + ' ' + #options.orgs + ' ' + #options.ops + ' ' + #options.teams + ' ' + #options.roles + ' ' + #options.permissions", cacheManager="ssoCacheManager")
 	public User getUser(String id, UserOptions options) {
+		if (id==null) {
+			return null;
+		}
+		if (cacheable(options)) {
+			User user = getCacheValue(User.class, getUserCache(), id, options);
+			if (user!=null) {
+				return user;
+			}			
+		}
 		try {
-			User user = client.getUser(id, options);		
-			if (user==null) {
-				logger.error("getUser" + id);
+			User user = ssoClient.getUser(id, options);	
+			if (cacheable(options)) {
+				return putCacheValue(user, getUserCache(), id, options);				
 			}
 			return user;
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode()!=HttpStatus.NOT_FOUND) {
-				logger.error("getUser:" + id + "  " + options + " " +  e);				
+				logger.error("getUser:" + id + "  " + options + e);				
 			}
 			return null;
 		} catch (RuntimeException e) {
 			logger.error("getUser:" + id + "  " + options + " " + e);				
 			return null;
 		}
+
 	}
 
+	protected boolean cacheable(UserOptions options) {
+		return options==null || UserOptions.FULL.equals(options) || UserOptions.ORGS.equals(options)  ||
+				UserOptions.ORGS_OPS.equals(options) || UserOptions.ORGS_OPS_TEAMS.equals(options);
+	}
+	
 	@Override
 	public URI createUser(User user) {
 		try {
@@ -93,6 +117,7 @@ public class UserManagerImpl implements UserManager {
 		}
 	}
 	
+
 	@Override
 	@CachePut(value=CACHE_USER, key="#user.id", cacheManager="ssoCacheManager")
 	public void updateUser(User user, boolean fullState) {
@@ -134,8 +159,9 @@ public class UserManagerImpl implements UserManager {
 			return null;
 		}
 	}
-	
-	
+
+
+	@Override
 	public void onUserUpdate(String id, Map<String, Object> details) {
 		if (id==null) {
 			return;
@@ -143,10 +169,13 @@ public class UserManagerImpl implements UserManager {
 		try {
 			Cache cache = getUserCache();
 			if (cache!=null) {
-				User user = (User) cache.get(id);
-				if (user!=null) {
+				ValueWrapper e =  cache.get(id);
+				if (e!=null) {
+					User user = (User)e.get();
 					if (details!=null) {
-						user.updateFrom(details);						
+						if (user!=null) {					
+							user.updateFrom(details);	
+						}
 					} else {
 						cache.evict(id);
 					}
@@ -159,6 +188,12 @@ public class UserManagerImpl implements UserManager {
 	}
 
 	@Override
+	public Cache getUserCache() {
+		Cache cache = cacheManager.getCache(UserManagerImpl.CACHE_USER);
+		return cache;
+	}
+	
+	@Override
 	public void clearCache() {
 		Cache cache = getUserCache();
 		if (cache!=null) {
@@ -166,10 +201,41 @@ public class UserManagerImpl implements UserManager {
 		}
 	}
 
+	public static final String ACTION_TYPE_LOGOUT = "Logout";
+
+	@EventListener
 	@Override
-	public Cache getUserCache() {
-		Cache cache = cacheManager.getCache(UserManagerImpl.CACHE_USER);
-		return cache;
+	public void onEvent(ApplicationEvent event) {
+		if (!(event instanceof PayloadApplicationEvent)) {
+			return;
+		}
+		Object obj = ((PayloadApplicationEvent<?>)event).getPayload();
+		User user= getNotificationSource(obj, User.class);
+		logger.debug("onEvent:" + user + " " + obj);
+		if (user!=null) {
+			evictCaches(user);
+			return;
+		}
+		Member member = getNotificationSource(obj, Member.class);
+		if (member!=null && member.getUser()!=null) {
+			logger.debug("onEvent:" + member + " " + obj);
+			evictCaches(member.getUser());				
+		}
+		
 	}
+
+
+
 	
+	private void evictCaches(User user) {
+		Cache cache = getUserCache();
+		if (cache!=null && user.getId()!=null) {
+			cache.evict(user.getId());
+			cache.evict(makeKey(user.getId(), true, true, true));
+			cache.evict(makeKey(user.getId(), false, false, false));
+			cache.evict(makeKey(user.getId(), true, false, false));			
+		}
+	}
+
+
 }

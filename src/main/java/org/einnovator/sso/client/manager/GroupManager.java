@@ -7,15 +7,20 @@ import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.modelx.GroupFilter;
+import org.einnovator.sso.client.modelx.MemberFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.springframework.cache.Cache;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface GroupManager {
-	URI createGroup(Group group);
 
 	Group getGroup(String groupId);
+
+	Group getGroup(String groupId, GroupFilter filter);
+
+	URI createGroup(Group group);
 
 	Group updateGroup(Group group);
 
@@ -25,9 +30,9 @@ public interface GroupManager {
 
 	void deleteGroup(String groupId);
 
-	Page<Member> listGroupMembers(String groupId, Pageable pageable, UserFilter filter);
+	Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable);
 
-	Integer countGroupMembers(String groupId, UserFilter filter);
+	Integer countGroupMembers(String groupId, MemberFilter filter);
 
 	void addToGroup(String userId, String groupId);
 
@@ -51,6 +56,11 @@ public interface GroupManager {
 	void onGroupMemberUpdate(String id, String userId);
 
 	Cache getGroupMembersCache();
-	Cache getGroupMemberCache();
+	Cache getGroupMemberCountCache();
+
+	/**
+	 * @param event
+	 */
+	void onEvent(ApplicationEvent event);
 
 }

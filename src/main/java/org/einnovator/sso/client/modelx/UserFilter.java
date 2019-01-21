@@ -1,10 +1,10 @@
 package org.einnovator.sso.client.modelx;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import org.einnovator.sso.client.model.Address;
 import org.einnovator.sso.client.model.GenderType;
+import org.einnovator.util.model.ToStringCreator;
 
 public class UserFilter extends UserOptions {
 
@@ -132,23 +132,25 @@ public class UserFilter extends UserOptions {
 		this.qaddress = qaddress;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see org.einnovator.sso.client.modelx.UserOptions#toString(org.einnovator.util.model.ToStringCreator)
+	 */
 	@Override
-	public String toString() {
-		return "UserFilter [" 
-				+ (q != null ? "q=" + q + ", " : "")
-				+ (gender != null ? "gender=" + gender + ", " : "")
-				+ (startBirthdate != null ? "startBirthdate=" + startBirthdate + ", " : "")
-				+ (endBirthdate != null ? "endBirthdate=" + endBirthdate + ", " : "")
-				+ (minAge != null ? "minAge=" + minAge + ", " : "") 
-				+ (maxAge != null ? "maxAge=" + maxAge + ", " : "")
-				+ (language != null ? "language=" + Arrays.toString(language) + ", " : "")
-				+ (ethnic != null ? "ethnic=" + Arrays.toString(ethnic) + ", " : "")
-				+ (address != null && !address.isEmpty() ? "address=" + address : "") 
-				+ (email != null ? "email=" + email + ", " : "")
-				+ (qaddress != null ? "qaddress=" + qaddress + ", " : "")
-				+ (email != null ? "email=" + email + ", " : "")
-				+ (qaddress != null ? "qaddress=" + qaddress + ", " : "")
-				+ "]";
+	public ToStringCreator toString(ToStringCreator creator) {
+		return super.toString(creator)
+				.append("", q)
+				.append("gender", gender)
+				.append("startBirthdate", startBirthdate)
+				.append("endBirthdate", endBirthdate)
+				.append("minAge", minAge)
+				.append("maxAge", maxAge)
+				.append("language", language)
+				.append("ethnic", ethnic)
+				.append("address", !address.isEmpty() ? address : null)
+				.append("email", email)
+				.append("qaddress", qaddress);
+				
 	}
 	
 }
