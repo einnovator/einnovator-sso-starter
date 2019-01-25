@@ -38,7 +38,7 @@ public class SsoLogoutController {
 	public String logout(HttpServletRequest request, HttpServletResponse response, Principal principal) {
 		
 		if (principal==null) {
-			return "redirect:/";
+			return redirect("/");
 		}
 		
 		HttpSession session = request.getSession(false);
@@ -59,11 +59,16 @@ public class SsoLogoutController {
 	    logger.info("logout:" + redirectUrl);
 	    if (SsoEndpoints.getLogoutEndpoint(config).equals(redirectUrl)) {
 		    logger.info("logout:[COMPLETED]");
-	    	return "redirect:/";
+	    	return redirect("/");
 	    } else {
 		    logger.info("logout:[REDIRECT]: " + SsoEndpoints.getLogoutEndpoint(config));
 			return "redirect:" + SsoEndpoints.getLogoutEndpoint(config);	    	
 	    }
+	}
+	
+
+	public static String redirect(String uri) {
+		return "redirect:" + uri;	
 	}
 	
 

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.util.PageOptions;
+import org.einnovator.util.PageResult;
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.UriUtils;
@@ -215,8 +216,8 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(),  User.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  User.class);
 	}
 
 	public URI createUser(User user) {
@@ -291,8 +292,8 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(),  Group.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  Group.class);
 	}
 	
 	public void deleteGroup(String groupId) {
@@ -317,8 +318,8 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(),  Member.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  Member.class);
 	}
 
 	public Integer countGroupMembers(String groupId, MemberFilter filter) {
@@ -491,8 +492,8 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(),  Invitation.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  Invitation.class);
 	}
 
 	
@@ -565,8 +566,8 @@ public class SsoClient {
 		URI uri = makeURI(SsoEndpoints.permissions(config));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(),  Permission.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  Permission.class);
 	}
 	
 	public void deletePermission(String id) {
@@ -598,8 +599,8 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(), User.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(), User.class);
 	}
 
 	public URI createRole(Role role) {
@@ -638,8 +639,8 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(),  Role.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  Role.class);
 	}
 	
 	public void deleteRole(String roleId) {
@@ -663,8 +664,8 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Page> result = exchange(request, Page.class);
-		return PageUtil.create(result.getBody(),  User.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  User.class);
 	}
 
 	public Integer countRoleMembers(String roleId, UserFilter filter) {

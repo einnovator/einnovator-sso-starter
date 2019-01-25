@@ -22,7 +22,7 @@ public class SsoClientConfiguration extends ObjectBase {
 
 	public static String OAUTH_TOKEN_NAME = "oauth_token";
 
-	public static String DEFAULT_SERVER = "http://localhost:28080";
+	public static String DEFAULT_SERVER = "http://localhost:2000";
 
 	public static String DEFAULT_REDIRECT_URI = "http://localhost/";
 

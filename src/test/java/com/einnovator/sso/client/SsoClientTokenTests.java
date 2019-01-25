@@ -29,7 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes= {SsoClientTokenTests.TestConfig.class, SsoClientSecurityConfigurer.class}, webEnvironment=WebEnvironment.MOCK)
 @EnableCaching
-@TestPropertySource(properties= {"sso.server=http://localhost:28081/auth", "sso.server_=http://localhost:28083/"})
+@TestPropertySource(properties = { "sso.server=http://localhost:2001/auth" })
 public class SsoClientTokenTests {
 
 	@Autowired

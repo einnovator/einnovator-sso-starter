@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -28,24 +29,25 @@ public class SsoTestHelper {
 
 	public static class TestConfig {
 
-		public static final String DEFAULT_SERVER = "http://localhost:28081/auth";
+		public static final String DEFAULT_SERVER = "http://localhost:2000/auth";
+
+		protected ApplicationContext context;
+		 
 		private String username;
 		private String password;
 		private String clientId;
 		private String clientSecret;
 		private String server;
 		 
-		public TestConfig(String server, String username, String password, String clientId, String clientSecret) {
-			this.server = server;
+		public TestConfig(String username, String password, String clientId, String clientSecret, ApplicationContext context) {
+			this.context = context;
+			this.server = context.getEnvironment().getProperty("sso.server", DEFAULT_SERVER);
 			this.username = username;
 			this.password = password;
 			this.clientId = clientId;
 			this.clientSecret = clientSecret;
 		}
 		
-		public TestConfig(String username, String password, String clientId, String clientSecret) {
-			this(DEFAULT_SERVER, username, password, clientId, clientSecret);
-		}
 		
 		@Bean
 		public SsoClient ssoClient() {
@@ -79,7 +81,7 @@ public class SsoTestHelper {
 		@Bean
 		public CacheManager cacheManager() {
 			EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean();
-			cacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
+			cacheManagerFactoryBean.setConfigLocation(new ClassPathResource(context.getEnvironment().getProperty("spring.cache.ehcache.config", "ehcache.xml")));
 			cacheManagerFactoryBean.setShared(true);
 			cacheManagerFactoryBean.afterPropertiesSet();
 			return new EhCacheCacheManager(cacheManagerFactoryBean.getObject());

@@ -53,8 +53,8 @@ public class SsoClientLoadTests {
 	private final String TEST_PASSWORD = "Einnovator123!!";
 	private final String TEST_USERX1 = "info+100@einnovator.org";
 
-	public static final String CLIENT_ID = "greenfence";
-	public static final String CLIENT_SECRET = "greenfence$123";
+	public static final String CLIENT_ID = "application";
+	public static final String CLIENT_SECRET = "application$123";
 
 	@Configuration
 	static class TestConfig {

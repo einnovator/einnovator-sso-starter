@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=SsoClientSecurityConfigurer.class, webEnvironment=WebEnvironment.MOCK)
 @SuppressWarnings("unused")
-@TestPropertySource(properties = { "sso.server=http://localhost:28081/auth", "sso.server_=http://localhost:28083/" })
+@TestPropertySource(properties = { "sso.server=http://localhost:2001/auth" })
 public class UserManagerTests {
 
 	private final String TEST_USER = "tdd@einnovator.org";
@@ -33,9 +33,9 @@ public class UserManagerTests {
 	
 	private final String TEST_PASSWORD = "Einnovator123!!";
 	
-	private final String CLIENT_ID = "greenfence";
+	private final String CLIENT_ID = "application";
 
-	private final String CLIENT_SECRET = "greenfence$123";
+	private final String CLIENT_SECRET = "application$123";
 
 	@Autowired
 	private SsoClient client;

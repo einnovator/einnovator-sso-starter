@@ -48,13 +48,12 @@ import static com.einnovator.sso.client.Profiler.dump;
 @SpringBootTest(classes = { SsoClientTests.TestConfig.class,
 		SsoClientSecurityConfigurer.class }, webEnvironment = WebEnvironment.MOCK)
 @EnableCaching
-@TestPropertySource(properties = { "sso.server=http://localhost:28081/auth", "sso.server_=http://localhost:28083/" })
+@TestPropertySource(properties = { "sso.server=http://localhost:2001/auth" })
 public class SsoClientTests {
 
 	@Autowired
 	private SsoClient client;
 
-	@SuppressWarnings("unused")
 	@Autowired
 	private SsoClientConfiguration config;
 
@@ -66,8 +65,8 @@ public class SsoClientTests {
 	private final String TEST_PASSWORD = "Einnovator123!!";
 	private final String TEST_USERX1 = "info+100@einnovator.org";
 
-	public static final String CLIENT_ID = "greenfence";
-	public static final String CLIENT_SECRET = "greenfence$123";
+	public static final String CLIENT_ID = "application";
+	public static final String CLIENT_SECRET = "application$123";
 
 	@Configuration
 	static class TestConfig {
