@@ -675,39 +675,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 			return;
 		}
 
-		if (event instanceof AuthenticationSuccessEvent) {
-			Authentication authentication = ((AuthenticationSuccessEvent) event).getAuthentication();
-
-			logger.info("onEvent:" + authentication + " " + event);
-
-			SecurityContext context = SecurityContextHolder.getContext();
-			if (authentication instanceof OAuth2Authentication) {
-				OAuth2Authentication oauth2Authentication = (OAuth2Authentication) authentication;
-				Authentication userAuthentication = oauth2Authentication.getUserAuthentication();
-				if (userAuthentication instanceof UsernamePasswordAuthenticationToken) {
-					userAuthentication = makeUsernamePasswordAuthenticationToken(
-							(UsernamePasswordAuthenticationToken) userAuthentication);
-				}
-				authentication = new OAuth2Authentication(oauth2Authentication.getOAuth2Request(), userAuthentication);
-			} else if (authentication instanceof UsernamePasswordAuthenticationToken) {
-				authentication = makeUsernamePasswordAuthenticationToken(
-						(UsernamePasswordAuthenticationToken) authentication);
-			}
-			context.setAuthentication(authentication);
-//			logger.info("onEvent: updated authentication:" + authentication.getPrincipal() + " "
-//					+ authentication.getAuthorities() + " " + authentication);
-
-		}
 	}
-
-	UsernamePasswordAuthenticationToken makeUsernamePasswordAuthenticationToken(
-			UsernamePasswordAuthenticationToken authentication) {
-		UsernamePasswordAuthenticationToken authToken = authentication;
-		Collection<GrantedAuthority> authorities2 = addPermissions(authToken.getAuthorities());
-		return new UsernamePasswordAuthenticationToken(authToken.getPrincipal(), authToken.getCredentials(),
-				authorities2);
-	}
-
 	private void updateCaches(Role role) {
 		Cache cache = getRoleCache();
 		if (cache != null && role.getUuid() != null) {
