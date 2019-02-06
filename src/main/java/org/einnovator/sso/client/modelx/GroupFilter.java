@@ -15,6 +15,8 @@ public class GroupFilter extends GroupOptions {
 
 	private String q;
 
+	private String username;
+
 	private String owner;
 
 	private String parent;
@@ -130,13 +132,16 @@ public class GroupFilter extends GroupOptions {
 	@Override
 	public ToStringCreator toString(ToStringCreator creator) {
 		return super.toString(creator)
-				.append("owner", owner)
-				.append("parent", parent)
 				.append("q", q)
+				.append("parent", parent)
+				.append("root", root)
+				.append("username", username)
+				.append("owner", owner)
 				.append("featured", featured)
 				.append("hidden", hidden)
 				.append("sub", sub)
-				.append("address", !address.isEmpty() ? address : null);
-	}
+				.append("address", !Address.isEmpty(address) ? address : null)
+			;
+		}
 	
 }

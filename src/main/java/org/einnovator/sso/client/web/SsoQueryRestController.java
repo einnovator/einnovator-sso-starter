@@ -53,7 +53,7 @@ public class SsoQueryRestController {
 		}
 		MemberFilter filter = new MemberFilter();
 		filter.setQ(q);
-		Page<Member> members =  groupManager.listGroupMembers(groupId, filter,  options.toPageRequest());
+		Page<Member> members =  groupManager.listMembers(groupId, filter,  options.toPageRequest());
 		if (members==null || members.getContent()==null) {
 			return null;
 		}

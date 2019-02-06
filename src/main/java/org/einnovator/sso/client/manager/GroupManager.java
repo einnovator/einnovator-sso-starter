@@ -30,15 +30,15 @@ public interface GroupManager {
 
 	void deleteGroup(String groupId);
 
-	Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable);
+	Page<Member> listMembers(String groupId, MemberFilter filter, Pageable pageable);
 
-	Integer countGroupMembers(String groupId, MemberFilter filter);
+	Integer countMembers(String groupId, MemberFilter filter);
 
-	void addToGroup(String userId, String groupId);
+	void addMember(String userId, String groupId);
 
-	void removeFromGroup(String userId, String groupId);
+	void removeMember(String userId, String groupId);
 
-	Member getGroupMember(String groupId, String userId);
+	Member getMember(String groupId, String userId);
 
 	boolean isMember(String userId, String groupId);
 

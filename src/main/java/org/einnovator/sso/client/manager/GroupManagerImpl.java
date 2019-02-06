@@ -158,7 +158,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable) {
+	public Page<Member> listMembers(String groupId, MemberFilter filter, Pageable pageable) {
 		try {
 			Page<Member> members = client.listGroupMembers(groupId, filter, pageable);
 			if (members == null) {
@@ -172,7 +172,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Integer countGroupMembers(String groupId, MemberFilter filter) {
+	public Integer countMembers(String groupId, MemberFilter filter) {
 		if (groupId==null) {
 			return null;
 		}		
@@ -198,7 +198,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 
 	@Override
-	public void addToGroup(String userId, String groupId) {
+	public void addMember(String userId, String groupId) {
 		try {
 			if (groupId == null) {
 				logger.error("addToGroup: " + userId + " " + groupId);
@@ -211,7 +211,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@CacheEvict(value = CACHE_GROUP_MEMBERS, key = "#groupId + #userId")
-	public void removeFromGroup(String userId, String groupId) {
+	public void removeMember(String userId, String groupId) {
 		try {
 			client.removeFromGroup(userId, groupId);
 			if (groupId == null) {
@@ -223,7 +223,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Member getGroupMember(String groupId, String userId) {
+	public Member getMember(String groupId, String userId) {
 		try {
 			Member member = client.getGroupMember(groupId, userId);
 			if (groupId == null) {
@@ -240,7 +240,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	@Override
 	@Cacheable(value = CACHE_GROUP_MEMBERS, key = "#groupId + ':' + #userId")
 	public boolean isMember(String groupId, String userId) {
-		return getGroupMember(groupId, userId) != null;
+		return getMember(groupId, userId) != null;
 	}
 
 	@Override

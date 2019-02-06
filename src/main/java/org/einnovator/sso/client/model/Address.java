@@ -269,4 +269,12 @@ public class Address extends ObjectBase {
 		return sb.toString();
 	}
 
+	/**
+	 * @param address
+	 * @return
+	 */
+	public static boolean isEmpty(Address address) {
+		return address==null || address.isEmpty();
+	}
+
 }
