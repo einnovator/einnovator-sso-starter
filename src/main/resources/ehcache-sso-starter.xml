@@ -20,23 +20,15 @@
 	<cache name="Notification"></cache>
 	<cache name="Notification:count"></cache>
 
-	<cache name="Message"></cache>
-	<cache name="Message:count"></cache>
+	<cache name="Channel"></cache>
 
-	<cache name="Organization"></cache>
 	<cache name="Connection"></cache>
 	<cache name="Connection:Comment"></cache>
 	<cache name="Connection:Tag"></cache>
-	<cache name="Product"></cache>
 
 	<cache name="Document"></cache>
 	<cache name="Folder"></cache>
 	<cache name="Template"></cache>
 
-	<cache name="AuditSpec"></cache>
-	
-	<cache name="Certification"></cache>
-
-	<cache name="Requirement"></cache>
 	
 </ehcache>

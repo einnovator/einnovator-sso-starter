@@ -36,7 +36,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = { SsoClientLoadTests.TestConfig.class,
 		SsoClientSecurityConfigurer.class }, webEnvironment = WebEnvironment.MOCK)
 @EnableCaching
-@TestPropertySource(properties = { "sso.server=https://gft-sso-blue.cfapps.io", "_sso.server=http://localhost:28081/auth", "sso.server_=http://localhost:28083/" })
+@TestPropertySource(properties = { "sso.server=https://gft-sso-blue.cfapps.io", "_sso.server=http://localhost:28081", "sso.server_=http://localhost:28083/" })
 public class SsoClientLoadTests {
 
 	@Autowired

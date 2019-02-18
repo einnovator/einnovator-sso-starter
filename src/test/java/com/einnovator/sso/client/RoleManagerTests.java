@@ -28,7 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=SsoClientSecurityConfigurer.class, webEnvironment=WebEnvironment.MOCK)
 @SuppressWarnings("unused")
-@TestPropertySource(properties = { "sso.server=http://localhost:2001/auth" })
+@TestPropertySource(properties = { "sso.server=http://localhost:2001" })
 public class RoleManagerTests {
 
 	private final String TEST_USER = "jsimao71@gmail.com";

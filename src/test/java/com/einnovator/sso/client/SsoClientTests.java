@@ -48,7 +48,7 @@ import static com.einnovator.sso.client.Profiler.dump;
 @SpringBootTest(classes = { SsoClientTests.TestConfig.class,
 		SsoClientSecurityConfigurer.class }, webEnvironment = WebEnvironment.MOCK)
 @EnableCaching
-@TestPropertySource(properties = { "sso.server=http://localhost:2001/auth" })
+@TestPropertySource(properties = { "sso.server=http://localhost:2001" })
 public class SsoClientTests {
 
 	@Autowired

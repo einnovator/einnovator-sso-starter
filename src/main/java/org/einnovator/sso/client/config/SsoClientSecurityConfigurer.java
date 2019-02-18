@@ -183,8 +183,8 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 		return new EhCacheCacheManager(cacheManagerFactoryBean.getObject());
 	}
 	
-	@Bean
-	@Order(Ordered.HIGHEST_PRECEDENCE)
+	//@Bean
+	//@Order(Ordered.HIGHEST_PRECEDENCE)
 	public SsoCorsFilter corsFilter(CorsConfigurationSource config) {
 		return new SsoCorsFilter(config);
 	}

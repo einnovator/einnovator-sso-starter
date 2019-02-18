@@ -97,7 +97,7 @@
 
 	<profiles>
 		<profile>
-			<id>ci</id>
+			<id>s3</id>
 			<activation>
 				<property>
 					<name>CI</name>
@@ -106,25 +106,21 @@
 			</activation>
 			
 			<distributionManagement>
-				<repository>
-				  <id>ci</id>
-				  <url>
-				    packagecloud+https://packagecloud.io/einnovator/einnovator
-				  </url>
-				</repository>
-				<snapshotRepository>
-				  <id>ci</id>
-				  <url>
-				    packagecloud+https://packagecloud.io/einnovator/einnovator
-				  </url>
-				</snapshotRepository>
-			</distributionManagement>
-			
-						
+			    <snapshotRepository>
+			      <id>s3</id>
+			      <url>s3://einnovator-mvnrepo/snapshot</url>
+			    </snapshotRepository>
+			    <repository>
+			      <id>s3</id>
+			      <url>s3://einnovator-mvnrepo/release</url>
+			    </repository>
+			</distributionManagement>		
 			<repositories>
+			<repository>
+		     	<id>s3</id>
+      			<url>s3://einnovator-mvnrepo/release</url>
+			 </repository>
 			</repositories>
-			
-			
 		</profile>
 	</profiles>
 	
