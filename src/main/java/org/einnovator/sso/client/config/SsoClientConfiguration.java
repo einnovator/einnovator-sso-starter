@@ -88,7 +88,7 @@ public class SsoClientConfiguration extends ObjectBase {
 		this.scopes = scopes;
 	}
 
-	public String getRedirectUri() {
+	public String redirectUri() {
 		return redirectUri;
 	}
 

@@ -92,7 +92,7 @@ public class Mention extends EntityBase {
 	}
 	
 
-	public String getRedirectUri() {
+	public String redirectUri() {
 		return redirectUri;
 	}
 

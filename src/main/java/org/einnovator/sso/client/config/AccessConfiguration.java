@@ -7,6 +7,9 @@ import org.einnovator.util.model.ToStringCreator;
 
 public class AccessConfiguration extends ObjectBase {
 	
+	public static final String ROLE_CLIENT = "ROLE_CLIENT";
+	public static final String ROLE_ADMIN = "ROLE_ADMIN";
+
 	private List<String> admin = null;
 	
 	public AccessConfiguration() {

@@ -22,6 +22,7 @@ public class GroupPredicates {
 	
 	public static final Predicate<Group> ORGANIZATION = new GroupTypePredicate(GroupType.ORGANIZATION); 
 	public static final Predicate<Group> OPERATION = new GroupTypePredicate(GroupType.OPERATION); 
+	public static final Predicate<Group> DEPARTMENT = new GroupTypePredicate(GroupType.DEPARTMENT); 
 	public static final Predicate<Group> TEAM = new GroupTypePredicate(GroupType.TEAM); 
 
 }

@@ -156,7 +156,7 @@ public class Invitation  extends EntityBase {
 		this.error = error;
 	}
 
-	public String getRedirectUri() {
+	public String redirectUri() {
 		return redirectUri;
 	}
 

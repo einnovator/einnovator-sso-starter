@@ -445,11 +445,17 @@ public class User extends EntityBase {
 			return Group.filter(groups, true, true, GroupPredicates.ORGANIZATION);
 		case OPERATION: 
 			return Group.filter(groups, true, true, GroupPredicates.OPERATION);
+		case DEPARTMENT: 
+			return Group.filter(groups, true, true, GroupPredicates.DEPARTMENT);
 		case TEAM: 
 			return Group.filter(groups, true, true, GroupPredicates.TEAM);
 		default:
-			return null;
+			return groups;
 		}
+	}
+
+	public List<String> getGroupsUuid(GroupType groupType) {
+		return EntityBase.getUuids(getGroups(groupType));
 	}
 
 	public List<Role> getRoles() {
@@ -535,6 +541,12 @@ public class User extends EntityBase {
 			}
 		}
 		return null;
+	}
+
+	@JsonIgnore
+	public Group getGroup(String groupId) {
+		Member member = getMembership(groupId);
+		return member!=null ? member.getGroup() : null;
 	}
 	
 	@Override

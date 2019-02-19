@@ -4,6 +4,7 @@ package org.einnovator.sso.client.model;
 public enum GroupType {
 	ORGANIZATION("Organization"),
 	OPERATION("Operation"),
+	DEPARTMENT("Department"),
 	TEAM("Team"),
 	GROUP("Group"),	
 	CONTACTS("Contacts");

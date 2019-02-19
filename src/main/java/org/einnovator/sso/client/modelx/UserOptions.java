@@ -13,7 +13,7 @@ public class UserOptions extends ObjectBase {
 
 	public static final UserOptions FULL = new UserOptions(true, true, true, true, true);
 
-	public static final UserOptions DEFAULT_OPTIONS = ORGS;
+	public static final UserOptions DEFAULT_OPTIONS = FULL;
 
 	private Boolean orgs;
 
