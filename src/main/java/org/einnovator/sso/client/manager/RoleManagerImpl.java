@@ -20,6 +20,7 @@ import org.einnovator.sso.client.model.RoleFilter;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.util.MappingUtils;
+import org.einnovator.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -112,10 +113,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	private boolean hasAnyRoleInternal(Principal principal, String role) {
-		Collection<? extends GrantedAuthority> authorities = SsoClient.getAuthorities(principal);
-		if (authorities == null) {
-			authorities = SsoClient.getAuthorities();
-		}
+		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
 		if (authorities != null) {
 			for (GrantedAuthority authority : authorities) {
 				if (roleEquals(role, authority.getAuthority())) {
@@ -151,7 +149,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	@Override
 	public boolean hasAnyRole(String... roles) {
-		return hasAnyRole(SsoClient.getPrincipal(), roles);
+		return hasAnyRole(SecurityUtil.getPrincipal(), roles);
 	}
 
 	@Override
@@ -166,7 +164,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	@Override
 	public boolean hasAnyRoleInGroup(String groupId, String... roles) {
-		return hasAnyRoleInGroup(SsoClient.getPrincipal(), groupId, roles);
+		return hasAnyRoleInGroup(SecurityUtil.getPrincipal(), groupId, roles);
 	}
 
 	//
@@ -194,14 +192,13 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	@Override
 	public boolean hasAnyPermission(String... perms) {
-		return hasAnyPermission(SsoClient.getPrincipal(), perms);
+		return hasAnyPermission(SecurityUtil.getPrincipal(), perms);
 	}
 
 	private boolean hasAnyPermissionInternal(Principal principal, String perm) {
-		Collection<? extends GrantedAuthority> authorities = principal != null ? SsoClient.getAuthorities(principal)
-				: SsoClient.getAuthorities();
+		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
 		if (authorities == null) {
-			authorities = SsoClient.getAuthorities();
+			authorities = SecurityUtil.getAuthorities();
 		}
 		if (authorities != null) {
 			authorities = addPermissions(authorities);
@@ -234,7 +231,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	 */
 	@Override
 	public boolean hasAnyPermissionInGroup(String groupId, String... perms) {
-		return hasAnyPermissionInGroup(SsoClient.getPrincipal(), groupId, perms);
+		return hasAnyPermissionInGroup(SecurityUtil.getPrincipal(), groupId, perms);
 	}
 
 	

@@ -5,7 +5,6 @@ import static org.einnovator.util.UriUtils.makeURI;
 
 import java.net.URI;
 import java.security.Principal;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.einnovator.util.PageOptions;
-import org.einnovator.util.PageResult;
-import org.einnovator.util.MappingUtils;
-import org.einnovator.util.PageUtil;
-import org.einnovator.util.UriUtils;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoEndpoints;
 import org.einnovator.sso.client.model.Group;
@@ -36,6 +30,12 @@ import org.einnovator.sso.client.modelx.GroupFilter;
 import org.einnovator.sso.client.modelx.MemberFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
+import org.einnovator.util.MappingUtils;
+import org.einnovator.util.PageOptions;
+import org.einnovator.util.PageResult;
+import org.einnovator.util.PageUtil;
+import org.einnovator.util.SecurityUtil;
+import org.einnovator.util.UriUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -46,7 +46,6 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -759,35 +758,34 @@ public class SsoClient {
 	}
 
 	public OAuth2AccessToken setupClientToken() {
-		return setupClientToken(config.getClientId(), config.getClientSecret());
+		return setupClientToken(oauth2Context);
 	}
 
-	public OAuth2AccessToken setupClientToken(String clientId, String clientSecret) {
-		return setupClientToken(clientId, clientSecret, oauth2Context);
-	}
 
 	public OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context) {
-		return setupClientToken(config.getClientId(), config.getClientSecret(), oauth2Context);
-	}
-
-	public OAuth2AccessToken setupClientToken(String clientId, String clientSecret, OAuth2ClientContext oauth2Context) {
-		return setupClientToken(clientId, clientSecret, oauth2Context, false, false);
+		return setupClientToken(oauth2Context, false, false, config);
 	}
 
 	public OAuth2AccessToken setupClientToken(boolean force, boolean cached) {
-		return setupClientToken(config.getClientId(), config.getClientSecret(), force, cached);
+		return setupClientToken(oauth2Context, force, cached);
 	}
 
-	public OAuth2AccessToken setupClientToken(String clientId, String clientSecret, boolean force, boolean cached) {
-		return setupClientToken(clientId, clientSecret, oauth2Context, force, cached);
+	public OAuth2AccessToken setupClientToken(String clientId, String clientSecret) {
+		SsoClientConfiguration config2 = new SsoClientConfiguration(config);
+		config2.setClientId(clientId);
+		config2.setClientSecret(clientSecret);
+		return setupClientToken(oauth2Context, config2);
 	}
 
 	public OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context, boolean force, boolean cached) {
-		return setupClientToken(config.getClientId(), config.getClientSecret(), oauth2Context, force, cached);
+		return setupClientToken(oauth2Context, force, cached, config);
 	}
 
-	public OAuth2AccessToken setupClientToken(String clientId, String clientSecret, OAuth2ClientContext oauth2Context,
-			boolean force, boolean cached) {
+	public static OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context, SsoClientConfiguration config) {
+		return setupClientToken(oauth2Context, false, false, config);
+	}
+
+	public static OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context, boolean force, boolean cached, SsoClientConfiguration config) {
 		OAuth2AccessToken token = null;
 		if (!force) {
 			token = oauth2Context.getAccessToken();
@@ -796,9 +794,8 @@ public class SsoClient {
 			}
 		}
 
-		token = getClientToken(clientId, clientSecret, oauth2Context);
+		token = getClientToken(oauth2Context, config);
 		if (token == null) {
-			logger.warn("setupToken: No token found");
 			return null;
 		}
 		oauth2Context.setAccessToken(token);
@@ -815,7 +812,21 @@ public class SsoClient {
 
 	public static ClientCredentialsResourceDetails makeClientCredentialsResourceDetails(SsoClientConfiguration config) {
 		return makeClientCredentialsResourceDetails(config.getClientId(), config.getClientSecret(), config);
+	}
 
+	public static OAuth2RestTemplate makeClientRestTemplate(SsoClientConfiguration config) {
+		return makeClientRestTemplate(config, true);
+	}
+
+	public static OAuth2RestTemplate makeClientRestTemplate(SsoClientConfiguration config, boolean setup) {
+		ClientCredentialsResourceDetails credentials = makeClientCredentialsResourceDetails(config);
+		OAuth2ClientContext context = new DefaultOAuth2ClientContext();
+		OAuth2RestTemplate template = new OAuth2RestTemplate(credentials, context);
+		if (setup) {
+			setupClientToken(template.getOAuth2ClientContext(), config);			
+		}
+		return template;
+		
 	}
 
 	public static ClientCredentialsResourceDetails makeClientCredentialsResourceDetails(String clientId,
@@ -846,8 +857,7 @@ public class SsoClient {
 		return resource;
 	}
 
-	public ResourceOwnerPasswordResourceDetails makeResourceOwnerPasswordResourceDetails(String username,
-			String password) {
+	public ResourceOwnerPasswordResourceDetails makeResourceOwnerPasswordResourceDetails(String username, String password) {
 		return makeResourceOwnerPasswordResourceDetails(username, password, config);
 	}
 
@@ -862,19 +872,15 @@ public class SsoClient {
 		return token;
 	}
 
-	public OAuth2AccessToken getClientToken(String clientId, String clientSecret) {
-		return getClientToken(clientId, clientSecret, oauth2Context);
-	}
-
-	public OAuth2AccessToken getClientToken(String clientId, String clientSecret, OAuth2ClientContext oauth2Context) {
-		ClientCredentialsResourceDetails resource = makeClientCredentialsResourceDetails(clientId, clientSecret);
+	public static OAuth2AccessToken getClientToken(OAuth2ClientContext oauth2Context, SsoClientConfiguration config) {
+		ClientCredentialsResourceDetails resource = makeClientCredentialsResourceDetails(config.getClientId(), config.getClientSecret(), config);
 		OAuth2RestTemplate template = new OAuth2RestTemplate(resource, oauth2Context);
 		OAuth2AccessToken token = template.getAccessToken();
 		return token;
 	}
 
 	public OAuth2AccessToken getClientToken(OAuth2ClientContext oauth2Context) {
-		return getClientToken(config.getClientId(), config.getClientSecret(), oauth2Context);
+		return getClientToken(oauth2Context, config);
 	}
 
 	public static OAuth2AccessToken getToken(Authentication authentication) {
@@ -894,7 +900,7 @@ public class SsoClient {
 	}
 
 	public static OAuth2AccessToken getToken() {
-		return getToken(getAuthentication());
+		return getToken(SecurityUtil.getAuthentication());
 	}
 
 	public OAuth2AccessToken getSessionToken() {
@@ -902,7 +908,7 @@ public class SsoClient {
 	}
 
 	public static String getTokenValue() {
-		return getTokenValue(getAuthentication());
+		return getTokenValue(SecurityUtil.getAuthentication());
 	}
 
 	public static String getTokenValue(Principal principal) {
@@ -965,48 +971,6 @@ public class SsoClient {
 		return principal.getName();
 	}
 
-	public static Principal getPrincipal() {
-		Authentication authentication = getAuthentication();
-		if (authentication != null) {
-			if (authentication instanceof Principal) {
-				return authentication;
-			}
-			if (authentication.getPrincipal() instanceof Principal) {
-				return (Principal) authentication.getPrincipal();
-			}
-		}
-		return null;
-	}
-
-	public static Collection<? extends GrantedAuthority> getAuthorities() {
-		Authentication authentication = getAuthentication();
-		if (authentication != null) {
-			return authentication.getAuthorities();
-		}
-		return null;
-	}
-
-	public static Collection<? extends GrantedAuthority> getAuthorities(Principal principal) {
-		if (principal == null) {
-			principal = getPrincipal();
-		}
-		if (principal instanceof OAuth2Authentication) {
-			OAuth2Authentication oauth2 = (OAuth2Authentication) principal;
-			// Authentication auth = oauth2.getUserAuthentication();
-			if (oauth2.getAuthorities() != null) {
-				return oauth2.getAuthorities();
-			}
-		}
-		return null;
-	}
-
-	public static Authentication getAuthentication() {
-		SecurityContext context = SecurityContextHolder.getContext();
-		if (context != null) {
-			return context.getAuthentication();
-		}
-		return null;
-	}
 
 	public void doLogout() {
 		@SuppressWarnings("rawtypes")

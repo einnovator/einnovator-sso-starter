@@ -38,8 +38,11 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	@Autowired
 	private SsoClient client;
 
+	@Autowired
 	private CacheManager cacheManager;
 
+	@Autowired
+	private UserManager userManager;
 	
 	public GroupManagerImpl(SsoClient client, CacheManager cacheManager) {
 		this.client = client;
@@ -204,6 +207,8 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 				logger.error("addToGroup: " + userId + " " + groupId);
 			}
 			client.addToGroup(userId, groupId);
+			evictCaches(groupId);
+			userManager.evictCaches(userId);
 		} catch (RuntimeException e) {
 			logger.error("addToGroup: " + userId + " " + groupId);
 		}
@@ -212,11 +217,14 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	@Override
 	@CacheEvict(value = CACHE_GROUP_MEMBERS, key = "#groupId + #userId")
 	public void removeMember(String userId, String groupId) {
+		if (groupId == null) {
+			logger.error("removeFromGroup: " + userId + " " + groupId);
+			return;
+		}
 		try {
 			client.removeFromGroup(userId, groupId);
-			if (groupId == null) {
-				logger.error("removeFromGroup: " + userId + " " + groupId);
-			}
+			evictCaches(groupId);
+			userManager.evictCaches(userId);
 		} catch (RuntimeException e) {
 			logger.error("removeFromGroup: " + userId + " " + groupId);
 		}

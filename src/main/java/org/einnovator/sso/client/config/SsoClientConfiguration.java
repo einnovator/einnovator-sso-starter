@@ -56,6 +56,15 @@ public class SsoClientConfiguration extends ObjectBase {
 	public SsoClientConfiguration() {
 	}
 
+	/**
+	 * Create instance of {@code SsoClientConfiguration}.
+	 *
+	 * @param config
+	 */
+	public SsoClientConfiguration(SsoClientConfiguration config) {
+		super(config);
+	}
+
 	public String getServer() {
 		return server;
 	}

@@ -13,6 +13,7 @@ import org.einnovator.sso.client.manager.RoleManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.User;
+import org.einnovator.util.SecurityUtil;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -70,7 +71,7 @@ public class RoleManagerTests {
 	@Test
 	@Ignore
 	public void checkPrincipalPermissions() {
-		Collection<? extends GrantedAuthority> authorities = SsoClient.getAuthorities();
+		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
 		assertNotNull(authorities);
 		for (GrantedAuthority authority: authorities) {
 			System.out.println(authority);

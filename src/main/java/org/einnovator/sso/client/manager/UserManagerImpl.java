@@ -16,7 +16,6 @@ import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.context.event.EventListener;
@@ -50,7 +49,6 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	private SsoClient ssoClient;
 	
 	@Override
-	@Cacheable(value=CACHE_USER, key="#id", cacheManager="ssoCacheManager")
 	public User getUser(String id) {
 		if (id==null) {
 			return null;
@@ -119,7 +117,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 
 	@Override
-	@CachePut(value=CACHE_USER, key="#user.id", cacheManager="ssoCacheManager")
+	@CachePut(value=CACHE_USER, key="#user.id")
 	public void updateUser(User user, boolean fullState) {
 		try {
 			client.updateUser(user);
@@ -129,7 +127,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	@CachePut(value=CACHE_USER, key="#user.id", cacheManager="ssoCacheManager")
+	@CachePut(value=CACHE_USER, key="#user.id")
 	public void updateUser(User user) {
 		try {
 			client.updateUser(user);
@@ -139,7 +137,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	@CacheEvict(value=CACHE_USER, key="#id", cacheManager="ssoCacheManager")
+	@CacheEvict(value=CACHE_USER, key="#id")
 	public void deleteUser(String userId) {
 		try {
 			client.deleteUser(userId);
@@ -224,18 +222,24 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		
 	}
 
-
-
-	
 	private void evictCaches(User user) {
-		Cache cache = getUserCache();
-		if (cache!=null && user.getId()!=null) {
-			cache.evict(user.getId());
-			cache.evict(makeKey(user.getId(), true, true, true));
-			cache.evict(makeKey(user.getId(), false, false, false));
-			cache.evict(makeKey(user.getId(), true, false, false));			
+		if (user!=null) {
+			evictCaches(user.getUsername());
+			evictCaches(user.getUuid());
 		}
 	}
+	
+	@Override
+	public void evictCaches(String userId) {
+		Cache cache = getUserCache();
+		if (cache != null && userId != null) {
+			cache.evict(userId);
+			cache.evict(makeKey(userId, true, true, true));
+			cache.evict(makeKey(userId, false, false, false));
+			cache.evict(makeKey(userId, true, false, false));
+		}
+	}
+
 
 
 }

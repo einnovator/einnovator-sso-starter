@@ -36,4 +36,9 @@ public interface UserManager {
 
 	void onEvent(ApplicationEvent event);
 
+	/**
+	 * @param userId
+	 */
+	void evictCaches(String userId);
+
 }
