@@ -10,6 +10,7 @@ import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.ToStringCreator;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -94,6 +95,7 @@ public class User extends EntityBase {
 
 	private List<Role> roles;
 	
+	@JsonCreator
 	public User() {
 	}
 	
@@ -547,6 +549,12 @@ public class User extends EntityBase {
 	public Group getGroup(String groupId) {
 		Member member = getMembership(groupId);
 		return member!=null ? member.getGroup() : null;
+	}
+	
+	@JsonIgnore
+	public List<String> getGroupsUuid() {
+		List<Group> groups = Group.flatTrees(Group.copy(getGroups(), true), true);
+		return EntityBase.getUuids(groups);
 	}
 	
 	@Override

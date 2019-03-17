@@ -1,6 +1,7 @@
 package org.einnovator.sso.client.modelx;
 
 import java.util.Date;
+import java.util.List;
 
 import org.einnovator.sso.client.model.Address;
 import org.einnovator.sso.client.model.GenderType;
@@ -11,6 +12,12 @@ public class UserFilter extends UserOptions {
 	private String q;
 	
 	private String groupId;
+	
+	private List<String> groups;
+
+	private List<String> roles;
+
+	private List<String> permisssions;
 	
 	private GenderType gender;
 	
@@ -132,6 +139,60 @@ public class UserFilter extends UserOptions {
 		this.qaddress = qaddress;
 	}
 
+
+	/**
+	 * Get the value of property {@code groups}.
+	 *
+	 * @return the groups
+	 */
+	public List<String> getGroups() {
+		return groups;
+	}
+
+	/**
+	 * Set the value of property {@code groups}.
+	 *
+	 * @param groups the groups to set
+	 */
+	public void setGroups(List<String> groups) {
+		this.groups = groups;
+	}
+
+	/**
+	 * Get the value of property {@code roles}.
+	 *
+	 * @return the roles
+	 */
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * Set the value of property {@code roles}.
+	 *
+	 * @param roles the roles to set
+	 */
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
+	/**
+	 * Get the value of property {@code permisssions}.
+	 *
+	 * @return the permisssions
+	 */
+	public List<String> getPermisssions() {
+		return permisssions;
+	}
+
+	/**
+	 * Set the value of property {@code permisssions}.
+	 *
+	 * @param permisssions the permisssions to set
+	 */
+	public void setPermisssions(List<String> permisssions) {
+		this.permisssions = permisssions;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.einnovator.sso.client.modelx.UserOptions#toString(org.einnovator.util.model.ToStringCreator)

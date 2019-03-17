@@ -5,13 +5,13 @@ import org.einnovator.util.model.ToStringCreator;
 
 public class UserOptions extends ObjectBase {
 
-	public static final UserOptions ORGS = new UserOptions(true, false, false, false, false);
+	public static final UserOptions ORGS = new UserOptions(true, false, false, false);
 
-	public static final UserOptions ORGS_OPS = new UserOptions(true, true, false, false, false);
+	public static final UserOptions ORGS_OPS = new UserOptions(true, true, false, false);
 
-	public static final UserOptions ORGS_OPS_TEAMS = new UserOptions(true, true, true, false, false);
+	public static final UserOptions ORGS_OPS_TEAMS = new UserOptions(true, true, true, false);
 
-	public static final UserOptions FULL = new UserOptions(true, true, true, true, true);
+	public static final UserOptions FULL = new UserOptions(true, true, true, true);
 
 	public static final UserOptions DEFAULT_OPTIONS = FULL;
 
@@ -21,20 +21,17 @@ public class UserOptions extends ObjectBase {
 
 	private Boolean teams;
 
-	private Boolean roles;
-
-	private Boolean permissions;
+	private Boolean authorities;
 
 	public UserOptions() {
 	}
 
-	public UserOptions(Boolean orgs, Boolean ops, Boolean teams, Boolean roles, Boolean permissions) {
+	public UserOptions(Boolean orgs, Boolean ops, Boolean teams, Boolean authorities) {
 		super();
 		this.orgs = orgs;
 		this.ops = ops;
 		this.teams = teams;
-		this.roles = roles;
-		this.permissions = permissions;
+		this.authorities = authorities;
 	}
 
 
@@ -62,21 +59,14 @@ public class UserOptions extends ObjectBase {
 		this.teams = teams;
 	}
 
-	public Boolean getRoles() {
-		return roles;
+	public Boolean getAuthorities() {
+		return authorities;
 	}
 
-	public void setRoles(Boolean roles) {
-		this.roles = roles;
+	public void setAuthorities(Boolean authorities) {
+		this.authorities = authorities;
 	}
 
-	public Boolean getPermissions() {
-		return permissions;
-	}
-
-	public void setPermissions(Boolean permissions) {
-		this.permissions = permissions;
-	}
 	
 	/* (non-Javadoc)
 	 * @see org.einnovator.util.model.ObjectBase#toString(org.einnovator.util.model.ToStringCreator)
@@ -87,8 +77,7 @@ public class UserOptions extends ObjectBase {
 				.append("orgs", orgs)
 				.append("ops", ops)
 				.append("teams", teams)
-				.append("roles", roles)
-				.append("permissions", permissions)
+				.append("authorities", authorities)
 				;				
 	}
 	
