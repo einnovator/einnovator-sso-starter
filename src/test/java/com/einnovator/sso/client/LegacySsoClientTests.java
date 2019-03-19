@@ -1,33 +1,12 @@
 package com.einnovator.sso.client;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import java.net.URI;
-import java.util.Random;
-import java.util.UUID;
-
-import org.einnovator.util.UriUtils;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
-import org.einnovator.sso.client.model.Address;
-import org.einnovator.sso.client.model.AddressBuilder;
-import org.einnovator.sso.client.model.Group;
-import org.einnovator.sso.client.model.GroupBuilder;
-import org.einnovator.sso.client.model.GroupType;
-import org.einnovator.sso.client.model.Invitation;
-import org.einnovator.sso.client.model.InvitationType;
-import org.einnovator.sso.client.model.Member;
-import org.einnovator.sso.client.model.Phone;
 import org.einnovator.sso.client.model.User;
-import org.einnovator.sso.client.model.UserBuilder;
-import org.einnovator.sso.client.modelx.GroupFilter;
-import org.einnovator.sso.client.modelx.UserFilter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,13 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Page;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static com.einnovator.sso.client.Profiler.run;
-import static com.einnovator.sso.client.Profiler.dump;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { LegacySsoClientTests.TestConfig.class,

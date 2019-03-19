@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.einnovator.util.model.Address;
 import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.ToStringCreator;
 

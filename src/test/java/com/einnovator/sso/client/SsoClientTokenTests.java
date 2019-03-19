@@ -8,10 +8,10 @@ import java.net.URI;
 import java.util.UUID;
 
 import org.einnovator.util.UriUtils;
+import org.einnovator.util.model.AddressBuilder;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
-import org.einnovator.sso.client.model.AddressBuilder;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.model.UserBuilder;
 import org.junit.Before;

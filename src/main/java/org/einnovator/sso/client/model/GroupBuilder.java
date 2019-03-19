@@ -3,6 +3,8 @@ package org.einnovator.sso.client.model;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.einnovator.util.model.Address;
+
 public class GroupBuilder {
 	
 	private String uuid;

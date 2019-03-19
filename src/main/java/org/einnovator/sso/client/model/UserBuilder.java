@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.einnovator.util.model.Address;
+
 
 public class UserBuilder {
 
