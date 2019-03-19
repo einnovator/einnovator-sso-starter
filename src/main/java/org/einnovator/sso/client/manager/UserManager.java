@@ -2,6 +2,7 @@ package org.einnovator.sso.client.manager;
 
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 import org.einnovator.sso.client.model.User;
@@ -40,5 +41,13 @@ public interface UserManager {
 	 * @param userId
 	 */
 	void evictCaches(String userId);
+
+	/**
+	 * @param groups
+	 * @param permissions
+	 * @param pageable
+	 * @return
+	 */
+	Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable);
 
 }

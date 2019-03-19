@@ -1,6 +1,7 @@
 package org.einnovator.sso.client.manager;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -242,4 +243,18 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 
 
 
+	@Override
+	public Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable) {
+		UserFilter filter = new UserFilter();
+		filter.setGroups(groups);
+		filter.setPermissions(permissions);
+		try {
+			return ssoClient.listUsers(filter, pageable);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			logger.error("listUsers:" + e);
+			return null;
+		}
+		
+	}
 }
