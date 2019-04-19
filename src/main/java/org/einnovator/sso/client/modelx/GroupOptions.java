@@ -2,6 +2,7 @@ package org.einnovator.sso.client.modelx;
 
 import java.util.List;
 
+import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.util.model.EntityOptions;
 import org.einnovator.util.model.ToStringCreator;
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GroupOptions extends EntityOptions {
+public class GroupOptions extends EntityOptions<Group> {
 
 	public static final GroupOptions TREE = new GroupOptions(true);
 

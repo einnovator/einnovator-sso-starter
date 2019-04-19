@@ -683,7 +683,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 					role2.setPermissions(role.getPermissions());
 				}
 			} else {
-				putCacheValue(role.getUuid(), cache, role.getUuid());
+				//putCacheValue(role.getUuid(), cache, role);
 			}
 		}
 		Cache cache2 = getGroupRolesCache();
