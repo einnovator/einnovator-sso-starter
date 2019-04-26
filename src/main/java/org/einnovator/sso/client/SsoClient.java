@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoEndpoints;
+import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Invitation;
@@ -26,6 +27,8 @@ import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleFilter;
 import org.einnovator.sso.client.model.User;
+import org.einnovator.sso.client.modelx.ClientFilter;
+import org.einnovator.sso.client.modelx.ClientOptions;
 import org.einnovator.sso.client.modelx.GroupFilter;
 import org.einnovator.sso.client.modelx.MemberFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
@@ -723,6 +726,62 @@ public class SsoClient {
 	public void changePassword(String password) {
 		URI uri = makeURI(SsoEndpoints.password(config) + "?password=" + password);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
+		exchange(request, Void.class);
+	}
+
+	
+	public Client getClient(String id, ClientOptions options) {
+		id = encodeId(id);
+		URI uri = makeURI(SsoEndpoints.client(id, config));
+		if (options!=null) {
+			Map<String, String> params = new LinkedHashMap<>();
+			params.putAll(MappingUtils.toMapFormatted(options));
+			uri = appendQueryParameters(uri, params);			
+		}
+
+		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
+		ResponseEntity<Client> result = exchange(request, Client.class);
+		return result.getBody();
+	}
+
+	public Page<Client> listClients(ClientFilter filter, Pageable pageable) {
+		URI uri = makeURI(SsoEndpoints.clients(config));
+		if (filter!=null || pageable!=null) {
+			Map<String, String> params = new LinkedHashMap<>();
+			if (filter!=null) {
+				params.putAll(MappingUtils.toMapFormatted(filter));
+			}
+			if (pageable!=null) {
+				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
+			}
+			uri = appendQueryParameters(uri, params);			
+		}
+		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
+		@SuppressWarnings("rawtypes")
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		return PageUtil.create2(result.getBody(),  Client.class);
+	}
+
+	public URI createClient(Client client) {
+		URI uri = makeURI(SsoEndpoints.clients(config));
+		RequestEntity<Client> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(client);
+		
+		ResponseEntity<Void> result = exchange(request, Void.class);
+		return result.getHeaders().getLocation();
+	}
+	
+	public void updateClient(Client client) {
+		URI uri = makeURI(SsoEndpoints.client(client.getId(), config));
+		RequestEntity<Client> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(client);
+		
+		exchange(request, Client.class);
+	}
+	
+	public void deleteClient(String clientId) {
+		clientId = encodeId(clientId);
+		URI uri = makeURI(SsoEndpoints.client(clientId, config));
+		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		
 		exchange(request, Void.class);
 	}
 

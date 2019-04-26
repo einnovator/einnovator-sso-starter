@@ -130,5 +130,13 @@ public class SsoEndpoints {
 
 	}
 
-	
+
+	public static String client(String id, SsoClientConfiguration config) {
+		return clients(config) + "/" + id;
+	}
+
+	public static String clients(SsoClientConfiguration config) {
+		return config.getServer() + "/api/admin/client";
+	}
+
 }
