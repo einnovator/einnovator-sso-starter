@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.einnovator.util.CacheUtils;
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.SecurityUtil;
 import org.springframework.cache.Cache;
@@ -91,20 +92,7 @@ public class ManagerBase {
 		
 
 	protected String makeKey(Object... keys) {
-		StringBuilder sb = new StringBuilder();
-		for (Object key: keys) {
-			if (key!=null) {
-				if (sb.length()>0) {
-					sb.append(":");						
-				}
-				if (key instanceof String) {
-					sb.append(key);
-				} else {
-					sb.append(key.hashCode());
-				}				
-			}
-		}
-		return sb.toString();
+		return CacheUtils.makeKey(keys);
 	}
 
 	@SuppressWarnings("unchecked")

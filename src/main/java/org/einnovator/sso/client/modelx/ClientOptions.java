@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientOptions extends EntityOptions<Client> {
 
+	public static final ClientOptions DEFAULT = new ClientOptions();
+
 	public ClientOptions() {
 	}
 

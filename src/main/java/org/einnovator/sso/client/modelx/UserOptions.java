@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.einnovator.sso.client.model.GroupType;
+import org.einnovator.sso.client.model.User;
 import org.einnovator.util.model.EntityOptions;
 import org.einnovator.util.model.ToStringCreator;
 
@@ -13,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserOptions extends EntityOptions {
+public class UserOptions extends EntityOptions<User> {
 
 	public static final UserOptions ORGS = new UserOptions(true, false, false, false, false);
 
@@ -23,7 +24,7 @@ public class UserOptions extends EntityOptions {
 
 	public static final UserOptions FULL = new UserOptions(true, true, true, true, true);
 
-	public static final UserOptions DEFAULT_OPTIONS = ORGS;
+	public static final UserOptions DEFAULT = ORGS;
 
 	private Boolean orgs;
 

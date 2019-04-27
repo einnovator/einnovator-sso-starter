@@ -16,7 +16,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.context.event.EventListener;
@@ -30,14 +29,14 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	public static final String CACHE_USER = "User";
 
 	private final Log logger = LogFactory.getLog(getClass());
-
-	@Autowired
-	private SsoClient client;
 	
 	private CacheManager cacheManager;
 	
+	@Autowired
+	private SsoClient ssoClient;
+	
 	public UserManagerImpl(SsoClient ssoClient, CacheManager cacheManager) {
-		this.client = ssoClient;
+		this.ssoClient = ssoClient;
 		this.cacheManager = cacheManager;
 	}
 	
@@ -45,10 +44,6 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		this.cacheManager = cacheManager;
 	}
 
-
-	@Autowired
-	private SsoClient ssoClient;
-	
 	@Override
 	public User getUser(String id) {
 		if (id==null) {
@@ -109,7 +104,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	@Override
 	public URI createUser(User user) {
 		try {
-			return client.createUser(user);
+			return ssoClient.createUser(user);
 		} catch (RuntimeException e) {
 			logger.error("createUser:" + e);
 			return null;
@@ -118,32 +113,31 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 
 	@Override
-	@CachePut(value=CACHE_USER, key="#user.id")
-	public void updateUser(User user, boolean fullState) {
+	public User updateUser(User user, boolean fullState) {
 		try {
-			client.updateUser(user);
+			ssoClient.updateUser(user);
+			evictCaches(user.getUuid());
+			return user;
 		} catch (RuntimeException e) {
 			logger.error("updateUser:" + e);
+			return null;
 		}
 	}
 	
 	@Override
-	@CachePut(value=CACHE_USER, key="#user.id")
-	public void updateUser(User user) {
-		try {
-			client.updateUser(user);
-		} catch (RuntimeException e) {
-			logger.error("updateUser:" + e);
-		}
+	public User updateUser(User user) {
+		return updateUser(user, false);
 	}
 	
 	@Override
 	@CacheEvict(value=CACHE_USER, key="#id")
-	public void deleteUser(String userId) {
+	public boolean deleteUser(String userId) {
 		try {
-			client.deleteUser(userId);
+			ssoClient.deleteUser(userId);
+			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteUser:" + e);
+			return false;
 		}
 	}
 	
@@ -151,7 +145,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	@Override
 	public Page<User> listUsers(UserFilter filter, Pageable pageable) {
 		try {
-			return client.listUsers(filter, pageable);
+			return ssoClient.listUsers(filter, pageable);
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 			logger.error("listUsers:" + e);
@@ -235,13 +229,12 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		Cache cache = getUserCache();
 		if (cache != null && userId != null) {
 			cache.evict(userId);
-			cache.evict(makeKey(userId, true, true, true));
-			cache.evict(makeKey(userId, false, false, false));
-			cache.evict(makeKey(userId, true, false, false));
+			cache.evict(makeKey(userId, UserOptions.FULL));
+			cache.evict(makeKey(userId, UserOptions.ORGS));
+			cache.evict(makeKey(userId, UserOptions.ORGS_OPS));
+			cache.evict(makeKey(userId, UserOptions.ORGS_OPS_TEAMS));
 		}
 	}
-
-
 
 	@Override
 	public Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable) {

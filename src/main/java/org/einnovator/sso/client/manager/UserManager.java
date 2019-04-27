@@ -21,11 +21,11 @@ public interface UserManager {
 
 	URI createUser(User user);
 	
-	void updateUser(User user, boolean fullState);
+	User updateUser(User user, boolean fullState);
 
-	void updateUser(User user);
+	User updateUser(User user);
 
-	void deleteUser(String userId);
+	boolean deleteUser(String userId);
 	
 	Page<User> listUsers(UserFilter filter, Pageable options);
 	
