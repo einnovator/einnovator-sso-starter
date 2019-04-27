@@ -151,7 +151,7 @@ public class SsoClient {
 	}
 	
 	public User getUser(String id) {
-		return getUser(id, UserOptions.DEFAULT_OPTIONS);
+		return getUser(id, null);
 	}
 	
 	public User getUser(String id, UserOptions options) {
