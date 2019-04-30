@@ -15,6 +15,7 @@ import org.einnovator.sso.client.manager.UserManagerImpl;
 import org.einnovator.sso.client.web.SsoClientLogoutHandler;
 import org.einnovator.sso.client.web.SsoCorsFilter;
 import org.einnovator.sso.client.web.SsoLogoutController;
+import org.einnovator.util.web.XSessionScopeConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -30,10 +31,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.Ordered;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -49,7 +51,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableWebSecurity
 @EnableConfigurationProperties(value=SsoClientConfiguration.class)
 @EnableCaching
-@Import(OAuth2ResourcesConfigurer.class)
+@Import({XSessionScopeConfig.class, OAuth2ResourcesConfigurer.class})
 public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*/ {
 
 
@@ -187,5 +189,13 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 	//@Order(Ordered.HIGHEST_PRECEDENCE)
 	public SsoCorsFilter corsFilter(CorsConfigurationSource config) {
 		return new SsoCorsFilter(config);
+	}
+	
+	
+	@Bean
+	@Scope(scopeName="xsession")
+	@Primary
+	public OAuth2ClientContext oAuth2ClientContext2() {
+		return new DefaultOAuth2ClientContext();
 	}
 }
