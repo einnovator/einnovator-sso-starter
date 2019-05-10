@@ -248,6 +248,15 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			logger.error("listUsers:" + e);
 			return null;
 		}
-		
 	}
+	
+	@Override
+	public List<String> getGroupsUuidForUser(String username) {
+		if (username==null) {
+			return null;
+		}
+		User user = getUser(username, UserOptions.FULL);
+		return user!=null ? user.getGroupsUuid() : null;
+	}
+
 }

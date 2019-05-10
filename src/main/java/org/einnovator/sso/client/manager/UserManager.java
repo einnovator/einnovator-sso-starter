@@ -50,4 +50,10 @@ public interface UserManager {
 	 */
 	Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable);
 
+	/**
+	 * @param username
+	 * @return
+	 */
+	List<String> getGroupsUuidForUser(String username);
+
 }
