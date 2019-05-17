@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.util.PageOptions;
+import org.einnovator.util.PageUtil;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.Member;
@@ -41,7 +42,7 @@ public class SsoQueryRestController {
 		}
 		Page<User> page = userManager.listUsers(filter, options.toPageRequest());
 
-		logger.info("query: #" + (page!=null ? page.getTotalElements() : null) + " " + filter + " " + options);			
+		logger.info("query: " + PageUtil.toString(page) + " " + filter + " " + options);			
 		return page;
     }
 	
@@ -75,7 +76,7 @@ public class SsoQueryRestController {
 		}
 		Page<?> page = userManager.listUsers(filter, options.toPageRequest());
 
-		logger.info("query: #" + (page!=null ? page.getTotalElements() : null) + " " + filter + " " + options);			
+		logger.info("query: " + PageUtil.toString(page) + " " + filter + " " + options);			
 
 		return page;
 	}
