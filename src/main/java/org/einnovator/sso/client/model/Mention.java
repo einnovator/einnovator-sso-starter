@@ -24,7 +24,7 @@ public class Mention extends EntityBase {
 	
 	private String icon;
 	
-	private String imgUri;
+	private String img;
 	
 
 	public Mention() {
@@ -66,12 +66,12 @@ public class Mention extends EntityBase {
 		this.icon = icon;
 	}
 
-	public String getImgUri() {
-		return imgUri;
+	public String getImg() {
+		return img;
 	}
 
-	public void setImgUri(String imgUri) {
-		this.imgUri = imgUri;
+	public void setImg(String img) {
+		this.img = img;
 	}
 
 	public String getName() {
@@ -111,7 +111,7 @@ public class Mention extends EntityBase {
 				+ (name != null ? "name=" + name + ", " : "")
 				+ (uri != null ? "uri=" + uri + ", " : "")
 				+ (redirectUri != null ? "redirectUri=" + redirectUri + ", " : "")
-				+ (imgUri != null ? "imgUri=" + imgUri + ", " : "")
+				+ (img != null ? "img=" + img + ", " : "")
 				+ (icon != null ? "icon=" + icon + ", " : "")
 				+ (creationDate != null ? "creationDate=" + creationDate : "") 
 				+ (lastModified != null ? "lastModified=" + lastModified : "") 

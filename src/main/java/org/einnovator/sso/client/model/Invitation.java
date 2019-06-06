@@ -37,7 +37,7 @@ public class Invitation  extends EntityBase {
 
 	private String description;
 
-	private String imgUri;
+	private String img;
 	
 	private String subject;
 	
@@ -172,12 +172,12 @@ public class Invitation  extends EntityBase {
 		this.site = site;
 	}
 
-	public String getImgUri() {
-		return imgUri;
+	public String getImg() {
+		return img;
 	}
 
-	public void setImgUri(String imgUri) {
-		this.imgUri = imgUri;
+	public void setImg(String img) {
+		this.img = img;
 	}
 
 	public String getTemplate() {
@@ -294,7 +294,7 @@ public class Invitation  extends EntityBase {
 				+ (env != null ? "env=" + env  + ", " : "")
 				+ (autoLogin != null ? "autoLogin=" + autoLogin  + ", " : "")
 				+ (redirectUri != null ? "redirectUri=" + redirectUri + ", ": "")
-				+ (imgUri != null ? "status=" + status  + ", " : "") 
+				+ (img != null ? "status=" + status  + ", " : "") 
 				+ (trigger0 != null ? "trigger0=" + trigger0  + ", " : "") 
 				+ (trigger1 != null ? "trigger1=" + trigger1  + ", " : "")
 				+ (description != null ? "description=" + description : "")

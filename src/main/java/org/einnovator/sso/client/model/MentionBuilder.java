@@ -21,7 +21,7 @@ public class MentionBuilder extends EntityBase {
 	
 	private String icon;
 	
-	private String imgUri;
+	private String img;
 	
 
 	public MentionBuilder() {
@@ -47,8 +47,8 @@ public class MentionBuilder extends EntityBase {
 		this.icon = icon;
 	}
 
-	public void setImgUri(String imgUri) {
-		this.imgUri = imgUri;
+	public void setImg(String img) {
+		this.img = img;
 	}
 
 	public void setName(String name) {
@@ -73,7 +73,7 @@ public class MentionBuilder extends EntityBase {
 		mention.setRedirectUri(redirectUri);
 		mention.setUri(uri);
 		mention.setIcon(icon);
-		mention.setImgUri(imgUri);
+		mention.setImg(img);
 		return mention;
 	}
 }

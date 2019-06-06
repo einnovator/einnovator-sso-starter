@@ -54,6 +54,10 @@ public class User extends EntityBase {
 
 	private String avatar;
 	
+	private String idhash;
+
+	private String idicon;
+
 	private String cover;
 
 	private String cover2;
@@ -581,6 +585,8 @@ public class User extends EntityBase {
 				.append("onboarding", onboarding)
 				.append("authenticated", authenticated)
 				.append("avatar", avatar)
+				.append("idhash", idhash)
+				.append("idicon", idicon)
 				.append("cover", cover)
 				.append("cover2", cover2)
 				.append("signature", signature)

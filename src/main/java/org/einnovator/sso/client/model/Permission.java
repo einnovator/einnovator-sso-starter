@@ -20,7 +20,7 @@ public class Permission extends EntityBase {
 
 	private String category;
 	
-	private String imgUri;
+	private String img;
 
 	private String icon;
 	
@@ -52,12 +52,12 @@ public class Permission extends EntityBase {
 		this.category = category;
 	}
 
-	public String getImgUri() {
-		return imgUri;
+	public String getImg() {
+		return img;
 	}
 
-	public void setImgUri(String imgUri) {
-		this.imgUri = imgUri;
+	public void setImg(String img) {
+		this.img = img;
 	}
 
 	public String getApp() {
@@ -104,7 +104,7 @@ public class Permission extends EntityBase {
 				+ (name != null ? "name=" + name + ", " : "")
 				+ (category != null ? "category=" + category : "")
 				+ (icon != null ? "icon=" + icon + ", " : "")
-				+ (imgUri != null ? "imgUri=" + imgUri + ", " : "")
+				+ (img != null ? "img=" + img + ", " : "")
 				+ (description != null ? "description=" + description + ", " : "")
 				+ (app != null ? "app=" + app + ", " : "")
 				+ "]";

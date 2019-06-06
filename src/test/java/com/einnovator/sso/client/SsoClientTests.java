@@ -116,6 +116,8 @@ public class SsoClientTests {
 
 	@Test
 	public void getExistingUserTest() {
+		OAuth2AccessToken token = client.getToken(TEST_USER2, TEST_PASSWORD);
+		System.out.println(token);
 		String username = TEST_USER2;
 		User user = client.getUser(username);
 		assertNotNull(user);

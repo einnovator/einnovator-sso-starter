@@ -27,7 +27,7 @@ public class InvitationBuilder  {
 
 	private String description;
 
-	private String imgUri;
+	private String img;
 	
 	private String template;
 
@@ -101,8 +101,8 @@ public class InvitationBuilder  {
 		return this;
 	}
 
-	public InvitationBuilder imgUri(String imgUri) {
-		this.imgUri = imgUri;
+	public InvitationBuilder img(String img) {
+		this.img = img;
 		return this;
 	}
 
@@ -156,7 +156,7 @@ public class InvitationBuilder  {
 		invitation.setRedirectUri(redirectUri);
 		invitation.setSite(site);
 		invitation.setDescription(description);
-		invitation.setImgUri(imgUri);
+		invitation.setImg(img);
 		invitation.setTemplate(template);
 		invitation.setSubject(subject);
 		invitation.setEnv(env);
