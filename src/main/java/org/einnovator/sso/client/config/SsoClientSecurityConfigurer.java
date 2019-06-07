@@ -10,13 +10,18 @@ import org.einnovator.sso.client.manager.PermissionManager;
 import org.einnovator.sso.client.manager.PermissionManagerImpl;
 import org.einnovator.sso.client.manager.RoleManager;
 import org.einnovator.sso.client.manager.RoleManagerImpl;
+import org.einnovator.sso.client.manager.SsoManager;
+import org.einnovator.sso.client.manager.SsoManagerImpl;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.manager.UserManagerImpl;
 import org.einnovator.sso.client.web.SsoClientLogoutHandler;
 import org.einnovator.sso.client.web.SsoCorsFilter;
 import org.einnovator.sso.client.web.SsoLogoutController;
+import org.einnovator.util.security.ClientTokenProvider;
+import org.einnovator.util.security.UserTokenProvider;
 import org.einnovator.util.web.XSessionScopeConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
@@ -32,6 +37,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,7 +58,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableConfigurationProperties(value=SsoClientConfiguration.class)
 @EnableCaching
 @Import({XSessionScopeConfig.class, OAuth2ResourcesConfigurer.class})
-public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*/ {
+public class SsoClientSecurityConfigurer {
 
 
 	@Value("${spring.cache.ehcache.config:ehcache-sso-starter.xml}")
@@ -138,7 +144,12 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 		registration.setOrder(-100);
 		return registration;
 	}
-	
+
+	@Bean
+	public InvitationManager invitationManager() {
+		return new InvitationManagerImpl(ssoCacheManager());
+	}
+
 	@Bean
 	public SsoClient ssoClient() {
 		return new SsoClient(config);
@@ -165,8 +176,18 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 	}
 
 	@Bean
-	public InvitationManager invitationManager() {
-		return new InvitationManagerImpl(ssoCacheManager());
+	public SsoManager ssoManager(OAuth2ClientContext context) {
+		return new SsoManagerImpl();
+	}
+
+	@Bean
+	public ClientTokenProvider clientTokenProvider() {
+		return new SsoClientTokenProvider();
+	}
+
+	@Bean
+	public UserTokenProvider userTokenProvider() {
+		return new SsoUserTokenProvider();
 	}
 
 	@Bean
@@ -185,8 +206,8 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 		return new EhCacheCacheManager(cacheManagerFactoryBean.getObject());
 	}
 	
-	//@Bean
-	//@Order(Ordered.HIGHEST_PRECEDENCE)
+	@Bean
+	@Order(Ordered.HIGHEST_PRECEDENCE)
 	public SsoCorsFilter corsFilter(CorsConfigurationSource config) {
 		return new SsoCorsFilter(config);
 	}
@@ -195,6 +216,7 @@ public class SsoClientSecurityConfigurer /*extends WebSecurityConfigurerAdapter*
 	@Bean
 	@Scope(scopeName="xsession")
 	@Primary
+	@Qualifier("oAuth2ClientContext2")
 	public OAuth2ClientContext oAuth2ClientContext2() {
 		return new DefaultOAuth2ClientContext();
 	}

@@ -12,11 +12,11 @@ public class RoleBuilder {
 
 	private String description;
 
-	private String owner;
-		
-	private Boolean builtIn;
+	private Boolean builtin;
 	
 	private Boolean global;
+
+	private String app;
 	
 	private List<Permission> permissions;
 	
@@ -36,8 +36,8 @@ public class RoleBuilder {
 		return this;
 	}
 
-	public RoleBuilder builtIn(Boolean builtIn) {
-		this.builtIn = builtIn;
+	public RoleBuilder builtin(Boolean builtin) {
+		this.builtin = builtin;
 		return this;
 	}
 
@@ -51,8 +51,8 @@ public class RoleBuilder {
 		return this;
 	}
 
-	public RoleBuilder owner(String owner) {
-		this.owner = owner;
+	public RoleBuilder app(String app) {
+		this.app = app;
 		return this;
 	}
 
@@ -80,10 +80,10 @@ public class RoleBuilder {
 		role.setName(name);
 		role.setType(type);
 		role.setGlobal(global);
-		role.setBuiltIn(builtIn);
+		role.setBuiltIn(builtin);
 		role.setGroup(group);
 		role.setPermissions(permissions);
-		role.setOwner(owner);
+		role.setApp(app);
 		role.setDescription(description);
 		return role;
 	}

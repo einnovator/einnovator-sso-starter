@@ -26,6 +26,7 @@ import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleFilter;
+import org.einnovator.sso.client.model.SsoRegistration;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
@@ -39,6 +40,8 @@ import org.einnovator.util.PageResult;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.SecurityUtil;
 import org.einnovator.util.UriUtils;
+import org.einnovator.util.model.Application;
+import org.einnovator.util.security.ClientTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -80,10 +83,17 @@ public class SsoClient {
 	private OAuth2RestTemplate restTemplate;
 
 	@Autowired
+	@Qualifier("oAuth2ClientContext2")
 	private OAuth2ClientContext oauth2Context;
 
 	@Autowired(required = false)
 	private ClientHttpRequestFactory ssoClientHttpRequestFactory;
+
+	@Autowired(required=false)
+	private ClientTokenProvider clientTokenProvider;
+
+	@Autowired(required=false)
+	private Application application;
 
 	@Autowired
 	public SsoClient(SsoClientConfiguration config) {
@@ -148,6 +158,47 @@ public class SsoClient {
 		OAuth2RestTemplate template = new OAuth2RestTemplate(resource, oauth2ClientContext);			
 		template.setRequestFactory(ssoClientHttpRequestFactory);
 		return template;
+	}
+	
+	public void register() {
+		SsoRegistration registration = config.getRegistration();
+		if (registration!=null) {
+			if (application!=null) {
+				registration.setApplication(application);
+			}
+			if (clientTokenProvider!=null) {
+				clientTokenProvider.setupToken();
+			}
+			register(registration, restTemplate);			
+		}
+	}
+
+	public void register(Application application) {
+		if (clientTokenProvider!=null) {
+			clientTokenProvider.setupToken();
+		}
+		register(application, restTemplate);
+	}
+
+	public void register(Application application, OAuth2RestTemplate restTemplate) {
+		SsoRegistration registration = config.getRegistration();
+		if (registration!=null) {
+			registration.setApplication(application);
+			register(registration, restTemplate);			
+		}
+	}
+
+	public void register(SsoRegistration registration) {
+		if (clientTokenProvider!=null) {
+			clientTokenProvider.setupToken();
+		}
+		register(registration, restTemplate);
+	}
+
+	public void register(SsoRegistration registration, OAuth2RestTemplate restTemplate) {
+		URI uri = makeURI(SsoEndpoints.register(config));
+		RequestEntity<SsoRegistration> request = RequestEntity.post(uri).body(registration);
+		exchange(restTemplate, request, Void.class);
 	}
 	
 	public User getUser(String id) {
@@ -785,8 +836,11 @@ public class SsoClient {
 		exchange(request, Void.class);
 	}
 
-	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType)
-			throws RestClientException {
+	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType) throws RestClientException {
+		return exchange(restTemplate, request, responseType);
+	}
+
+	protected <T> ResponseEntity<T> exchange(OAuth2RestTemplate restTemplate, RequestEntity<?> request, Class<T> responseType) throws RestClientException {
 		if (autoSetupToken) {
 			setupToken();
 		}
@@ -1095,4 +1149,5 @@ public class SsoClient {
 		return ssoClient;
 	}
 
+	
 }

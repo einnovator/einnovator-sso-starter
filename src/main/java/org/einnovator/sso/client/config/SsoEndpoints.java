@@ -4,9 +4,12 @@ package org.einnovator.sso.client.config;
 /**
  * SSO API endpoints.
  * 
- * @author Jorge Simao {jorge.simao@einnovator.org}
  */
 public class SsoEndpoints {
+
+	public static String register(SsoClientConfiguration config) {
+		return config.getServer() + "/api/register";
+	}
 
 	public static String user(String id, SsoClientConfiguration config) {
 		return users(config) + "/" + id;

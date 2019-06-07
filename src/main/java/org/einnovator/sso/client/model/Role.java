@@ -16,17 +16,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Role extends EntityBase {	
 
 	private String name;
-	
+
 	private RoleType type;
 
 	private String description;
 
-	private String owner;
-		
 	private Integer userCount;
 	
-	private Boolean builtIn;
-	
+	private Boolean builtin;
+
+	private String app;
+
 	private Boolean global;
 	
 	private List<Permission> permissions;
@@ -37,9 +37,9 @@ public class Role extends EntityBase {
 	public Role() {
 	}
 	
-	public Role(String name, Boolean builtIn) {
+	public Role(String name, Boolean builtin) {
 		this.name = name;
-		this.builtIn = builtIn;
+		this.builtin = builtin;
 	}
 
 	public String getName() {
@@ -59,13 +59,50 @@ public class Role extends EntityBase {
 	}
 
 	public Boolean getBuiltIn() {
-		return builtIn;
+		return builtin;
 	}
 
-	public void setBuiltIn(Boolean builtIn) {
-		this.builtIn = builtIn;
+	public void setBuiltIn(Boolean builtin) {
+		this.builtin = builtin;
 	}
 	
+	
+	/**
+	 * Get the value of property {@code builtin}.
+	 *
+	 * @return the builtin
+	 */
+	public Boolean getBuiltin() {
+		return builtin;
+	}
+
+	/**
+	 * Set the value of property {@code builtin}.
+	 *
+	 * @param builtin the builtin to set
+	 */
+	public void setBuiltin(Boolean builtin) {
+		this.builtin = builtin;
+	}
+
+	/**
+	 * Get the value of property {@code app}.
+	 *
+	 * @return the app
+	 */
+	public String getApp() {
+		return app;
+	}
+
+	/**
+	 * Set the value of property {@code app}.
+	 *
+	 * @param app the app to set
+	 */
+	public void setApp(String app) {
+		this.app = app;
+	}
+
 	public Boolean getGlobal() {
 		return global;
 	}
@@ -82,15 +119,6 @@ public class Role extends EntityBase {
 		this.description = description;
 	}
 	
-	
-	public String getOwner() {
-		return owner;
-	}
-
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
-
 	public Integer getUserCount() {
 		return userCount;
 	}
@@ -126,16 +154,13 @@ public class Role extends EntityBase {
 		return null;
 	}
 		
-	/* (non-Javadoc)
-	 * @see org.einnovator.util.model.ObjectBase#toString1(org.einnovator.util.model.ToStringCreator)
-	 */
 	@Override
 	public ToStringCreator toString1(ToStringCreator creator) {
 		return super.toString1(creator)
 				.append("name", name)
-				.append("builtIn", builtIn)
+				.append("builtin", builtin)
+				.append("app", app)
 				.append("global", global)
-				.append("owner", owner)
 				.append("userCount", userCount)
 				.append("group", group)
 				.append("description", description)
