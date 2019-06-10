@@ -27,7 +27,7 @@ public class UserBuilder {
 	
 	private String title;
 
-	private String gender;
+	private GenderType gender;
 
 	private Date birthdate;
 	
@@ -112,7 +112,7 @@ public class UserBuilder {
 		return this;
 	}
 
-	public UserBuilder gender(String gender) {
+	public UserBuilder gender(GenderType gender) {
 		this.gender = gender;
 		return this;
 	}

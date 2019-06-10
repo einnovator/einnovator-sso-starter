@@ -34,7 +34,7 @@ public class User extends EntityBase {
 	
 	private String title;
 	
-	private String gender;
+	private GenderType gender;
 	
 	private Date birthdate;
 
@@ -105,7 +105,6 @@ public class User extends EntityBase {
 	}
 	
 	public User(String username) {
-		this.id = username;
 		this.username = username;
 	}
 	
@@ -241,11 +240,11 @@ public class User extends EntityBase {
 		this.nickname = nickname;
 	}
 	
-	public String getGender() {
+	public GenderType getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(GenderType gender) {
 		this.gender = gender;
 	}
 

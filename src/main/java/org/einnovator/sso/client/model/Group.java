@@ -81,7 +81,11 @@ public class Group extends EntityBase {
 			groups = new ArrayList<>(group.getGroups());
 		}
 	}
-	
+
+	public Group(Object obj) {
+		super(obj);
+	}
+
 	public Group(String uuid) {
 		this.uuid = uuid;
 	}
