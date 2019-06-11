@@ -10,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.model.SsoRegistration;
-import org.einnovator.util.model.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 
@@ -48,28 +47,6 @@ public class SsoManagerImpl implements SsoManager {
 			logger.error("register: " + e);
 			return false;
 		}		
-	}
-
-	@Override
-	public boolean register(Application application) {
-		try {
-			client.register(application);			
-			return true;
-		} catch (RuntimeException e) {
-			logger.error("register: " + e + " " + application);
-			return false;
-		}
-	}
-
-	@Override
-	public boolean register(Application application, OAuth2RestTemplate template) {
-		try {
-			client.register(application, template);			
-			return true;
-		} catch (RuntimeException e) {
-			logger.error("register: " + e + " " + application);
-			return false;
-		}
 	}
 
 	@Override

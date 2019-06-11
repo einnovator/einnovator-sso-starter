@@ -41,7 +41,6 @@ import org.einnovator.util.PageUtil;
 import org.einnovator.util.SecurityUtil;
 import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Application;
-import org.einnovator.util.security.ClientTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -84,13 +83,10 @@ public class SsoClient {
 
 	@Autowired
 	@Qualifier("oAuth2ClientContext2")
-	private OAuth2ClientContext oauth2Context;
+	private OAuth2ClientContext oauth2ClientContext;
 
 	@Autowired(required = false)
 	private ClientHttpRequestFactory ssoClientHttpRequestFactory;
-
-	@Autowired(required=false)
-	private ClientTokenProvider clientTokenProvider;
 
 	@Autowired(required=false)
 	private Application application;
@@ -103,7 +99,7 @@ public class SsoClient {
 	public SsoClient(OAuth2RestTemplate restTemplate, SsoClientConfiguration config) {
 		this.config = config;
 		this.restTemplate = restTemplate;
-		this.oauth2Context = restTemplate.getOAuth2ClientContext();
+		this.oauth2ClientContext = restTemplate.getOAuth2ClientContext();
 	}
 
 	public SsoClient(SsoClientConfiguration config, ClientHttpRequestFactory clientHttpRequestFactory) {
@@ -111,7 +107,7 @@ public class SsoClient {
 		ssoClientHttpRequestFactory = clientHttpRequestFactory;
 	}
 
-	private boolean autoSetupToken = true;
+	private boolean autoSetupToken;
 	
 	@PostConstruct
 	public void init() {
@@ -129,11 +125,11 @@ public class SsoClient {
 	}
 
 	public OAuth2ClientContext getOauth2Context() {
-		return oauth2Context;
+		return oauth2ClientContext;
 	}
 
-	public void setOauth2Context(OAuth2ClientContext oauth2Context) {
-		this.oauth2Context = oauth2Context;
+	public void setOauth2Context(OAuth2ClientContext oauth2ClientContext) {
+		this.oauth2ClientContext = oauth2ClientContext;
 	}
 	
 	
@@ -159,40 +155,29 @@ public class SsoClient {
 		template.setRequestFactory(ssoClientHttpRequestFactory);
 		return template;
 	}
-	
+
+	public OAuth2RestTemplate makeOAuth2RestTemplate() {
+		return makeOAuth2RestTemplate(oauth2ClientContext);
+	}
+
 	public void register() {
 		SsoRegistration registration = config.getRegistration();
 		if (registration!=null) {
 			if (application!=null) {
 				registration.setApplication(application);
 			}
-			if (clientTokenProvider!=null) {
-				clientTokenProvider.setupToken();
+			try {
+				register(registration);							
+			} catch (RuntimeException e) {
+				e.printStackTrace();
+				throw e;
 			}
-			register(registration, restTemplate);			
-		}
-	}
-
-	public void register(Application application) {
-		if (clientTokenProvider!=null) {
-			clientTokenProvider.setupToken();
-		}
-		register(application, restTemplate);
-	}
-
-	public void register(Application application, OAuth2RestTemplate restTemplate) {
-		SsoRegistration registration = config.getRegistration();
-		if (registration!=null) {
-			registration.setApplication(application);
-			register(registration, restTemplate);			
 		}
 	}
 
 	public void register(SsoRegistration registration) {
-		if (clientTokenProvider!=null) {
-			clientTokenProvider.setupToken();
-		}
-		register(registration, restTemplate);
+		setupClientToken();
+		register(registration, makeOAuth2RestTemplate());
 	}
 
 	public void register(SsoRegistration registration, OAuth2RestTemplate restTemplate) {
@@ -855,7 +840,7 @@ public class SsoClient {
 		OAuth2AccessToken token = null;
 
 		if (!force) {
-			token = oauth2Context.getAccessToken();
+			token = oauth2ClientContext.getAccessToken();
 			if (token != null) {
 				return token;
 			}
@@ -866,52 +851,53 @@ public class SsoClient {
 			logger.warn("setupToken: No token found");
 			return null;
 		}
-		oauth2Context.setAccessToken(token);
+		oauth2ClientContext.setAccessToken(token);
 		return token;
 	}
 
 	public OAuth2AccessToken setupClientToken() {
-		return setupClientToken(oauth2Context);
+		return setupClientToken(oauth2ClientContext);
 	}
 
 
-	public OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context) {
-		return setupClientToken(oauth2Context, false, false, config);
+	public OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2ClientContext) {
+		return setupClientToken(oauth2ClientContext, false, false, config);
 	}
 
 	public OAuth2AccessToken setupClientToken(boolean force, boolean cached) {
-		return setupClientToken(oauth2Context, force, cached);
+		return setupClientToken(oauth2ClientContext, force, cached);
 	}
 
 	public OAuth2AccessToken setupClientToken(String clientId, String clientSecret) {
 		SsoClientConfiguration config2 = new SsoClientConfiguration(config);
 		config2.setClientId(clientId);
 		config2.setClientSecret(clientSecret);
-		return setupClientToken(oauth2Context, config2);
+		return setupClientToken(oauth2ClientContext, config2);
 	}
 
-	public OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context, boolean force, boolean cached) {
-		return setupClientToken(oauth2Context, force, cached, config);
+	public OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2ClientContext, boolean force, boolean cached) {
+		return setupClientToken(oauth2ClientContext, force, cached, config);
 	}
 
-	public static OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context, SsoClientConfiguration config) {
-		return setupClientToken(oauth2Context, false, false, config);
+	public static OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2ClientContext, SsoClientConfiguration config) {
+		return setupClientToken(oauth2ClientContext, false, false, config);
 	}
 
-	public static OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2Context, boolean force, boolean cached, SsoClientConfiguration config) {
+	public static OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2ClientContext, boolean force, boolean cached, SsoClientConfiguration config) {
 		OAuth2AccessToken token = null;
 		if (!force) {
-			token = oauth2Context.getAccessToken();
+			token = oauth2ClientContext.getAccessToken();
 			if (token != null) {
 				return token;
 			}
 		}
+		token = getClientToken(oauth2ClientContext, config);
 
-		token = getClientToken(oauth2Context, config);
 		if (token == null) {
 			return null;
 		}
-		oauth2Context.setAccessToken(token);
+		oauth2ClientContext.setAccessToken(token);
+
 		return token;
 	}
 
@@ -975,25 +961,25 @@ public class SsoClient {
 	}
 
 	public OAuth2AccessToken getToken(String username, String password) {
-		return getToken(username, password, oauth2Context);
+		return getToken(username, password, oauth2ClientContext);
 	}
 
-	public OAuth2AccessToken getToken(String username, String password, OAuth2ClientContext oauth2Context) {
+	public OAuth2AccessToken getToken(String username, String password, OAuth2ClientContext oauth2ClientContext) {
 		ResourceOwnerPasswordResourceDetails resource = makeResourceOwnerPasswordResourceDetails(username, password);
-		OAuth2RestTemplate template = new OAuth2RestTemplate(resource, oauth2Context);
+		OAuth2RestTemplate template = new OAuth2RestTemplate(resource, oauth2ClientContext);
 		OAuth2AccessToken token = template.getAccessToken();
 		return token;
 	}
 
-	public static OAuth2AccessToken getClientToken(OAuth2ClientContext oauth2Context, SsoClientConfiguration config) {
+	public static OAuth2AccessToken getClientToken(OAuth2ClientContext oauth2ClientContext, SsoClientConfiguration config) {
 		ClientCredentialsResourceDetails resource = makeClientCredentialsResourceDetails(config.getClientId(), config.getClientSecret(), config);
-		OAuth2RestTemplate template = new OAuth2RestTemplate(resource, oauth2Context);
+		OAuth2RestTemplate template = new OAuth2RestTemplate(resource, oauth2ClientContext);
 		OAuth2AccessToken token = template.getAccessToken();
 		return token;
 	}
 
-	public OAuth2AccessToken getClientToken(OAuth2ClientContext oauth2Context) {
-		return getClientToken(oauth2Context, config);
+	public OAuth2AccessToken getClientToken(OAuth2ClientContext oauth2ClientContext) {
+		return getClientToken(oauth2ClientContext, config);
 	}
 
 	public static OAuth2AccessToken getToken(Authentication authentication) {
@@ -1017,7 +1003,7 @@ public class SsoClient {
 	}
 
 	public OAuth2AccessToken getSessionToken() {
-		return oauth2Context.getAccessToken();
+		return oauth2ClientContext.getAccessToken();
 	}
 
 	public static String getTokenValue() {
