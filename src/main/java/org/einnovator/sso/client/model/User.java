@@ -8,6 +8,7 @@ import java.util.Map;
 import org.einnovator.sso.client.modelx.GroupPredicates;
 import org.einnovator.util.model.Address;
 import org.einnovator.util.model.EntityBase;
+import org.einnovator.util.model.Phone;
 import org.einnovator.util.model.ToStringCreator;
 import org.springframework.util.StringUtils;
 

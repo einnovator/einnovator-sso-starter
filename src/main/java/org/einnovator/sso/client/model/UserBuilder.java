@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.einnovator.util.model.Address;
+import org.einnovator.util.model.Phone;
 
 
 public class UserBuilder {

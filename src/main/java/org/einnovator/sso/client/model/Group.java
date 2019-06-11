@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.einnovator.util.model.Address;
 import org.einnovator.util.model.EntityBase;
+import org.einnovator.util.model.Phone;
 import org.einnovator.util.model.ToStringCreator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
