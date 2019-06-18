@@ -129,7 +129,6 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 		try {
 			return ssoClient.listClients(filter, pageable);
 		} catch (RuntimeException e) {
-			e.printStackTrace();
 			logger.error("listClients:" + e);
 			return null;
 		}

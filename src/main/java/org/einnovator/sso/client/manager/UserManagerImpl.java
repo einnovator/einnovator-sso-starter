@@ -147,7 +147,6 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		try {
 			return ssoClient.listUsers(filter, pageable);
 		} catch (RuntimeException e) {
-			e.printStackTrace();
 			logger.error("listUsers:" + e);
 			return null;
 		}
@@ -175,8 +174,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 				}
 			}
 		} catch (RuntimeException e) {
-			e.printStackTrace();
-			logger.error("onUserUpdate: " + e);
+			logger.error("onUserUpdate: " + e + " " + id);
 		}
 	}
 
@@ -244,7 +242,6 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		try {
 			return ssoClient.listUsers(filter, pageable);
 		} catch (RuntimeException e) {
-			e.printStackTrace();
 			logger.error("listUsers:" + e);
 			return null;
 		}

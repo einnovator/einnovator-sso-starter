@@ -169,7 +169,6 @@ public class SsoClient {
 			try {
 				register(registration);							
 			} catch (RuntimeException e) {
-				e.printStackTrace();
 				throw e;
 			}
 		}
