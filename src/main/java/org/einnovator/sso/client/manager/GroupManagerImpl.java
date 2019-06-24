@@ -77,13 +77,13 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 		if (groupId==null) {
 			return null;
 		}
-		if (cacheable(filter)) {
-			Group group = getCacheValue(Group.class, getGroupCache(), groupId, filter);
-			if (group!=null) {
-				return group;
-			}			
-		}
 		try {
+			if (cacheable(filter)) {
+				Group group = getCacheValue(Group.class, getGroupCache(), groupId, filter);
+				if (group!=null) {
+					return group;
+				}			
+			}
 			Group group = client.getGroup(groupId, filter);
 			if (cacheable(filter)) {
 				putCacheValue(group, getGroupCache(), groupId, filter);

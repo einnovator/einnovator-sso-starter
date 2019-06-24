@@ -49,11 +49,11 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		if (id==null) {
 			return null;
 		}
-		User user = getCacheValue(User.class, getUserCache(), id);
-		if (user!=null) {
-			return user;
-		}
 		try {
+			User user = getCacheValue(User.class, getUserCache(), id);
+			if (user!=null) {
+				return user;
+			}
 			user = ssoClient.getUser(id);	
 			return putCacheValue(user, getUserCache(), id);
 		} catch (HttpStatusCodeException e) {
