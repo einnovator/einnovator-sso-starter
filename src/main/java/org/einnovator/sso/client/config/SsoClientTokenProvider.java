@@ -34,7 +34,7 @@ public class SsoClientTokenProvider implements ClientTokenProvider {
 
 	@Override
 	public OAuth2RestTemplate makeOAuth2RestTemplate() {
-		return ssoClient.makeOAuth2RestTemplate();
+		return ssoClient.makeClientOAuth2RestTemplate();
 	}
 
 }

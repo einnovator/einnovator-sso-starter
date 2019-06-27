@@ -19,9 +19,7 @@ import org.einnovator.sso.client.web.SsoCorsFilter;
 import org.einnovator.sso.client.web.SsoLogoutController;
 import org.einnovator.util.security.ClientTokenProvider;
 import org.einnovator.util.security.UserTokenProvider;
-import org.einnovator.util.web.XSessionScopeConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
@@ -36,12 +34,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -57,7 +53,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableWebSecurity
 @EnableConfigurationProperties(value=SsoClientConfiguration.class)
 @EnableCaching
-@Import({XSessionScopeConfig.class, OAuth2ResourcesConfigurer.class})
+@Import({OAuth2ResourcesConfigurer.class})
 public class SsoClientSecurityConfigurer {
 
 
@@ -212,12 +208,4 @@ public class SsoClientSecurityConfigurer {
 		return new SsoCorsFilter(config);
 	}
 	
-	
-	@Bean
-	@Scope(scopeName="xsession")
-	@Primary
-	@Qualifier("oAuth2ClientContext2")
-	public OAuth2ClientContext oAuth2ClientContext2() {
-		return new DefaultOAuth2ClientContext();
-	}
 }

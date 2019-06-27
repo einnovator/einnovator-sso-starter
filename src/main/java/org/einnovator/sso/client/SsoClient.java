@@ -41,6 +41,7 @@ import org.einnovator.util.PageUtil;
 import org.einnovator.util.SecurityUtil;
 import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Application;
+import org.einnovator.util.web.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -82,8 +83,11 @@ public class SsoClient {
 	private OAuth2RestTemplate restTemplate;
 
 	@Autowired
-	@Qualifier("oAuth2ClientContext2")
 	private OAuth2ClientContext oauth2ClientContext;
+
+	private OAuth2ClientContext oauth2ClientContext0 = new DefaultOAuth2ClientContext();
+
+	private OAuth2RestTemplate restTemplate0;
 
 	@Autowired(required = false)
 	private ClientHttpRequestFactory ssoClientHttpRequestFactory;
@@ -115,24 +119,133 @@ public class SsoClient {
 			ssoClientHttpRequestFactory = config.getConnection().makeClientHttpRequestFactory();
 		}
 	}
-		
+	
+	/**
+	 * Get the value of property {@code application}.
+	 *
+	 * @return the application
+	 */
+	public Application getApplication() {
+		return application;
+	}
+
+	/**
+	 * Set the value of property {@code application}.
+	 *
+	 * @param application the application to set
+	 */
+	public void setApplication(Application application) {
+		this.application = application;
+	}
+
+	/**
+	 * Get the value of property {@code config}.
+	 *
+	 * @return the config
+	 */
+	public SsoClientConfiguration getConfig() {
+		return config;
+	}
+
+	/**
+	 * Set the value of property {@code config}.
+	 *
+	 * @param config the config to set
+	 */
+	public void setConfig(SsoClientConfiguration config) {
+		this.config = config;
+	}
+
+	/**
+	 * Get the value of property {@code restTemplate}.
+	 *
+	 * @return the restTemplate
+	 */
 	public OAuth2RestTemplate getRestTemplate() {
 		return restTemplate;
 	}
 
+	/**
+	 * Set the value of property {@code restTemplate}.
+	 *
+	 * @param restTemplate the restTemplate to set
+	 */
 	public void setRestTemplate(OAuth2RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 
-	public OAuth2ClientContext getOauth2Context() {
+	/**
+	 * Get the value of property {@code ssoClientHttpRequestFactory}.
+	 *
+	 * @return the ssoClientHttpRequestFactory
+	 */
+	public ClientHttpRequestFactory getSsoClientHttpRequestFactory() {
+		return ssoClientHttpRequestFactory;
+	}
+
+	/**
+	 * Set the value of property {@code ssoClientHttpRequestFactory}.
+	 *
+	 * @param ssoClientHttpRequestFactory the ssoClientHttpRequestFactory to set
+	 */
+	public void setSsoClientHttpRequestFactory(ClientHttpRequestFactory ssoClientHttpRequestFactory) {
+		this.ssoClientHttpRequestFactory = ssoClientHttpRequestFactory;
+	}
+
+	/**
+	 * Get the value of property {@code oauth2ClientContext}.
+	 *
+	 * @return the oauth2ClientContext
+	 */
+	public OAuth2ClientContext getOauth2ClientContext() {
 		return oauth2ClientContext;
 	}
 
-	public void setOauth2Context(OAuth2ClientContext oauth2ClientContext) {
+	/**
+	 * Set the value of property {@code oauth2ClientContext}.
+	 *
+	 * @param oauth2ClientContext the oauth2ClientContext to set
+	 */
+	public void setOauth2ClientContext(OAuth2ClientContext oauth2ClientContext) {
 		this.oauth2ClientContext = oauth2ClientContext;
 	}
-	
-	
+
+	/**
+	 * Get the value of property {@code oauth2ClientContext0}.
+	 *
+	 * @return the oauth2ClientContext0
+	 */
+	public OAuth2ClientContext getOauth2ClientContext0() {
+		return oauth2ClientContext0;
+	}
+
+	/**
+	 * Set the value of property {@code oauth2ClientContext0}.
+	 *
+	 * @param oauth2ClientContext0 the oauth2ClientContext0 to set
+	 */
+	public void setOauth2ClientContext0(OAuth2ClientContext oauth2ClientContext0) {
+		this.oauth2ClientContext0 = oauth2ClientContext0;
+	}
+
+	/**
+	 * Get the value of property {@code restTemplate0}.
+	 *
+	 * @return the restTemplate0
+	 */
+	public OAuth2RestTemplate getRestTemplate0() {
+		return restTemplate0;
+	}
+
+	/**
+	 * Set the value of property {@code restTemplate0}.
+	 *
+	 * @param restTemplate0 the restTemplate0 to set
+	 */
+	public void setRestTemplate0(OAuth2RestTemplate restTemplate0) {
+		this.restTemplate0 = restTemplate0;
+	}
+
 	public boolean isAutoSetupToken() {
 		return autoSetupToken;
 	}
@@ -155,9 +268,12 @@ public class SsoClient {
 		template.setRequestFactory(ssoClientHttpRequestFactory);
 		return template;
 	}
-
-	public OAuth2RestTemplate makeOAuth2RestTemplate() {
-		return makeOAuth2RestTemplate(oauth2ClientContext);
+	
+	public OAuth2RestTemplate makeClientOAuth2RestTemplate() {
+		if (restTemplate0==null) {
+			restTemplate0 = makeOAuth2RestTemplate(oauth2ClientContext0);
+		}
+		return restTemplate0;
 	}
 
 	public void register() {
@@ -175,8 +291,8 @@ public class SsoClient {
 	}
 
 	public void register(SsoRegistration registration) {
-		setupClientToken();
-		register(registration, makeOAuth2RestTemplate());
+		setupClientToken(oauth2ClientContext0);
+		register(registration, makeClientOAuth2RestTemplate());
 	}
 
 	public void register(SsoRegistration registration, OAuth2RestTemplate restTemplate) {
@@ -821,6 +937,10 @@ public class SsoClient {
 	}
 
 	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType) throws RestClientException {
+		OAuth2RestTemplate restTemplate = this.restTemplate;
+		if (WebUtil.getHttpServletRequest()==null) {
+			restTemplate = this.restTemplate0;
+		}
 		return exchange(restTemplate, request, responseType);
 	}
 
@@ -828,6 +948,7 @@ public class SsoClient {
 		if (autoSetupToken) {
 			setupToken();
 		}
+		
 		return restTemplate.exchange(request, responseType);
 	}
 
@@ -1076,7 +1197,7 @@ public class SsoClient {
 				.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).build();
 		try {
 			ResponseEntity<Void> response2 = exchange(request2, Void.class);
-			logger.info("logout:" + response2);
+			logger.debug("logout:" + response2);
 		} catch (RuntimeException e) {
 			logger.error("logout:" + e);
 		}
@@ -1096,7 +1217,7 @@ public class SsoClient {
 			try {
 				RestTemplate restTemplate = new RestTemplate();
 				ResponseEntity<Void> response2 = restTemplate.exchange(request2, Void.class);
-				logger.info("logout:" + response2);
+				logger.debug("logout:" + response2);
 			} catch (RuntimeException e) {
 				logger.error("logout:" + e);
 			}
