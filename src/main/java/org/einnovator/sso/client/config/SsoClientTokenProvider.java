@@ -24,7 +24,7 @@ public class SsoClientTokenProvider implements ClientTokenProvider {
 	@Override
 	public OAuth2AccessToken setupToken() {
 		try {
-			OAuth2AccessToken token = ssoClient.setupClientToken();			
+			OAuth2AccessToken token = ssoClient.setupClientToken0();			
 			return token;
 		} catch (RuntimeException e) {
 			logger.error(String.format("setupToken: %s", e));

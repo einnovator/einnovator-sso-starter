@@ -980,6 +980,10 @@ public class SsoClient {
 	}
 
 
+	public OAuth2AccessToken setupClientToken0() {
+		return setupClientToken(oauth2ClientContext0);
+	}
+
 	public OAuth2AccessToken setupClientToken(OAuth2ClientContext oauth2ClientContext) {
 		return setupClientToken(oauth2ClientContext, false, false, config);
 	}

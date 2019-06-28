@@ -1,6 +1,7 @@
 package org.einnovator.sso.client.model;
 
 import java.util.List;
+import java.util.Map;
 
 import org.einnovator.util.model.Application;
 import org.einnovator.util.model.ObjectBase;
@@ -20,6 +21,8 @@ public class SsoRegistration extends ObjectBase {
 	private Application application;
 	
 	private List<Role> roles;
+	
+	private Map<String, Object> properties;
 
 	public SsoRegistration() {
 	}
@@ -84,6 +87,25 @@ public class SsoRegistration extends ObjectBase {
 		this.roles = roles;
 	}
 
+	/**
+	 * Get the value of property {@code properties}.
+	 *
+	 * @return the properties
+	 */
+	public Map<String, Object> getProperties() {
+		return properties;
+	}
+
+
+	/**
+	 * Set the value of property {@code properties}.
+	 *
+	 * @param properties the properties to set
+	 */
+	public void setProperties(Map<String, Object> properties) {
+		this.properties = properties;
+	}
+
 
 	@Override
 	public ToStringCreator toString1(ToStringCreator creator) {
@@ -91,6 +113,7 @@ public class SsoRegistration extends ObjectBase {
 			.append("auto", auto)
 			.append("application", application)
 			.append("roles", roles)
+			.append("properties", properties)
 			;
 	}
 

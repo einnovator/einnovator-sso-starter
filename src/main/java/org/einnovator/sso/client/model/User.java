@@ -113,233 +113,547 @@ public class User extends EntityBase {
 		super(obj);
 	}
 
+	
+	/**
+	 * Get the value of property {@code username}.
+	 *
+	 * @return the username
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * Set the value of property {@code username}.
+	 *
+	 * @param username the username to set
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	/**
+	 * Get the value of property {@code email}.
+	 *
+	 * @return the email
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * Set the value of property {@code email}.
+	 *
+	 * @param email the email to set
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	/**
+	 * Get the value of property {@code email2}.
+	 *
+	 * @return the email2
+	 */
 	public String getEmail2() {
 		return email2;
 	}
 
+	/**
+	 * Set the value of property {@code email2}.
+	 *
+	 * @param email2 the email2 to set
+	 */
 	public void setEmail2(String email2) {
 		this.email2 = email2;
 	}
 
+	/**
+	 * Get the value of property {@code email3}.
+	 *
+	 * @return the email3
+	 */
 	public String getEmail3() {
 		return email3;
 	}
 
+	/**
+	 * Set the value of property {@code email3}.
+	 *
+	 * @param email3 the email3 to set
+	 */
 	public void setEmail3(String email3) {
 		this.email3 = email3;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public byte[] getPassword() {
-		return password;
-	}
-
-	public void setPassword(byte[] password) {
-		this.password = password;
-	}
-
+	/**
+	 * Get the value of property {@code firstName}.
+	 *
+	 * @return the firstName
+	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
+	/**
+	 * Set the value of property {@code firstName}.
+	 *
+	 * @param firstName the firstName to set
+	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
+	/**
+	 * Get the value of property {@code lastName}.
+	 *
+	 * @return the lastName
+	 */
 	public String getLastName() {
 		return lastName;
 	}
 
+	/**
+	 * Set the value of property {@code lastName}.
+	 *
+	 * @param lastName the lastName to set
+	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	public Phone getMobilePhone() {
-		return mobilePhone;
+	/**
+	 * Get the value of property {@code title}.
+	 *
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
 	}
 
-	public void setMobilePhone(Phone mobilePhone) {
-		this.mobilePhone = mobilePhone;
+	/**
+	 * Set the value of property {@code title}.
+	 *
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public Phone getPhone() {
-		return phone;
-	}
-
-	public void setPhone(Phone phone) {
-		this.phone = phone;
-	}
-
-	public Phone getPhone2() {
-		return phone2;
-	}
-
-	public void setPhone2(Phone phone2) {
-		this.phone2 = phone2;
-	}
-
-	public String getWebsite() {
-		return website;
-	}
-
-	public void setWebsite(String website) {
-		this.website = website;
-	}
-
-	public String getSecurityQuestion() {
-		return securityQuestion;
-	}
-
-	public void setSecurityQuestion(String securityQuestion) {
-		this.securityQuestion = securityQuestion;
-	}
-
-	public String getSecurityAnswer() {
-		return securityAnswer;
-	}
-
-	public void setSecurityAnswer(String securityAnswer) {
-		this.securityAnswer = securityAnswer;
-	}
-
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-	
+	/**
+	 * Get the value of property {@code gender}.
+	 *
+	 * @return the gender
+	 */
 	public GenderType getGender() {
 		return gender;
 	}
 
+	/**
+	 * Set the value of property {@code gender}.
+	 *
+	 * @param gender the gender to set
+	 */
 	public void setGender(GenderType gender) {
 		this.gender = gender;
 	}
 
+	/**
+	 * Get the value of property {@code birthdate}.
+	 *
+	 * @return the birthdate
+	 */
 	public Date getBirthdate() {
 		return birthdate;
 	}
 
+	/**
+	 * Set the value of property {@code birthdate}.
+	 *
+	 * @param birthdate the birthdate to set
+	 */
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
 	}
 
-
-	public String getAvatar() {
-		return avatar;
+	/**
+	 * Get the value of property {@code mobilePhone}.
+	 *
+	 * @return the mobilePhone
+	 */
+	public Phone getMobilePhone() {
+		return mobilePhone;
 	}
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+	/**
+	 * Set the value of property {@code mobilePhone}.
+	 *
+	 * @param mobilePhone the mobilePhone to set
+	 */
+	public void setMobilePhone(Phone mobilePhone) {
+		this.mobilePhone = mobilePhone;
 	}
 
-	public String getCover() {
-		return cover;
+	/**
+	 * Get the value of property {@code phone}.
+	 *
+	 * @return the phone
+	 */
+	public Phone getPhone() {
+		return phone;
 	}
 
-	public void setCover(String cover) {
-		this.cover = cover;
+	/**
+	 * Set the value of property {@code phone}.
+	 *
+	 * @param phone the phone to set
+	 */
+	public void setPhone(Phone phone) {
+		this.phone = phone;
 	}
 
-	public String getCover2() {
-		return cover2;
+	/**
+	 * Get the value of property {@code phone2}.
+	 *
+	 * @return the phone2
+	 */
+	public Phone getPhone2() {
+		return phone2;
 	}
 
-	public void setCover2(String cover2) {
-		this.cover2 = cover2;
+	/**
+	 * Set the value of property {@code phone2}.
+	 *
+	 * @param phone2 the phone2 to set
+	 */
+	public void setPhone2(Phone phone2) {
+		this.phone2 = phone2;
 	}
 
-
-	public String getSignature() {
-		return signature;
+	/**
+	 * Get the value of property {@code middleName}.
+	 *
+	 * @return the middleName
+	 */
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setSignature(String signature) {
-		this.signature = signature;
+	/**
+	 * Set the value of property {@code middleName}.
+	 *
+	 * @param middleName the middleName to set
+	 */
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
 	}
 
+	/**
+	 * Get the value of property {@code nickname}.
+	 *
+	 * @return the nickname
+	 */
+	public String getNickname() {
+		return nickname;
+	}
 
+	/**
+	 * Set the value of property {@code nickname}.
+	 *
+	 * @param nickname the nickname to set
+	 */
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	/**
+	 * Get the value of property {@code timezone}.
+	 *
+	 * @return the timezone
+	 */
 	public String getTimezone() {
 		return timezone;
 	}
 
+	/**
+	 * Set the value of property {@code timezone}.
+	 *
+	 * @param timezone the timezone to set
+	 */
 	public void setTimezone(String timezone) {
 		this.timezone = timezone;
 	}
 
+	/**
+	 * Get the value of property {@code locale}.
+	 *
+	 * @return the locale
+	 */
 	public String getLocale() {
 		return locale;
 	}
 
+	/**
+	 * Set the value of property {@code locale}.
+	 *
+	 * @param locale the locale to set
+	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
-	
-	public Address getAddress() {
-		return address;
+
+	/**
+	 * Get the value of property {@code avatar}.
+	 *
+	 * @return the avatar
+	 */
+	public String getAvatar() {
+		return avatar;
 	}
 
-	public void setAddress(Address address) {
-		this.address = address;
+	/**
+	 * Set the value of property {@code avatar}.
+	 *
+	 * @param avatar the avatar to set
+	 */
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
-	
+
+	/**
+	 * Get the value of property {@code idhash}.
+	 *
+	 * @return the idhash
+	 */
+	public String getIdhash() {
+		return idhash;
+	}
+
+	/**
+	 * Set the value of property {@code idhash}.
+	 *
+	 * @param idhash the idhash to set
+	 */
+	public void setIdhash(String idhash) {
+		this.idhash = idhash;
+	}
+
+	/**
+	 * Get the value of property {@code idicon}.
+	 *
+	 * @return the idicon
+	 */
+	public String getIdicon() {
+		return idicon;
+	}
+
+	/**
+	 * Set the value of property {@code idicon}.
+	 *
+	 * @param idicon the idicon to set
+	 */
+	public void setIdicon(String idicon) {
+		this.idicon = idicon;
+	}
+
+	/**
+	 * Get the value of property {@code cover}.
+	 *
+	 * @return the cover
+	 */
+	public String getCover() {
+		return cover;
+	}
+
+	/**
+	 * Set the value of property {@code cover}.
+	 *
+	 * @param cover the cover to set
+	 */
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
+
+	/**
+	 * Get the value of property {@code cover2}.
+	 *
+	 * @return the cover2
+	 */
+	public String getCover2() {
+		return cover2;
+	}
+
+	/**
+	 * Set the value of property {@code cover2}.
+	 *
+	 * @param cover2 the cover2 to set
+	 */
+	public void setCover2(String cover2) {
+		this.cover2 = cover2;
+	}
+
+	/**
+	 * Get the value of property {@code signature}.
+	 *
+	 * @return the signature
+	 */
+	public String getSignature() {
+		return signature;
+	}
+
+	/**
+	 * Set the value of property {@code signature}.
+	 *
+	 * @param signature the signature to set
+	 */
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	/**
+	 * Get the value of property {@code website}.
+	 *
+	 * @return the website
+	 */
+	public String getWebsite() {
+		return website;
+	}
+
+	/**
+	 * Set the value of property {@code website}.
+	 *
+	 * @param website the website to set
+	 */
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	/**
+	 * Get the value of property {@code status}.
+	 *
+	 * @return the status
+	 */
 	public UserStatus getStatus() {
 		return status;
 	}
 
+	/**
+	 * Set the value of property {@code status}.
+	 *
+	 * @param status the status to set
+	 */
 	public void setStatus(UserStatus status) {
 		this.status = status;
 	}
-	
+
+	/**
+	 * Get the value of property {@code type}.
+	 *
+	 * @return the type
+	 */
 	public UserType getType() {
 		return type;
 	}
 
+	/**
+	 * Set the value of property {@code type}.
+	 *
+	 * @param type the type to set
+	 */
 	public void setType(UserType type) {
 		this.type = type;
 	}
 
+	/**
+	 * Get the value of property {@code enabled}.
+	 *
+	 * @return the enabled
+	 */
 	public Boolean getEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Set the value of property {@code enabled}.
+	 *
+	 * @param enabled the enabled to set
+	 */
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	
+
+	/**
+	 * Get the value of property {@code address}.
+	 *
+	 * @return the address
+	 */
+	public Address getAddress() {
+		return address;
+	}
+
+	/**
+	 * Set the value of property {@code address}.
+	 *
+	 * @param address the address to set
+	 */
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	/**
+	 * Get the value of property {@code password}.
+	 *
+	 * @return the password
+	 */
+	public byte[] getPassword() {
+		return password;
+	}
+
+	/**
+	 * Set the value of property {@code password}.
+	 *
+	 * @param password the password to set
+	 */
+	public void setPassword(byte[] password) {
+		this.password = password;
+	}
+
+	/**
+	 * Get the value of property {@code securityQuestion}.
+	 *
+	 * @return the securityQuestion
+	 */
+	public String getSecurityQuestion() {
+		return securityQuestion;
+	}
+
+	/**
+	 * Set the value of property {@code securityQuestion}.
+	 *
+	 * @param securityQuestion the securityQuestion to set
+	 */
+	public void setSecurityQuestion(String securityQuestion) {
+		this.securityQuestion = securityQuestion;
+	}
+
+	/**
+	 * Get the value of property {@code securityAnswer}.
+	 *
+	 * @return the securityAnswer
+	 */
+	public String getSecurityAnswer() {
+		return securityAnswer;
+	}
+
+	/**
+	 * Set the value of property {@code securityAnswer}.
+	 *
+	 * @param securityAnswer the securityAnswer to set
+	 */
+	public void setSecurityAnswer(String securityAnswer) {
+		this.securityAnswer = securityAnswer;
+	}
+
 	public Map<String, Object> getProfile() {
 		return profile;
 	}
