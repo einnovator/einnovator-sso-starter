@@ -1,6 +1,8 @@
 package org.einnovator.sso.client;
 
 import static org.einnovator.util.UriUtils.appendQueryParameters;
+import static org.einnovator.util.UriUtils.encode;
+import static org.einnovator.util.UriUtils.encodeId;
 import static org.einnovator.util.UriUtils.makeURI;
 
 import java.net.URI;
@@ -39,7 +41,6 @@ import org.einnovator.util.PageOptions;
 import org.einnovator.util.PageResult;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.SecurityUtil;
-import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Application;
 import org.einnovator.util.web.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +76,6 @@ public class SsoClient {
 	private final Log logger = LogFactory.getLog(getClass());
 
 	private SsoClientConfiguration config;
-
-	private static final String DEFAULT_ENCODING = "UTF-8";
 
 	@Autowired
 	@Qualifier("ssoOAuth2RestTemplate")
@@ -319,41 +318,6 @@ public class SsoClient {
 		return result.getBody();
 	}
 	
-
-	public static String encodeId(String userId) {
-		if (userId == null) {
-			return null;
-		}
-		userId = userId.replace(".", "@@");
-		userId = encode(userId);
-		return userId;
-	}
-
-	public static String decodeId(String userId) {
-		if (userId == null) {
-			return null;
-		}
-		userId = decode(userId);
-		userId = userId.replace("@@", ".");
-		return userId;
-	}
-
-	public static String encode(String path) {
-		if (path == null) {
-			return null;
-		}
-		path = UriUtils.encode(path, DEFAULT_ENCODING);
-		return path;
-	}
-
-	public static String decode(String path) {
-		if (path == null) {
-			return null;
-		}
-		path = UriUtils.decode(path, DEFAULT_ENCODING);
-		return path;
-	}
-
 
 	public Page<User> listUsers(UserFilter filter, Pageable pageable) {
 		URI uri = makeURI(SsoEndpoints.users(config));
@@ -614,15 +578,12 @@ public class SsoClient {
 		}
 	}
 	
-	public URI invite(Invitation invitation, Boolean sendMail, String redirectUri) {
+	public URI invite(Invitation invitation, Boolean sendMail) {
 		URI uri = makeURI(SsoEndpoints.invite(config));
-		if (sendMail!=null || redirectUri!=null) {
+		if (sendMail!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
 			if (sendMail!=null) {
 				params.put("sendMail", sendMail!=null ? Boolean.toString(sendMail) : null);				
-			}
-			if (redirectUri!=null) {
-				params.put("redirectUri", redirectUri);				
 			}
 			uri = appendQueryParameters(uri, params);			
 		}

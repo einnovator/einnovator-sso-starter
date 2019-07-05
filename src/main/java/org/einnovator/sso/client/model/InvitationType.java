@@ -3,13 +3,10 @@ package org.einnovator.sso.client.model;
 
 public enum InvitationType {
 	USER("User"),
-	EMPLOYEE("Employee"),
 	MEMBER("Member"),
-	SUPPLIER("Supplier"),
-	XSUPPLIER("Indirect Supplier"),
-	CUSTOMER("Customer"),
-	WALLET("Wallet"),
-	CONNECTION("Connection");
+	CONNECTION("Connection"),
+	GROUP_CONNECTION("Group Connection"),
+	OTHER("Other");
 	
 	private final String displayValue;
 
@@ -27,13 +24,8 @@ public enum InvitationType {
 	
 	public static InvitationType parse(String s) {
 		if (s!=null) {
-			s = s.replace('-', '_');			
 			for (InvitationType e: InvitationType.class.getEnumConstants()) {
 				String key = e.toString();
-				if (key.equalsIgnoreCase(s)) {
-					return e;
-				}
-				key = key.replaceAll("_", "");
 				if (key.equalsIgnoreCase(s)) {
 					return e;
 				}
@@ -42,11 +34,5 @@ public enum InvitationType {
 		return null;
 	}
 
-	public static InvitationType getDefault(GroupType groupType) {
-		switch (groupType) {
-		case ORGANIZATION: case OPERATION:	return InvitationType.EMPLOYEE;
-		default: return InvitationType.MEMBER;
-		}
-	}
-	
+
 }

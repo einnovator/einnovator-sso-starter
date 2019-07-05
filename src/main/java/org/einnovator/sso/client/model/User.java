@@ -73,8 +73,6 @@ public class User extends EntityBase {
 	
 	private UserStatus status;
 	
-	private UserType type;
-	
 	private Boolean enabled;
 
 	private String currentGroup;
@@ -547,24 +545,6 @@ public class User extends EntityBase {
 	}
 
 	/**
-	 * Get the value of property {@code type}.
-	 *
-	 * @return the type
-	 */
-	public UserType getType() {
-		return type;
-	}
-
-	/**
-	 * Set the value of property {@code type}.
-	 *
-	 * @param type the type to set
-	 */
-	public void setType(UserType type) {
-		this.type = type;
-	}
-
-	/**
 	 * Get the value of property {@code enabled}.
 	 *
 	 * @return the enabled
@@ -893,7 +873,6 @@ public class User extends EntityBase {
 				.append("phone2", phone2)
 				.append("gender", gender)
 				.append("birthdate", birthdate)
-				.append("type", type)
 				.append("status", status)
 				.append("enabled", enabled)
 				.append("onboarding", onboarding)

@@ -387,7 +387,7 @@ public class SsoClientTests {
 		invitation.setOwner(TEST_USER2);
 		invitation.setType(type);
 		invitation.setDescription("Test invitation: " + UUID.randomUUID());
-		URI uri = client.invite(invitation, sendMail, null /* redirectUri */);
+		URI uri = client.invite(invitation, sendMail);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);

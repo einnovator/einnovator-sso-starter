@@ -4,15 +4,15 @@ package org.einnovator.sso.client.model;
 public enum InvitationError {
 	ALREADY_INVITED("invitation.error.already_invited", "Already invited"),
 	USER_EXITS("invitation.error.user_exists", "User already registered"),
-	SELF_USER("invitation.error.self", "Can not invite youself"),
-	SELF_GROUP("invitation.error.self_group", "Can not invite self group"),
-	SELF_SUBGROUP("invitation.error.self_group", "Can not invite sub-ordinate groups"),
+	ALREADY_MEMBER("invitation.error.already_member", "User already member of Group"),
+	SELF("invitation.error.self", "Can not invite self"),
+	GROUP_CONNECT("invitation.error.group", "Can not invite and connect with group"),
 	MAIL_ERROR("invitation.error.mail", "Mail Send Error"),
 	SMS_ERROR("invitation.error.sms", "SMS Send Error");
 	
 	private final String code;
 
-	private final String message; //default
+	private final String message; //default message
 
 	InvitationError(String code, String message) {
 		this.code = code;

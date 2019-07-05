@@ -42,15 +42,15 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 	
 	@Override
-	public URI invite(Invitation invitation, Boolean sendMail, String redirectUri) {
+	public URI invite(Invitation invitation, Boolean sendMail) {
 		try {
-			URI uri = client.invite(invitation, sendMail, redirectUri);
+			URI uri = client.invite(invitation, sendMail);
 			if (uri == null) {
 				logger.error("invite: " + invitation);
 			}
 			return uri;
 		} catch (RuntimeException e) {
-			logger.error("invite: " + invitation + " " + e);
+			logger.error("invite: " + e + " " + invitation);
 			return null;
 		}
 	}
