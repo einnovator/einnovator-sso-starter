@@ -16,8 +16,8 @@ import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
-import org.einnovator.sso.client.model.RoleFilter;
 import org.einnovator.sso.client.model.User;
+import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.SecurityUtil;
@@ -31,13 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 
@@ -597,7 +591,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 			if (groupId == null) {
 				filter.setGlobal(true);
 			}
-			filter.setOrgId(groupId);
+			filter.setGroup(groupId);
 			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE));
 			if (page == null || page.getContent() == null) {
 				return null;

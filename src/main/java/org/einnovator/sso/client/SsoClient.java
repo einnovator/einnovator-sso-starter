@@ -27,13 +27,13 @@ import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
-import org.einnovator.sso.client.model.RoleFilter;
 import org.einnovator.sso.client.model.SsoRegistration;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
 import org.einnovator.sso.client.modelx.GroupFilter;
 import org.einnovator.sso.client.modelx.MemberFilter;
+import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
 import org.einnovator.util.MappingUtils;
@@ -821,7 +821,7 @@ public class SsoClient {
 		RoleFilter filter = new RoleFilter();
 		userId = encodeId(userId);
 		filter.setUser(userId);
-		filter.setOrgId(groupId);
+		filter.setGroup(groupId);
 		return listRoles(filter, pageable);
 	}
 

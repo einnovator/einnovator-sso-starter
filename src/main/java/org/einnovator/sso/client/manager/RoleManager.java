@@ -7,8 +7,8 @@ import java.util.Map;
 
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
-import org.einnovator.sso.client.model.RoleFilter;
 import org.einnovator.sso.client.model.User;
+import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
