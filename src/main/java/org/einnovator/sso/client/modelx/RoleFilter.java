@@ -211,6 +211,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code q}.
 	 *
 	 * @param q the q to with
+	 * @return this
 	 */
 	public RoleFilter withQ(String q) {
 		this.q = q;
@@ -221,6 +222,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code name}.
 	 *
 	 * @param name the name to with
+	 * @return this
 	 */
 	public RoleFilter withName(String name) {
 		this.name = name;
@@ -231,6 +233,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code group}.
 	 *
 	 * @param group the group to with
+	 * @return this
 	 */
 	public RoleFilter withGroup(String group) {
 		this.group = group;
@@ -241,6 +244,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code inherited}.
 	 *
 	 * @param inherited the inherited to with
+	 * @return this
 	 */
 	public RoleFilter withInherited(Boolean inherited) {
 		this.inherited = inherited;
@@ -251,6 +255,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code builtin}.
 	 *
 	 * @param builtin the builtin to with
+	 * @return this
 	 */
 	public RoleFilter withBuiltin(Boolean builtin) {
 		this.builtin = builtin;
@@ -262,6 +267,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code custom}.
 	 *
 	 * @param custom the custom to with
+	 * @return this
 	 */
 	public RoleFilter withCustom(Boolean custom) {
 		this.custom = custom;
@@ -272,6 +278,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code global}.
 	 *
 	 * @param global the global to with
+	 * @return this
 	 */
 	public RoleFilter withGlobal(Boolean global) {
 		this.global = global;
@@ -282,6 +289,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code user}.
 	 *
 	 * @param user the user to with
+	 * @return this
 	 */
 	public RoleFilter withUser(String user) {
 		this.user = user;
@@ -293,6 +301,7 @@ public class RoleFilter extends RoleOptions {
 	 * Set the value of property {@code type}.
 	 *
 	 * @param type the type to with
+	 * @return this
 	 */
 	public RoleFilter withType(RoleType type) {
 		this.type = type;

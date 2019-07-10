@@ -36,7 +36,8 @@ public class Request extends EntityBase {
 
 	/**
 	 * Create instance of {@code Request} from other {@code Object}.
-	 *
+	 * 
+	 * @param obj a prototype object
 	 */
 	public Request(Object obj) {
 		super(obj);

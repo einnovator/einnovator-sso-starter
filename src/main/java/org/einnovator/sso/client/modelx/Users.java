@@ -39,7 +39,7 @@ public class Users extends ObjectBase {
 	/**
 	 * Get the value of property {@code members}.
 	 *
-	 * @return the members
+	 * @return the value of member
 	 */
 	public Boolean getMember() {
 		return member;
@@ -49,9 +49,9 @@ public class Users extends ObjectBase {
 	/**
 	 * Set the value of property {@code members}.
 	 *
-	 * @param members the members to set
+	 * @param member the value of member
 	 */
-	public void setMembers(Boolean member) {
+	public void setMember(Boolean member) {
 		this.member = member;
 	}
 

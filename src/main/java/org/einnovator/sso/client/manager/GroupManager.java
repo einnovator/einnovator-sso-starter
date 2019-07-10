@@ -58,9 +58,6 @@ public interface GroupManager {
 	Cache getGroupMembersCache();
 	Cache getGroupMemberCountCache();
 
-	/**
-	 * @param event
-	 */
 	void onEvent(ApplicationEvent event);
 
 }

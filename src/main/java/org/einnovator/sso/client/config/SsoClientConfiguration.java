@@ -62,10 +62,10 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Create instance of {@code SsoClientConfiguration}.
 	 *
-	 * @param config
+	 * @param obj a prototype object
 	 */
-	public SsoClientConfiguration(SsoClientConfiguration config) {
-		super(config);
+	public SsoClientConfiguration(Object obj) {
+		super(obj);
 	}
 
 	/**

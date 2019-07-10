@@ -53,6 +53,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code clientId}.
 	 *
 	 * @param clientId the clientId to 
+	 * @return this
 	 */
 	public ClientBuilder clientId(String clientId) {
 		this.clientId = clientId;
@@ -65,6 +66,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code clientSecret}.
 	 *
 	 * @param clientSecret the clientSecret to 
+	 * @return this
 	 */
 	public ClientBuilder clientSecret(String clientSecret) {
 		this.clientSecret = clientSecret;
@@ -77,6 +79,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code scope}.
 	 *
 	 * @param scope the scope to 
+	 * @return this
 	 */
 	public ClientBuilder scope(Set<String> scope) {
 		this.scope = scope;
@@ -89,6 +92,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code resourceIds}.
 	 *
 	 * @param resourceIds the resourceIds to 
+	 * @return this
 	 */
 	public ClientBuilder resourceIds(Set<String> resourceIds) {
 		this.resourceIds = resourceIds;
@@ -101,6 +105,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code authorizedGrantTypes}.
 	 *
 	 * @param authorizedGrantTypes the authorizedGrantTypes to 
+	 * @return this
 	 */
 	public ClientBuilder authorizedGrantTypes(Set<String> authorizedGrantTypes) {
 		this.authorizedGrantTypes = authorizedGrantTypes;
@@ -113,6 +118,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code registeredRedirectUris}.
 	 *
 	 * @param registeredRedirectUris the registeredRedirectUris to 
+	 * @return this
 	 */
 	public ClientBuilder registeredRedirectUris(Set<String> registeredRedirectUris) {
 		this.registeredRedirectUris = registeredRedirectUris;
@@ -125,6 +131,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code autoApproveScopes}.
 	 *
 	 * @param autoApproveScopes the autoApproveScopes to 
+	 * @return this
 	 */
 	public ClientBuilder autoApproveScopes(Set<String> autoApproveScopes) {
 		this.autoApproveScopes = autoApproveScopes;
@@ -137,6 +144,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code authorities}.
 	 *
 	 * @param authorities the authorities to 
+	 * @return this
 	 */
 	public ClientBuilder authorities(List<GrantedAuthority> authorities) {
 		this.authorities = authorities;
@@ -149,6 +157,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code accessTokenValiditySeconds}.
 	 *
 	 * @param accessTokenValiditySeconds the accessTokenValiditySeconds to 
+	 * @return this
 	 */
 	public ClientBuilder accessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
 		this.accessTokenValiditySeconds = accessTokenValiditySeconds;
@@ -161,6 +170,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code refreshTokenValiditySeconds}.
 	 *
 	 * @param refreshTokenValiditySeconds the refreshTokenValiditySeconds to 
+	 * @return this
 	 */
 	public ClientBuilder refreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
 		this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
@@ -173,6 +183,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code additionalInformation}.
 	 *
 	 * @param additionalInformation the additionalInformation to 
+	 * @return this
 	 */
 	public ClientBuilder additionalInformation(Map<String, Object> additionalInformation) {
 		this.additionalInformation = additionalInformation;
@@ -185,6 +196,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code avatar}.
 	 *
 	 * @param avatar the avatar to 
+	 * @return this
 	 */
 	public ClientBuilder avatar(String avatar) {
 		this.avatar = avatar;
@@ -197,6 +209,7 @@ public class ClientBuilder {
 	 * Set the value of property {@code thumbnail}.
 	 *
 	 * @param thumbnail the thumbnail to 
+	 * @return this
 	 */
 	public ClientBuilder thumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;

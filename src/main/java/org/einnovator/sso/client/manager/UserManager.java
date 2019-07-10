@@ -15,8 +15,27 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserManager {
 	
+	/**
+	 * Get {@code User} with specified identifier.
+	 * 
+	 * Identifier {@code id} can be the value of properties that have unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * @param id the indentifier
+	 * @return the {@code User} if found, null otherwise.
+	 */
 	User getUser(String id);
 	
+	/**
+	 * Get {@code User} with specified identifier.
+	 * 
+	 * Identifier {@code id} can be the value of properties that have unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * @param id the identifier
+	 * @param options (optional) the {@code UserOptions} that tailor which field set or projection to return.
+	 * @return the {@code User} if found, null otherwise.
+	 */
 	User getUser(String id, UserOptions options);
 
 	URI createUser(User user);
@@ -38,22 +57,28 @@ public interface UserManager {
 	void onEvent(ApplicationEvent event);
 
 	/**
-	 * @param userId
+	 * Evict chache for {@code User} with specified identifier
+	 * 
+	 * @param id the identifier
 	 */
-	void evictCaches(String userId);
+	void evictCaches(String id);
 
 	/**
-	 * @param groups
-	 * @param permissions
-	 * @param pageable
-	 * @return
+	 * List {@code User}s with {@code Role}s that have any of the named {@code Permission}s in the at least one of the specified {@code Group}s.
+	 * 
+	 * @param groups list of {@code Group} identifiers
+	 * @param permissions list of {@code Permission} names
+	 * @param pageable a {@code Pageable}
+	 * @return the {@code Page} of {@code User}s  (or null if error)
 	 */
 	Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable);
 
 	/**
-	 * @param username
-	 * @return
+	 * Get list of UUIDs of {@code Groups} that the {@code User} with specified identifier is member of.
+	 * 
+	 * @param id the {@code User} identifier
+	 * @return the list of UUIDs (or null if error)
 	 */
-	List<String> getGroupsUuidForUser(String username);
+	List<String> getGroupsUuidForUser(String id);
 
 }

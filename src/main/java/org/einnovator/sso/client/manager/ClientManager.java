@@ -37,9 +37,6 @@ public interface ClientManager {
 
 	void onEvent(ApplicationEvent event);
 
-	/**
-	 * @param clientId
-	 */
 	void evictCaches(String clientId);
 
 }
