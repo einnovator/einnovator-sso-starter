@@ -1,9 +1,12 @@
 package org.einnovator.sso.client.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.ToStringCreator;
+import org.einnovator.util.security.Authority;
+import org.einnovator.util.security.AuthorityBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
@@ -262,4 +265,21 @@ public class Role extends EntityBase {
 		return permission;
 	}
 
+	public static List<Authority> toAuthorities(Role role, List<User> users) {
+		if (role==null) {
+			return null;
+		}
+		List<Authority> authorities = new ArrayList<>();
+		for (User user: users) {
+			authorities.add(new AuthorityBuilder()
+					.user(user.getUsername())
+					.userData(user)
+					.group(role.getGroup()!=null ? role.getGroup().getUuid() : null)
+					.groupData(role.getGroup())
+					.role(role.getName())
+					.roleData(role)
+					.build());
+		}
+		return authorities;
+	}
 }
