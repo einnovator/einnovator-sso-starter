@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,6 +38,7 @@ public class SsoQueryRestController extends ControllerBase {
 	private GroupManager groupManager;
 
 	@GetMapping("/user")
+	@ResponseBody
 	public Page<User> users(UserFilter filter, PageOptions options, Principal principal) {
 		
 		Page<User> page = userManager.listUsers(filter, options.toPageRequest());
@@ -48,6 +50,7 @@ public class SsoQueryRestController extends ControllerBase {
     }
 	
 	@GetMapping("/group/{groupId}")
+	@ResponseBody
 	public Page<Member> members(@PathVariable String groupId, MemberFilter filter, PageOptions options, Principal principal) {
 		
 		Page<Member> page =  groupManager.listMembers(groupId, filter,  options.toPageRequest());
@@ -59,6 +62,7 @@ public class SsoQueryRestController extends ControllerBase {
     }
 	
 	@GetMapping("/group")
+	@ResponseBody
 	public Page<Group> groups(Principal principal, GroupFilter filter, PageOptions options) {
 
 		Page<Group> page = groupManager.listGroups(filter, options.toPageRequest());

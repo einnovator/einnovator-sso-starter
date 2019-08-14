@@ -17,10 +17,12 @@ import org.einnovator.sso.client.manager.UserManagerImpl;
 import org.einnovator.sso.client.web.SsoClientLogoutHandler;
 import org.einnovator.sso.client.web.SsoCorsFilter;
 import org.einnovator.sso.client.web.SsoLogoutController;
+import org.einnovator.sso.client.web.SsoQueryRestController;
 import org.einnovator.util.security.ClientTokenProvider;
 import org.einnovator.util.security.UserTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
@@ -45,6 +47,8 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 
@@ -191,6 +195,11 @@ public class SsoClientSecurityConfigurer {
 		return new SsoLogoutController(config);
 	}
 
+	@Bean
+	@ConditionalOnMissingBean(SsoQueryRestController.class)
+	public SsoQueryRestController ssoQueryRestController() {
+		return new SsoQueryRestController();
+	}
 
 	@Bean
 	@Primary

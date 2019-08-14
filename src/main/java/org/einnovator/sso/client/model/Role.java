@@ -272,11 +272,11 @@ public class Role extends EntityBase {
 		List<Authority> authorities = new ArrayList<>();
 		for (User user: users) {
 			authorities.add(new AuthorityBuilder()
-					.user(user.getUsername())
+					.username(user.getUsername())
 					.userData(user)
 					.group(role.getGroup()!=null ? role.getGroup().getUuid() : null)
 					.groupData(role.getGroup())
-					.role(role.getName())
+					.roles(role.getName())
 					.roleData(role)
 					.build());
 		}
