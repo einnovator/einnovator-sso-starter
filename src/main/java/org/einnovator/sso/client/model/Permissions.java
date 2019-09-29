@@ -4,7 +4,7 @@
 package org.einnovator.sso.client.model;
 
 /**
- * @author jsima
+ * @author support@einnovator.org
  *
  */
 public class Permissions {

@@ -16,6 +16,10 @@ public enum RoleType {
 		return displayName;
 	}
 	
+	public String getDisplayValue() {
+		return displayName;
+	}
+	
 	public static RoleType parse(String s) {
 		for (RoleType e: RoleType.class.getEnumConstants()) {
 			if (e.toString().equalsIgnoreCase(s)) {
