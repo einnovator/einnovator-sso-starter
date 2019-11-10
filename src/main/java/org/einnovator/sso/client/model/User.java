@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.einnovator.sso.client.modelx.GroupPredicates;
 import org.einnovator.util.model.Address;
@@ -758,7 +761,7 @@ public class User extends EntityBase {
 	public List<String> getGroupsUuid(GroupType groupType) {
 		return EntityBase.getUuids(getGroups(groupType));
 	}
-
+	
 	public List<Role> getRoles() {
 		return roles;
 	}
@@ -896,6 +899,19 @@ public class User extends EntityBase {
 				.append("profileGroup", profileGroup)
 				.append("membership", membership)
 				.append("roles", roles);
-	} 
+	}
+	
+	public static List<String> getUsernames(Iterable<User> users) {
+		List<String> usernames = new ArrayList<>();
+		if (users!=null) {
+			for (User user: users) {
+				if (StringUtils.hasText(user.getUsername())) {
+					usernames.add(user.getUsername());
+				}
+			}			
+		}
+		return usernames;
+	}
+
 		
 }

@@ -13,6 +13,7 @@ import org.einnovator.util.model.Address;
 import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.Phone;
 import org.einnovator.util.model.ToStringCreator;
+import org.springframework.util.StringUtils;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -546,5 +547,15 @@ public class Group extends EntityBase {
 		return groups2;
 	}
 
-
+	public static List<String> getUsernames(Iterable<Group> groups) {
+		List<String> names = new ArrayList<>();
+		if (groups!=null) {
+			for (Group group: groups) {
+				if (StringUtils.hasText(group.getName())) {
+					names.add(group.getName());
+				}
+			}			
+		}
+		return names;
+	}
 }
