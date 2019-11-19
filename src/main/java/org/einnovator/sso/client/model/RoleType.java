@@ -3,8 +3,7 @@ package org.einnovator.sso.client.model;
 
 public enum RoleType {
 	GLOBAL("Global"),
-	OPERATION("Operation"),
-	ORGANIZATION("Organization");
+	GROUP("Operation");
 	
 	private final String displayName;
 
