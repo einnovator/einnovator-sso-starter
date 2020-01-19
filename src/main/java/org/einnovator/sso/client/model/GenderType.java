@@ -2,8 +2,8 @@ package org.einnovator.sso.client.model;
 
 public enum GenderType {
 	MALE("Male"),
-	
-	FEMALE("Female");
+	FEMALE("Female"),
+	OTHER("Other");
 	
 	private final String displayName;
 
