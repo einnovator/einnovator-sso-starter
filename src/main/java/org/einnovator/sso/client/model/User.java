@@ -858,7 +858,29 @@ public class User extends EntityBase {
 		List<Group> groups = Group.flatTrees(Group.copy(getGroups(), true), true);
 		return EntityBase.getUuids(groups);
 	}
-	
+
+	@JsonIgnore
+	public String getTheAvatar() {
+		if (StringUtils.hasText(avatar)) {
+			return avatar;
+		}
+		if (StringUtils.hasText(idicon)) {
+			return idicon;
+		}
+		return null;
+	}
+
+	@JsonIgnore
+	public String getRequiredAvatar(String defaultAvatar) {
+		if (StringUtils.hasText(avatar)) {
+			return avatar;
+		}
+		if (StringUtils.hasText(idicon)) {
+			return idicon;
+		}
+		return defaultAvatar;
+	}
+
 	@Override
 	public ToStringCreator toString1(ToStringCreator builder) {
 		return builder
