@@ -1,7 +1,12 @@
 package org.einnovator.sso.client.config;
 
 
-import java.security.KeyPair;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +15,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -22,7 +27,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.client.RestTemplate;
 
@@ -88,9 +92,30 @@ public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 		if (converter!=null) {
 			return converter;
 		}
+		String key = getTokenKey();
+		RSAPublicKey pubKey = makeRSAPublicKeyFromPem(key);
+	    RsaVerifier verifier = new RsaVerifier(pubKey);
+	    if (logger.isDebugEnabled()) {
+	    	logger.debug("accessTokenConverter:" + pubKey);
+	    }
 		converter = new JwtAccessTokenConverter();
+	    converter.setVerifier(verifier);
 		converter.afterPropertiesSet();
 		return converter;
+	}
+	
+	public static RSAPublicKey makeRSAPublicKeyFromPem(String key) {
+		key = key.replaceAll("\\n", "").replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "");
+        KeyFactory kf;
+		try {
+			kf = KeyFactory.getInstance("RSA");
+			X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(key));
+		    RSAPublicKey pubKey = (RSAPublicKey) kf.generatePublic(keySpecX509);
+		    return pubKey;		
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	private static String tokenKey;
@@ -106,7 +131,9 @@ public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 			if (value!=null) {
 				tokenKey = value.toString();
 			}
-			logger.info("getTokenKey: " + tokenKey);
+			if (logger.isDebugEnabled()) {
+				logger.debug("getTokenKey: " + tokenKey);				
+			}
 			return tokenKey;
 		} catch (RuntimeException e) {
 			logger.error("getTokenKey: Failed to get token key from authentication server:" + config.getServer() + " " + e);
