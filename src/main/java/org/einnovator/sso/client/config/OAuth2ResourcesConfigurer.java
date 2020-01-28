@@ -1,6 +1,7 @@
 package org.einnovator.sso.client.config;
 
 
+import java.security.KeyPair;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,17 +89,6 @@ public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 			return converter;
 		}
 		converter = new JwtAccessTokenConverter();
-		//String tokenKey = getTokenKey();
-		//converter.setVerifierKey(tokenKey);
-		
-		//TODO: use tokenKey
-		String password = "greenfence$sso-gw$123$";
-		String keystore = "einnovator-sso-gateway.jks";
-		String alias ="sso-gw";
-		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(keystore), password.toCharArray());
-		converter.setKeyPair(keyStoreKeyFactory.getKeyPair(alias));
-		//System.out.println(converter.getKey());
-		
 		converter.afterPropertiesSet();
 		return converter;
 	}
