@@ -93,11 +93,16 @@ public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 			return converter;
 		}
 		String key = getTokenKey();
-		RSAPublicKey pubKey = makeRSAPublicKeyFromPem(key);
-	    RsaVerifier verifier = new RsaVerifier(pubKey);
-	    if (logger.isDebugEnabled()) {
-	    	logger.debug("accessTokenConverter:" + pubKey);
-	    }
+		RsaVerifier verifier = null;
+		if (key!=null) {
+			RSAPublicKey pubKey = makeRSAPublicKeyFromPem(key);
+		    verifier = new RsaVerifier(pubKey);
+		    if (logger.isDebugEnabled()) {
+		    	logger.debug("accessTokenConverter:" + pubKey);
+		    }			
+		} else {
+			logger.error("accessTokenConverter: public key not found");
+		}
 		converter = new JwtAccessTokenConverter();
 	    converter.setVerifier(verifier);
 		converter.afterPropertiesSet();

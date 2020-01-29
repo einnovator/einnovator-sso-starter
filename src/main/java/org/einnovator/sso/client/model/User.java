@@ -1,12 +1,10 @@
 package org.einnovator.sso.client.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.einnovator.sso.client.modelx.GroupPredicates;
 import org.einnovator.util.model.Address;
@@ -741,6 +739,9 @@ public class User extends EntityBase {
 	@JsonIgnore
 	public List<Group> getGroups(GroupType groupType) {
 		List<Group> groups = getGroups();
+		if (groupType==null) {
+			return groups;
+		}
 		if (groups==null) {
 			return null;
 		}
@@ -756,6 +757,16 @@ public class User extends EntityBase {
 		default:
 			return groups;
 		}
+	}
+
+	@JsonIgnore
+	public List<Group> getOrganizations() {
+		return getGroups(GroupType.ORGANIZATION);
+	}
+
+	@JsonIgnore
+	public List<Group> getTeams() {
+		return getGroups(GroupType.TEAM);
 	}
 
 	public List<String> getGroupsUuid(GroupType groupType) {
