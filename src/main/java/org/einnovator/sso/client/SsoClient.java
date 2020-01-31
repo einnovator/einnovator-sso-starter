@@ -900,6 +900,9 @@ public class SsoClient {
 	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType) throws RestClientException {
 		OAuth2RestTemplate restTemplate = this.restTemplate;
 		if (WebUtil.getHttpServletRequest()==null) {
+			if (this.restTemplate0==null) {
+				this.restTemplate0 = makeClientOAuth2RestTemplate();
+			}
 			restTemplate = this.restTemplate0;
 		}
 		return exchange(restTemplate, request, responseType);
