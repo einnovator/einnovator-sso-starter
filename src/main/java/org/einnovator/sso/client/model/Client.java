@@ -1,4 +1,5 @@
 package org.einnovator.sso.client.model;
+		
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+		
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Client extends EntityBase {	
@@ -40,23 +42,23 @@ public class Client extends EntityBase {
 	@JsonProperty("authorized_grant_types")
 	@JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
 	private Set<String> authorizedGrantTypes = Collections.emptySet();
-
+	
 	@JsonProperty("redirect_uri")
 	@JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
 	private Set<String> registeredRedirectUris;
-
+	
 	@JsonProperty("autoapprove")
 	@JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
 	private Set<String> autoApproveScopes;
-
+	
 	private List<GrantedAuthority> authorities = Collections.emptyList();
-
 	@JsonProperty("access_token_validity")
+	
 	private Integer accessTokenValiditySeconds;
-
 	@JsonProperty("refresh_token_validity")
+	
 	private Integer refreshTokenValiditySeconds;
-
+	
 	private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
 
 	private String avatar;
@@ -66,15 +68,23 @@ public class Client extends EntityBase {
 	@JsonIgnore
 	private ClientDetails details;
 
-
+	/**
+	 * Create instance of {@code Client}.
+	 *
+	 */
 	public Client() {
 	}
 	
+	/**
+	 * Create instance of {@code Client}.
+	 *
+	 * @param obj a prototype
+	 */
 	public Client(Object obj) {
 		super(obj);
 	}
-	
-	
+
+
 	/**
 	 * Get the value of property {@code clientId}.
 	 *
@@ -87,7 +97,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code clientId}.
 	 *
-	 * @param clientId the clientId to set
+	 * @param clientId the value of property clientId
 	 */
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
@@ -105,7 +115,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code clientSecret}.
 	 *
-	 * @param clientSecret the clientSecret to set
+	 * @param clientSecret the value of property clientSecret
 	 */
 	public void setClientSecret(String clientSecret) {
 		this.clientSecret = clientSecret;
@@ -123,7 +133,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code scope}.
 	 *
-	 * @param scope the scope to set
+	 * @param scope the value of property scope
 	 */
 	public void setScope(Set<String> scope) {
 		this.scope = scope;
@@ -141,7 +151,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code resourceIds}.
 	 *
-	 * @param resourceIds the resourceIds to set
+	 * @param resourceIds the value of property resourceIds
 	 */
 	public void setResourceIds(Set<String> resourceIds) {
 		this.resourceIds = resourceIds;
@@ -159,7 +169,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code authorizedGrantTypes}.
 	 *
-	 * @param authorizedGrantTypes the authorizedGrantTypes to set
+	 * @param authorizedGrantTypes the value of property authorizedGrantTypes
 	 */
 	public void setAuthorizedGrantTypes(Set<String> authorizedGrantTypes) {
 		this.authorizedGrantTypes = authorizedGrantTypes;
@@ -177,7 +187,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code registeredRedirectUris}.
 	 *
-	 * @param registeredRedirectUris the registeredRedirectUris to set
+	 * @param registeredRedirectUris the value of property registeredRedirectUris
 	 */
 	public void setRegisteredRedirectUris(Set<String> registeredRedirectUris) {
 		this.registeredRedirectUris = registeredRedirectUris;
@@ -195,7 +205,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code autoApproveScopes}.
 	 *
-	 * @param autoApproveScopes the autoApproveScopes to set
+	 * @param autoApproveScopes the value of property autoApproveScopes
 	 */
 	public void setAutoApproveScopes(Set<String> autoApproveScopes) {
 		this.autoApproveScopes = autoApproveScopes;
@@ -213,7 +223,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code authorities}.
 	 *
-	 * @param authorities the authorities to set
+	 * @param authorities the value of property authorities
 	 */
 	public void setAuthorities(List<GrantedAuthority> authorities) {
 		this.authorities = authorities;
@@ -231,7 +241,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code accessTokenValiditySeconds}.
 	 *
-	 * @param accessTokenValiditySeconds the accessTokenValiditySeconds to set
+	 * @param accessTokenValiditySeconds the value of property accessTokenValiditySeconds
 	 */
 	public void setAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
 		this.accessTokenValiditySeconds = accessTokenValiditySeconds;
@@ -249,7 +259,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code refreshTokenValiditySeconds}.
 	 *
-	 * @param refreshTokenValiditySeconds the refreshTokenValiditySeconds to set
+	 * @param refreshTokenValiditySeconds the value of property refreshTokenValiditySeconds
 	 */
 	public void setRefreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
 		this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
@@ -267,28 +277,10 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code additionalInformation}.
 	 *
-	 * @param additionalInformation the additionalInformation to set
+	 * @param additionalInformation the value of property additionalInformation
 	 */
 	public void setAdditionalInformation(Map<String, Object> additionalInformation) {
 		this.additionalInformation = additionalInformation;
-	}
-
-	/**
-	 * Get the value of property {@code details}.
-	 *
-	 * @return the details
-	 */
-	public ClientDetails getDetails() {
-		return details;
-	}
-
-	/**
-	 * Set the value of property {@code details}.
-	 *
-	 * @param details the details to set
-	 */
-	public void setDetails(ClientDetails details) {
-		this.details = details;
 	}
 
 	/**
@@ -303,7 +295,7 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code avatar}.
 	 *
-	 * @param avatar the avatar to set
+	 * @param avatar the value of property avatar
 	 */
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
@@ -321,10 +313,168 @@ public class Client extends EntityBase {
 	/**
 	 * Set the value of property {@code thumbnail}.
 	 *
-	 * @param thumbnail the thumbnail to set
+	 * @param thumbnail the value of property thumbnail
 	 */
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	/**
+	 * Get the value of property {@code details}.
+	 *
+	 * @return the details
+	 */
+	public ClientDetails getDetails() {
+		return details;
+	}
+
+	/**
+	 * Set the value of property {@code details}.
+	 *
+	 * @param details the value of property details
+	 */
+	public void setDetails(ClientDetails details) {
+		this.details = details;
+	}
+
+	/**
+	 * Set the value of property {@code clientId}.
+	 *
+	 * @param clientId the value of property clientId
+	 */
+	public Client withClientId(String clientId) {
+		this.clientId = clientId;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code clientSecret}.
+	 *
+	 * @param clientSecret the value of property clientSecret
+	 */
+	public Client withClientSecret(String clientSecret) {
+		this.clientSecret = clientSecret;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code scope}.
+	 *
+	 * @param scope the value of property scope
+	 */
+	public Client withScope(Set<String> scope) {
+		this.scope = scope;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code resourceIds}.
+	 *
+	 * @param resourceIds the value of property resourceIds
+	 */
+	public Client withResourceIds(Set<String> resourceIds) {
+		this.resourceIds = resourceIds;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code authorizedGrantTypes}.
+	 *
+	 * @param authorizedGrantTypes the value of property authorizedGrantTypes
+	 */
+	public Client withAuthorizedGrantTypes(Set<String> authorizedGrantTypes) {
+		this.authorizedGrantTypes = authorizedGrantTypes;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code registeredRedirectUris}.
+	 *
+	 * @param registeredRedirectUris the value of property registeredRedirectUris
+	 */
+	public Client withRegisteredRedirectUris(Set<String> registeredRedirectUris) {
+		this.registeredRedirectUris = registeredRedirectUris;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code autoApproveScopes}.
+	 *
+	 * @param autoApproveScopes the value of property autoApproveScopes
+	 */
+	public Client withAutoApproveScopes(Set<String> autoApproveScopes) {
+		this.autoApproveScopes = autoApproveScopes;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code authorities}.
+	 *
+	 * @param authorities the value of property authorities
+	 */
+	public Client withAuthorities(List<GrantedAuthority> authorities) {
+		this.authorities = authorities;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code accessTokenValiditySeconds}.
+	 *
+	 * @param accessTokenValiditySeconds the value of property accessTokenValiditySeconds
+	 */
+	public Client withAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
+		this.accessTokenValiditySeconds = accessTokenValiditySeconds;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code refreshTokenValiditySeconds}.
+	 *
+	 * @param refreshTokenValiditySeconds the value of property refreshTokenValiditySeconds
+	 */
+	public Client withRefreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
+		this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code additionalInformation}.
+	 *
+	 * @param additionalInformation the value of property additionalInformation
+	 */
+	public Client withAdditionalInformation(Map<String, Object> additionalInformation) {
+		this.additionalInformation = additionalInformation;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code avatar}.
+	 *
+	 * @param avatar the value of property avatar
+	 */
+	public Client withAvatar(String avatar) {
+		this.avatar = avatar;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code thumbnail}.
+	 *
+	 * @param thumbnail the value of property thumbnail
+	 */
+	public Client withThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code details}.
+	 *
+	 * @param details the value of property details
+	 */
+	public Client withDetails(ClientDetails details) {
+		this.details = details;
+		return this;
 	}
 
 	@Override

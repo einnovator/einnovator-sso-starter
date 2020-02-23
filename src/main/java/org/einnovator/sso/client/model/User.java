@@ -2,7 +2,6 @@ package org.einnovator.sso.client.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,25 +93,39 @@ public class User extends EntityBase {
 	
 	private String securityAnswer;
 	
-	private Map<String, Object> profile = new LinkedHashMap<>();
+	private Map<String, Object> profile;
 	
 	private List<Member> membership;
 
 	private List<Role> roles;
 	
+	/**
+	 * Create instance of {@code User}.
+	 *
+	 */
 	@JsonCreator
 	public User() {
 	}
 	
+	/**
+	 * Create instance of {@code User}.
+	 *
+	 * @param username the username
+	 */
 	public User(String username) {
 		this.username = username;
 	}
 	
-	public User(Object obj) {
-		super(obj);
+	/**
+	 * Create instance of {@code User}.
+	 *
+	 * @param prototype a prototype
+	 */
+	public User(Object prototype) {
+		super(prototype);
 	}
-
 	
+
 	/**
 	 * Get the value of property {@code username}.
 	 *
@@ -125,7 +138,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code username}.
 	 *
-	 * @param username the username to set
+	 * @param username the value of property username
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -143,7 +156,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code email}.
 	 *
-	 * @param email the email to set
+	 * @param email the value of property email
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -161,7 +174,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code email2}.
 	 *
-	 * @param email2 the email2 to set
+	 * @param email2 the value of property email2
 	 */
 	public void setEmail2(String email2) {
 		this.email2 = email2;
@@ -179,7 +192,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code email3}.
 	 *
-	 * @param email3 the email3 to set
+	 * @param email3 the value of property email3
 	 */
 	public void setEmail3(String email3) {
 		this.email3 = email3;
@@ -197,7 +210,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code firstName}.
 	 *
-	 * @param firstName the firstName to set
+	 * @param firstName the value of property firstName
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -215,7 +228,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code lastName}.
 	 *
-	 * @param lastName the lastName to set
+	 * @param lastName the value of property lastName
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
@@ -233,7 +246,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code title}.
 	 *
-	 * @param title the title to set
+	 * @param title the value of property title
 	 */
 	public void setTitle(String title) {
 		this.title = title;
@@ -251,7 +264,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code gender}.
 	 *
-	 * @param gender the gender to set
+	 * @param gender the value of property gender
 	 */
 	public void setGender(GenderType gender) {
 		this.gender = gender;
@@ -269,7 +282,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code birthdate}.
 	 *
-	 * @param birthdate the birthdate to set
+	 * @param birthdate the value of property birthdate
 	 */
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
@@ -287,7 +300,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code mobilePhone}.
 	 *
-	 * @param mobilePhone the mobilePhone to set
+	 * @param mobilePhone the value of property mobilePhone
 	 */
 	public void setMobilePhone(Phone mobilePhone) {
 		this.mobilePhone = mobilePhone;
@@ -305,7 +318,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code phone}.
 	 *
-	 * @param phone the phone to set
+	 * @param phone the value of property phone
 	 */
 	public void setPhone(Phone phone) {
 		this.phone = phone;
@@ -323,7 +336,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code phone2}.
 	 *
-	 * @param phone2 the phone2 to set
+	 * @param phone2 the value of property phone2
 	 */
 	public void setPhone2(Phone phone2) {
 		this.phone2 = phone2;
@@ -341,7 +354,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code middleName}.
 	 *
-	 * @param middleName the middleName to set
+	 * @param middleName the value of property middleName
 	 */
 	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
@@ -359,7 +372,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code nickname}.
 	 *
-	 * @param nickname the nickname to set
+	 * @param nickname the value of property nickname
 	 */
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
@@ -377,7 +390,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code timezone}.
 	 *
-	 * @param timezone the timezone to set
+	 * @param timezone the value of property timezone
 	 */
 	public void setTimezone(String timezone) {
 		this.timezone = timezone;
@@ -395,7 +408,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code locale}.
 	 *
-	 * @param locale the locale to set
+	 * @param locale the value of property locale
 	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
@@ -413,7 +426,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code avatar}.
 	 *
-	 * @param avatar the avatar to set
+	 * @param avatar the value of property avatar
 	 */
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
@@ -431,7 +444,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code idhash}.
 	 *
-	 * @param idhash the idhash to set
+	 * @param idhash the value of property idhash
 	 */
 	public void setIdhash(String idhash) {
 		this.idhash = idhash;
@@ -449,7 +462,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code idicon}.
 	 *
-	 * @param idicon the idicon to set
+	 * @param idicon the value of property idicon
 	 */
 	public void setIdicon(String idicon) {
 		this.idicon = idicon;
@@ -467,7 +480,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code cover}.
 	 *
-	 * @param cover the cover to set
+	 * @param cover the value of property cover
 	 */
 	public void setCover(String cover) {
 		this.cover = cover;
@@ -485,7 +498,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code cover2}.
 	 *
-	 * @param cover2 the cover2 to set
+	 * @param cover2 the value of property cover2
 	 */
 	public void setCover2(String cover2) {
 		this.cover2 = cover2;
@@ -503,7 +516,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code signature}.
 	 *
-	 * @param signature the signature to set
+	 * @param signature the value of property signature
 	 */
 	public void setSignature(String signature) {
 		this.signature = signature;
@@ -521,10 +534,46 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code website}.
 	 *
-	 * @param website the website to set
+	 * @param website the value of property website
 	 */
 	public void setWebsite(String website) {
 		this.website = website;
+	}
+
+	/**
+	 * Get the value of property {@code social}.
+	 *
+	 * @return the social
+	 */
+	public String getSocial() {
+		return social;
+	}
+
+	/**
+	 * Set the value of property {@code social}.
+	 *
+	 * @param social the value of property social
+	 */
+	public void setSocial(String social) {
+		this.social = social;
+	}
+
+	/**
+	 * Get the value of property {@code social2}.
+	 *
+	 * @return the social2
+	 */
+	public String getSocial2() {
+		return social2;
+	}
+
+	/**
+	 * Set the value of property {@code social2}.
+	 *
+	 * @param social2 the value of property social2
+	 */
+	public void setSocial2(String social2) {
+		this.social2 = social2;
 	}
 
 	/**
@@ -539,7 +588,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code status}.
 	 *
-	 * @param status the status to set
+	 * @param status the value of property status
 	 */
 	public void setStatus(UserStatus status) {
 		this.status = status;
@@ -557,10 +606,82 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code enabled}.
 	 *
-	 * @param enabled the enabled to set
+	 * @param enabled the value of property enabled
 	 */
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	/**
+	 * Get the value of property {@code currentGroup}.
+	 *
+	 * @return the currentGroup
+	 */
+	public String getCurrentGroup() {
+		return currentGroup;
+	}
+
+	/**
+	 * Set the value of property {@code currentGroup}.
+	 *
+	 * @param currentGroup the value of property currentGroup
+	 */
+	public void setCurrentGroup(String currentGroup) {
+		this.currentGroup = currentGroup;
+	}
+
+	/**
+	 * Get the value of property {@code profileGroup}.
+	 *
+	 * @return the profileGroup
+	 */
+	public String getProfileGroup() {
+		return profileGroup;
+	}
+
+	/**
+	 * Set the value of property {@code profileGroup}.
+	 *
+	 * @param profileGroup the value of property profileGroup
+	 */
+	public void setProfileGroup(String profileGroup) {
+		this.profileGroup = profileGroup;
+	}
+
+	/**
+	 * Get the value of property {@code authenticated}.
+	 *
+	 * @return the authenticated
+	 */
+	public Boolean getAuthenticated() {
+		return authenticated;
+	}
+
+	/**
+	 * Set the value of property {@code authenticated}.
+	 *
+	 * @param authenticated the value of property authenticated
+	 */
+	public void setAuthenticated(Boolean authenticated) {
+		this.authenticated = authenticated;
+	}
+
+	/**
+	 * Get the value of property {@code onboarding}.
+	 *
+	 * @return the onboarding
+	 */
+	public Integer getOnboarding() {
+		return onboarding;
+	}
+
+	/**
+	 * Set the value of property {@code onboarding}.
+	 *
+	 * @param onboarding the value of property onboarding
+	 */
+	public void setOnboarding(Integer onboarding) {
+		this.onboarding = onboarding;
 	}
 
 	/**
@@ -575,10 +696,28 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code address}.
 	 *
-	 * @param address the address to set
+	 * @param address the value of property address
 	 */
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	/**
+	 * Get the value of property {@code description}.
+	 *
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Set the value of property {@code description}.
+	 *
+	 * @param description the value of property description
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**
@@ -593,7 +732,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code password}.
 	 *
-	 * @param password the password to set
+	 * @param password the value of property password
 	 */
 	public void setPassword(byte[] password) {
 		this.password = password;
@@ -611,7 +750,7 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code securityQuestion}.
 	 *
-	 * @param securityQuestion the securityQuestion to set
+	 * @param securityQuestion the value of property securityQuestion
 	 */
 	public void setSecurityQuestion(String securityQuestion) {
 		this.securityQuestion = securityQuestion;
@@ -629,18 +768,454 @@ public class User extends EntityBase {
 	/**
 	 * Set the value of property {@code securityAnswer}.
 	 *
-	 * @param securityAnswer the securityAnswer to set
+	 * @param securityAnswer the value of property securityAnswer
 	 */
 	public void setSecurityAnswer(String securityAnswer) {
 		this.securityAnswer = securityAnswer;
 	}
 
+	/**
+	 * Get the value of property {@code profile}.
+	 *
+	 * @return the profile
+	 */
 	public Map<String, Object> getProfile() {
 		return profile;
 	}
 
+	/**
+	 * Set the value of property {@code profile}.
+	 *
+	 * @param profile the value of property profile
+	 */
 	public void setProfile(Map<String, Object> profile) {
 		this.profile = profile;
+	}
+
+	/**
+	 * Get the value of property {@code membership}.
+	 *
+	 * @return the membership
+	 */
+	public List<Member> getMembership() {
+		return membership;
+	}
+
+	/**
+	 * Set the value of property {@code membership}.
+	 *
+	 * @param membership the value of property membership
+	 */
+	public void setMembership(List<Member> membership) {
+		this.membership = membership;
+	}
+
+	/**
+	 * Get the value of property {@code roles}.
+	 *
+	 * @return the roles
+	 */
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * Set the value of property {@code roles}.
+	 *
+	 * @param roles the value of property roles
+	 */
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	/**
+	 * Set the value of property {@code username}.
+	 *
+	 * @param username the value of property username
+	 */
+	public User withUsername(String username) {
+		this.username = username;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code email}.
+	 *
+	 * @param email the value of property email
+	 */
+	public User withEmail(String email) {
+		this.email = email;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code email2}.
+	 *
+	 * @param email2 the value of property email2
+	 */
+	public User withEmail2(String email2) {
+		this.email2 = email2;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code email3}.
+	 *
+	 * @param email3 the value of property email3
+	 */
+	public User withEmail3(String email3) {
+		this.email3 = email3;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code firstName}.
+	 *
+	 * @param firstName the value of property firstName
+	 */
+	public User withFirstName(String firstName) {
+		this.firstName = firstName;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code lastName}.
+	 *
+	 * @param lastName the value of property lastName
+	 */
+	public User withLastName(String lastName) {
+		this.lastName = lastName;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code title}.
+	 *
+	 * @param title the value of property title
+	 */
+	public User withTitle(String title) {
+		this.title = title;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code gender}.
+	 *
+	 * @param gender the value of property gender
+	 */
+	public User withGender(GenderType gender) {
+		this.gender = gender;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code birthdate}.
+	 *
+	 * @param birthdate the value of property birthdate
+	 */
+	public User withBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code mobilePhone}.
+	 *
+	 * @param mobilePhone the value of property mobilePhone
+	 */
+	public User withMobilePhone(Phone mobilePhone) {
+		this.mobilePhone = mobilePhone;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code phone}.
+	 *
+	 * @param phone the value of property phone
+	 */
+	public User withPhone(Phone phone) {
+		this.phone = phone;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code phone2}.
+	 *
+	 * @param phone2 the value of property phone2
+	 */
+	public User withPhone2(Phone phone2) {
+		this.phone2 = phone2;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code middleName}.
+	 *
+	 * @param middleName the value of property middleName
+	 */
+	public User withMiddleName(String middleName) {
+		this.middleName = middleName;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code nickname}.
+	 *
+	 * @param nickname the value of property nickname
+	 */
+	public User withNickname(String nickname) {
+		this.nickname = nickname;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code timezone}.
+	 *
+	 * @param timezone the value of property timezone
+	 */
+	public User withTimezone(String timezone) {
+		this.timezone = timezone;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code locale}.
+	 *
+	 * @param locale the value of property locale
+	 */
+	public User withLocale(String locale) {
+		this.locale = locale;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code avatar}.
+	 *
+	 * @param avatar the value of property avatar
+	 */
+	public User withAvatar(String avatar) {
+		this.avatar = avatar;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code idhash}.
+	 *
+	 * @param idhash the value of property idhash
+	 */
+	public User withIdhash(String idhash) {
+		this.idhash = idhash;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code idicon}.
+	 *
+	 * @param idicon the value of property idicon
+	 */
+	public User withIdicon(String idicon) {
+		this.idicon = idicon;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code cover}.
+	 *
+	 * @param cover the value of property cover
+	 */
+	public User withCover(String cover) {
+		this.cover = cover;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code cover2}.
+	 *
+	 * @param cover2 the value of property cover2
+	 */
+	public User withCover2(String cover2) {
+		this.cover2 = cover2;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code signature}.
+	 *
+	 * @param signature the value of property signature
+	 */
+	public User withSignature(String signature) {
+		this.signature = signature;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code website}.
+	 *
+	 * @param website the value of property website
+	 */
+	public User withWebsite(String website) {
+		this.website = website;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code social}.
+	 *
+	 * @param social the value of property social
+	 */
+	public User withSocial(String social) {
+		this.social = social;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code social2}.
+	 *
+	 * @param social2 the value of property social2
+	 */
+	public User withSocial2(String social2) {
+		this.social2 = social2;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code status}.
+	 *
+	 * @param status the value of property status
+	 */
+	public User withStatus(UserStatus status) {
+		this.status = status;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code enabled}.
+	 *
+	 * @param enabled the value of property enabled
+	 */
+	public User withEnabled(Boolean enabled) {
+		this.enabled = enabled;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code currentGroup}.
+	 *
+	 * @param currentGroup the value of property currentGroup
+	 */
+	public User withCurrentGroup(String currentGroup) {
+		this.currentGroup = currentGroup;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code profileGroup}.
+	 *
+	 * @param profileGroup the value of property profileGroup
+	 */
+	public User withProfileGroup(String profileGroup) {
+		this.profileGroup = profileGroup;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code authenticated}.
+	 *
+	 * @param authenticated the value of property authenticated
+	 */
+	public User withAuthenticated(Boolean authenticated) {
+		this.authenticated = authenticated;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code onboarding}.
+	 *
+	 * @param onboarding the value of property onboarding
+	 */
+	public User withOnboarding(Integer onboarding) {
+		this.onboarding = onboarding;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code address}.
+	 *
+	 * @param address the value of property address
+	 */
+	public User withAddress(Address address) {
+		this.address = address;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code description}.
+	 *
+	 * @param description the value of property description
+	 */
+	public User withDescription(String description) {
+		this.description = description;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code password}.
+	 *
+	 * @param password the value of property password
+	 */
+	public User withPassword(byte[] password) {
+		this.password = password;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code securityQuestion}.
+	 *
+	 * @param securityQuestion the value of property securityQuestion
+	 */
+	public User withSecurityQuestion(String securityQuestion) {
+		this.securityQuestion = securityQuestion;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code securityAnswer}.
+	 *
+	 * @param securityAnswer the value of property securityAnswer
+	 */
+	public User withSecurityAnswer(String securityAnswer) {
+		this.securityAnswer = securityAnswer;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code profile}.
+	 *
+	 * @param profile the value of property profile
+	 */
+	public User withProfile(Map<String, Object> profile) {
+		this.profile = profile;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code membership}.
+	 *
+	 * @param membership the value of property membership
+	 */
+	public User withMembership(List<Member> membership) {
+		this.membership = membership;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code roles}.
+	 *
+	 * @param roles the value of property roles
+	 */
+	public User withRoles(List<Role> roles) {
+		this.roles = roles;
+		return this;
 	}
 
 	public Object getProfileAttribute(String name) {
@@ -666,74 +1241,10 @@ public class User extends EntityBase {
 		}
 		return username;
 	}
-	
-	public String getCurrentGroup() {
-		return currentGroup;
-	}
 
-	public void setCurrentGroup(String currentGroup) {
-		this.currentGroup = currentGroup;
-	}
-
-	public String getProfileGroup() {
-		return profileGroup;
-	}
-
-	public void setProfileGroup(String profileGroup) {
-		this.profileGroup = profileGroup;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Boolean getAuthenticated() {
-		return authenticated;
-	}
-
-	public void setAuthenticated(Boolean authenticated) {
-		this.authenticated = authenticated;
-	}
-
-	public String getSocial() {
-		return social;
-	}
-
-	public void setSocial(String social) {
-		this.social = social;
-	}
-
-	public String getSocial2() {
-		return social2;
-	}
-
-	public void setSocial2(String social2) {
-		this.social2 = social2;
-	}
-
-	public Integer getOnboarding() {
-		return onboarding;
-	}
-
-	public void setOnboarding(Integer onboarding) {
-		this.onboarding = onboarding;
-	}
-
-	public List<Member> getMembership() {
-		return membership;
-	}
-
-	public void setMembership(List<Member> membership) {
-		this.membership = membership;
-	}
-	
 	@JsonIgnore
 	public List<Group> getGroups() {
-		return Member.toGroups(getMembership());
+		return Member.getGroups(membership);
 	}
 
 	@JsonIgnore
@@ -771,14 +1282,6 @@ public class User extends EntityBase {
 
 	public List<String> getGroupsUuid(GroupType groupType) {
 		return EntityBase.getUuids(getGroups(groupType));
-	}
-	
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
 	}
 
 	@JsonIgnore
@@ -938,8 +1441,8 @@ public class User extends EntityBase {
 		List<String> usernames = new ArrayList<>();
 		if (users!=null) {
 			for (User user: users) {
-				if (StringUtils.hasText(user.getUsername())) {
-					usernames.add(user.getUsername());
+				if (StringUtils.hasText(user.username)) {
+					usernames.add(user.username);
 				}
 			}			
 		}

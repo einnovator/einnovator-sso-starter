@@ -1,4 +1,4 @@
-package com.einnovator.sso.client;
+package com.einnovator.sso.client.manager;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;

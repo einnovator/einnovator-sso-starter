@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.einnovator.util.model.EntityBase;
+import org.einnovator.util.model.ToStringCreator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -27,80 +28,233 @@ public class Member extends EntityBase {
 	
 	private List<Role> roles;
 	
+	/**
+	 * Create instance of {@code Member}.
+	 *
+	 */
 	public Member() {
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	/**
+	 * Create instance of {@code Member}.
+	 *
+	 * @param prototype a prototype
+	 */
+	public Member(Object prototype) {
+		super(prototype);
 	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-	
+	/**
+	 * Get the value of property {@code user}.
+	 *
+	 * @return the user
+	 */
 	public User getUser() {
 		return user;
 	}
 
+	/**
+	 * Set the value of property {@code user}.
+	 *
+	 * @param user the value of property user
+	 */
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
+	/**
+	 * Get the value of property {@code group}.
+	 *
+	 * @return the group
+	 */
 	public Group getGroup() {
 		return group;
 	}
 
+	/**
+	 * Set the value of property {@code group}.
+	 *
+	 * @param group the value of property group
+	 */
 	public void setGroup(Group group) {
 		this.group = group;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	
+	/**
+	 * Get the value of property {@code title}.
+	 *
+	 * @return the title
+	 */
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * Set the value of property {@code title}.
+	 *
+	 * @param title the value of property title
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
+	/**
+	 * Get the value of property {@code startDate}.
+	 *
+	 * @return the startDate
+	 */
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	/**
+	 * Set the value of property {@code startDate}.
+	 *
+	 * @param startDate the value of property startDate
+	 */
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	/**
+	 * Get the value of property {@code endDate}.
+	 *
+	 * @return the endDate
+	 */
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	/**
+	 * Set the value of property {@code endDate}.
+	 *
+	 * @param endDate the value of property endDate
+	 */
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	/**
+	 * Get the value of property {@code enabled}.
+	 *
+	 * @return the enabled
+	 */
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * Set the value of property {@code enabled}.
+	 *
+	 * @param enabled the value of property enabled
+	 */
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	/**
+	 * Get the value of property {@code roles}.
+	 *
+	 * @return the roles
+	 */
 	public List<Role> getRoles() {
 		return roles;
 	}
 
+	/**
+	 * Set the value of property {@code roles}.
+	 *
+	 * @param roles the value of property roles
+	 */
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 
-	@Override
-	public String toString() {
-		return this.getClass().getSimpleName() + " [" 
-				+ (user != null ? "username=" + user.getUsername() + ", " : "")
-				+ (group != null ? "group=" + group.getId() + " " + group.getUuid() + " " + group.getName() + ", " : "")
-				+ (title != null ? "title=" + title + ", " : "")
-				+ (startDate != null ? "startDate=" + startDate + ", " : "")
-				+ (enabled != null ? "enabled=" + enabled : "") 
-				+ (user!=null ? "user=" + user : "")
-				+ (roles!=null ? "roles=" + roles : "")
-				+ "]";
+	/**
+	 * Set the value of property {@code user}.
+	 *
+	 * @param user the value of property user
+	 */
+	public Member withUser(User user) {
+		this.user = user;
+		return this;
 	}
 
-	public static List<User> toUsers(List<Member> members) {
+	/**
+	 * Set the value of property {@code group}.
+	 *
+	 * @param group the value of property group
+	 */
+	public Member withGroup(Group group) {
+		this.group = group;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code title}.
+	 *
+	 * @param title the value of property title
+	 */
+	public Member withTitle(String title) {
+		this.title = title;
+		return this;
+	}
+
+
+	/**
+	 * Set the value of property {@code startDate}.
+	 *
+	 * @param startDate the value of property startDate
+	 */
+	public Member withStartDate(Date startDate) {
+		this.startDate = startDate;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code endDate}.
+	 *
+	 * @param endDate the value of property endDate
+	 */
+	public Member withEndDate(Date endDate) {
+		this.endDate = endDate;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code enabled}.
+	 *
+	 * @param enabled the value of property enabled
+	 */
+	public Member withEnabled(Boolean enabled) {
+		this.enabled = enabled;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code roles}.
+	 *
+	 * @param roles the value of property roles
+	 */
+	public Member withRoles(List<Role> roles) {
+		this.roles = roles;
+		return this;
+	}
+
+
+	@Override
+	public ToStringCreator toString1(ToStringCreator creator) {
+		return super.toString1(creator)
+				.append("username", user!=null ? user.getUsername() : null)
+				.append("group", group != null ? group.getUuid() + " " + group.getName() : null)
+				.append("title", title)
+				.append("startDate", startDate)
+				.append("endDate", endDate)
+				.append("enabled", enabled)
+				.append("roles", roles)
+				;
+	}
+	
+	public static List<User> getUsers(List<Member> members) {
 		if (members==null) {
 			return null;
 		}
@@ -113,7 +267,7 @@ public class Member extends EntityBase {
 		return users;
 	}
 
-	public static List<Group> toGroups(List<Member> members) {
+	public static List<Group> getGroups(List<Member> members) {
 		if (members==null) {
 			return null;
 		}
@@ -126,7 +280,7 @@ public class Member extends EntityBase {
 		return groups;
 	}
 
-	public static List<Group> toGroups(GroupType type, List<Member> members) {
+	public static List<Group> getGroups(GroupType type, List<Member> members) {
 		if (members==null) {
 			return null;
 		}

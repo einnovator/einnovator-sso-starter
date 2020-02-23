@@ -1,5 +1,6 @@
 package org.einnovator.sso.client.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,11 +59,20 @@ public class Invitation  extends EntityBase {
 
 	private Map<String, Object> meta;
 
+	/**
+	 * Create instance of {@code Invitation}.
+	 *
+	 */
 	public Invitation() {
 	}
 
-	public Invitation(Invitation invitation) {
-		super(invitation);
+	/**
+	 * Create instance of {@code Invitation}.
+	 *
+	 * @param prototype a prototype
+	 */
+	public Invitation(Object prototype) {
+		super(prototype);
 	}
 
 	
@@ -78,7 +88,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code type}.
 	 *
-	 * @param type the type to set
+	 * @param type the value of property type
 	 */
 	public void setType(InvitationType type) {
 		this.type = type;
@@ -96,7 +106,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code otherType}.
 	 *
-	 * @param otherType the otherType to set
+	 * @param otherType the value of property otherType
 	 */
 	public void setOtherType(String otherType) {
 		this.otherType = otherType;
@@ -114,7 +124,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code app}.
 	 *
-	 * @param app the app to set
+	 * @param app the value of property app
 	 */
 	public void setApp(String app) {
 		this.app = app;
@@ -132,7 +142,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code invitee}.
 	 *
-	 * @param invitee the invitee to set
+	 * @param invitee the value of property invitee
 	 */
 	public void setInvitee(String invitee) {
 		this.invitee = invitee;
@@ -150,7 +160,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code invitedUser}.
 	 *
-	 * @param invitedUser the invitedUser to set
+	 * @param invitedUser the value of property invitedUser
 	 */
 	public void setInvitedUser(User invitedUser) {
 		this.invitedUser = invitedUser;
@@ -168,7 +178,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code owner}.
 	 *
-	 * @param owner the owner to set
+	 * @param owner the value of property owner
 	 */
 	public void setOwner(String owner) {
 		this.owner = owner;
@@ -186,7 +196,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code user}.
 	 *
-	 * @param user the user to set
+	 * @param user the value of property user
 	 */
 	public void setUser(User user) {
 		this.user = user;
@@ -204,7 +214,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code status}.
 	 *
-	 * @param status the status to set
+	 * @param status the value of property status
 	 */
 	public void setStatus(InvitationStatus status) {
 		this.status = status;
@@ -222,7 +232,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code error}.
 	 *
-	 * @param error the error to set
+	 * @param error the value of property error
 	 */
 	public void setError(InvitationError error) {
 		this.error = error;
@@ -240,7 +250,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code redirectUri}.
 	 *
-	 * @param redirectUri the redirectUri to set
+	 * @param redirectUri the value of property redirectUri
 	 */
 	public void setRedirectUri(String redirectUri) {
 		this.redirectUri = redirectUri;
@@ -258,7 +268,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code site}.
 	 *
-	 * @param site the site to set
+	 * @param site the value of property site
 	 */
 	public void setSite(String site) {
 		this.site = site;
@@ -276,7 +286,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code description}.
 	 *
-	 * @param description the description to set
+	 * @param description the value of property description
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -294,7 +304,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code subject}.
 	 *
-	 * @param subject the subject to set
+	 * @param subject the value of property subject
 	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
@@ -312,13 +322,12 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code template}.
 	 *
-	 * @param template the template to set
+	 * @param template the value of property template
 	 */
 	public void setTemplate(String template) {
 		this.template = template;
 	}
 
-	
 	/**
 	 * Get the value of property {@code autoLogin}.
 	 *
@@ -331,7 +340,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code autoLogin}.
 	 *
-	 * @param autoLogin the autoLogin to set
+	 * @param autoLogin the value of property autoLogin
 	 */
 	public void setAutoLogin(Boolean autoLogin) {
 		this.autoLogin = autoLogin;
@@ -349,7 +358,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code invitees}.
 	 *
-	 * @param invitees the invitees to set
+	 * @param invitees the value of property invitees
 	 */
 	public void setInvitees(List<Invitee> invitees) {
 		this.invitees = invitees;
@@ -367,7 +376,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code groups}.
 	 *
-	 * @param groups the groups to set
+	 * @param groups the value of property groups
 	 */
 	public void setGroups(List<Group> groups) {
 		this.groups = groups;
@@ -385,47 +394,10 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code formattedDate}.
 	 *
-	 * @param formattedDate the formattedDate to set
+	 * @param formattedDate the value of property formattedDate
 	 */
 	public void setFormattedDate(String formattedDate) {
 		this.formattedDate = formattedDate;
-	}
-
-	/**
-	 * Get the value of property {@code env}.
-	 *
-	 * @return the env
-	 */
-	public Map<String, Object> getEnv() {
-		return env;
-	}
-
-	/**
-	 * Set the value of property {@code env}.
-	 *
-	 * @param env the env to set
-	 */
-	public void setEnv(Map<String, Object> env) {
-		this.env = env;
-	}
-
-	
-	/**
-	 * Get the value of property {@code meta}.
-	 *
-	 * @return the meta
-	 */
-	public Map<String, Object> getMeta() {
-		return meta;
-	}
-
-	/**
-	 * Set the value of property {@code meta}.
-	 *
-	 * @param meta the meta to set
-	 */
-	public void setMeta(Map<String, Object> meta) {
-		this.meta = meta;
 	}
 
 	/**
@@ -440,7 +412,7 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code trigger0}.
 	 *
-	 * @param trigger0 the trigger0 to set
+	 * @param trigger0 the value of property trigger0
 	 */
 	public void setTrigger0(Trigger trigger0) {
 		this.trigger0 = trigger0;
@@ -458,10 +430,289 @@ public class Invitation  extends EntityBase {
 	/**
 	 * Set the value of property {@code trigger1}.
 	 *
-	 * @param trigger1 the trigger1 to set
+	 * @param trigger1 the value of property trigger1
 	 */
 	public void setTrigger1(Trigger trigger1) {
 		this.trigger1 = trigger1;
+	}
+
+	/**
+	 * Get the value of property {@code env}.
+	 *
+	 * @return the env
+	 */
+	public Map<String, Object> getEnv() {
+		return env;
+	}
+
+	/**
+	 * Set the value of property {@code env}.
+	 *
+	 * @param env the value of property env
+	 */
+	public void setEnv(Map<String, Object> env) {
+		this.env = env;
+	}
+
+	/**
+	 * Get the value of property {@code meta}.
+	 *
+	 * @return the meta
+	 */
+	public Map<String, Object> getMeta() {
+		return meta;
+	}
+
+	/**
+	 * Set the value of property {@code meta}.
+	 *
+	 * @param meta the value of property meta
+	 */
+	public void setMeta(Map<String, Object> meta) {
+		this.meta = meta;
+	}
+
+	/**
+	 * Set the value of property {@code type}.
+	 *
+	 * @param type the value of property type
+	 */
+	public Invitation withType(InvitationType type) {
+		this.type = type;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code otherType}.
+	 *
+	 * @param otherType the value of property otherType
+	 */
+	public Invitation withOtherType(String otherType) {
+		this.otherType = otherType;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code app}.
+	 *
+	 * @param app the value of property app
+	 */
+	public Invitation withApp(String app) {
+		this.app = app;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code invitee}.
+	 *
+	 * @param invitee the value of property invitee
+	 */
+	public Invitation withInvitee(String invitee) {
+		this.invitee = invitee;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code invitedUser}.
+	 *
+	 * @param invitedUser the value of property invitedUser
+	 */
+	public Invitation withInvitedUser(User invitedUser) {
+		this.invitedUser = invitedUser;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code owner}.
+	 *
+	 * @param owner the value of property owner
+	 */
+	public Invitation withOwner(String owner) {
+		this.owner = owner;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code user}.
+	 *
+	 * @param user the value of property user
+	 */
+	public Invitation withUser(User user) {
+		this.user = user;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code status}.
+	 *
+	 * @param status the value of property status
+	 */
+	public Invitation withStatus(InvitationStatus status) {
+		this.status = status;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code error}.
+	 *
+	 * @param error the value of property error
+	 */
+	public Invitation withError(InvitationError error) {
+		this.error = error;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code redirectUri}.
+	 *
+	 * @param redirectUri the value of property redirectUri
+	 */
+	public Invitation withRedirectUri(String redirectUri) {
+		this.redirectUri = redirectUri;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code site}.
+	 *
+	 * @param site the value of property site
+	 */
+	public Invitation withSite(String site) {
+		this.site = site;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code description}.
+	 *
+	 * @param description the value of property description
+	 */
+	public Invitation withDescription(String description) {
+		this.description = description;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code subject}.
+	 *
+	 * @param subject the value of property subject
+	 */
+	public Invitation withSubject(String subject) {
+		this.subject = subject;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code template}.
+	 *
+	 * @param template the value of property template
+	 */
+	public Invitation withTemplate(String template) {
+		this.template = template;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code autoLogin}.
+	 *
+	 * @param autoLogin the value of property autoLogin
+	 */
+	public Invitation withAutoLogin(Boolean autoLogin) {
+		this.autoLogin = autoLogin;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code invitees}.
+	 *
+	 * @param invitees the value of property invitees
+	 */
+	public Invitation withInvitees(List<Invitee> invitees) {
+		this.invitees = invitees;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code formattedDate}.
+	 *
+	 * @param formattedDate the value of property formattedDate
+	 */
+	public Invitation withFormattedDate(String formattedDate) {
+		this.formattedDate = formattedDate;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code trigger0}.
+	 *
+	 * @param trigger0 the value of property trigger0
+	 */
+	public Invitation withTrigger0(Trigger trigger0) {
+		this.trigger0 = trigger0;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code trigger1}.
+	 *
+	 * @param trigger1 the value of property trigger1
+	 */
+	public Invitation withTrigger1(Trigger trigger1) {
+		this.trigger1 = trigger1;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code env}.
+	 *
+	 * @param env the value of property env
+	 */
+	public Invitation withEnv(Map<String, Object> env) {
+		this.env = env;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code meta}.
+	 *
+	 * @param meta the value of property meta
+	 */
+	public Invitation withMeta(Map<String, Object> meta) {
+		this.meta = meta;
+		return this;
+	}
+
+	public Invitation withInvitees(Invitee... invitees) {
+		if (invitees!=null) {
+			if (this.invitees==null) {
+				this.invitees = new ArrayList<>();
+			}
+			for (Invitee invitee: invitees) {
+				if (invitee!=null) {
+					this.invitees.add(invitee);					
+				}
+			}
+		}
+		return this;
+	}
+
+	public Invitation withGroups(List<Group> groups) {
+		this.groups = groups;
+		return this;
+	}
+
+	public Invitation withGroups(Group... groups) {
+		if (groups!=null) {
+			if (this.groups==null) {
+				this.groups = new ArrayList<>();
+			}
+			for (Group group: groups) {
+				if (group!=null) {
+					this.groups.add(group);					
+				}
+			}
+		}
+		return this;
 	}
 
 	public static Invitation makeInvitation(Map<String, Object> map) {

@@ -20,7 +20,7 @@ import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.util.MappingUtils;
-import org.einnovator.util.SecurityUtil;
+import org.einnovator.util.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;

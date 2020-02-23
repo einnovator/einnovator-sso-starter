@@ -3,7 +3,7 @@ package org.einnovator.sso.client.manager;
 import java.net.URI;
 
 import org.einnovator.sso.client.model.Invitation;
-import org.einnovator.sso.client.model.InvitationFilter;
+import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.springframework.cache.Cache;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package com.einnovator.sso.client;
+package com.einnovator.sso.client.manager;
 
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;

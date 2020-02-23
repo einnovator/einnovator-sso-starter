@@ -1,4 +1,4 @@
-package com.einnovator.sso.client;
+package com.einnovator.sso.client.manager;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +13,7 @@ import org.einnovator.sso.client.manager.RoleManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.User;
-import org.einnovator.util.SecurityUtil;
+import org.einnovator.util.security.SecurityUtil;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

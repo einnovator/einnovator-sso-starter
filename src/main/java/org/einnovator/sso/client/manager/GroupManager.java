@@ -8,7 +8,6 @@ import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.modelx.GroupFilter;
 import org.einnovator.sso.client.modelx.MemberFilter;
-import org.einnovator.sso.client.modelx.UserFilter;
 import org.springframework.cache.Cache;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Page;

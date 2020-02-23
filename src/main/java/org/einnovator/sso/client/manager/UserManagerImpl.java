@@ -11,6 +11,7 @@ import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
+import org.einnovator.util.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;

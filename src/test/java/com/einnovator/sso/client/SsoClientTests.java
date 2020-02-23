@@ -1,5 +1,7 @@
 package com.einnovator.sso.client;
 
+import static com.einnovator.sso.client.Profiler.dump;
+import static com.einnovator.sso.client.Profiler.run;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -11,23 +13,20 @@ import java.net.URI;
 import java.util.Random;
 import java.util.UUID;
 
-import org.einnovator.util.UriUtils;
-import org.einnovator.util.model.Address;
-import org.einnovator.util.model.AddressBuilder;
-import org.einnovator.util.model.Phone;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.model.Group;
-import org.einnovator.sso.client.model.GroupBuilder;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.model.InvitationType;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
-import org.einnovator.sso.client.model.UserBuilder;
 import org.einnovator.sso.client.modelx.GroupFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
+import org.einnovator.util.UriUtils;
+import org.einnovator.util.model.Address;
+import org.einnovator.util.model.Phone;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,9 +39,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static com.einnovator.sso.client.Profiler.run;
-import static com.einnovator.sso.client.Profiler.dump;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { SsoClientTests.TestConfig.class,
@@ -127,8 +123,8 @@ public class SsoClientTests {
 	@Test
 	public void createUserTest() {
 		String username = "tdd-" + UUID.randomUUID().toString();
-		User user = new UserBuilder().username(username).email(username + "@test.org")
-				.password(("Pass123!!-" + username).getBytes()).build();
+		User user = new User().withUsername(username).withEmail(username + "@test.org")
+				.withPassword(("Pass123!!-" + username).getBytes());
 		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user));
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
@@ -147,9 +143,9 @@ public class SsoClientTests {
 	@Test
 	public void createUserAndGetTest() {
 		String username = "tdd-" + UUID.randomUUID().toString();
-		User user = new UserBuilder().username(username).email(username + "@test.org")
-				.password(("Pass123!!-" + username).getBytes())
-				.address(new AddressBuilder().country("USA").city("NY").postalCode("12345").build()).build();
+		User user = new User().withUsername(username).withEmail(username + "@test.org")
+				.withPassword(("Pass123!!-" + username).getBytes())
+				.withAddress(new Address().withCountry("USA").withCity("NY").withPostalCode("12345"));
 		URI uri = client.createUser(user);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
@@ -216,7 +212,7 @@ public class SsoClientTests {
 	@Test
 	public void createGroupTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
-		Group group = new GroupBuilder().name(groupName).description("Description of Group:" + groupName).build();
+		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
 		URI uri = client.createGroup(group);
 		assertNotNull(uri);
 		client.deleteGroup(groupName);
@@ -225,7 +221,7 @@ public class SsoClientTests {
 	@Test
 	public void createGroupAndGetTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
-		Group group = new GroupBuilder().name(groupName).description("Description of Group:" + groupName).build();
+		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
 		URI uri = client.createGroup(group);
 		assertNotNull(uri);
 		String groupName2 = UriUtils.extractId(uri);
@@ -246,7 +242,7 @@ public class SsoClientTests {
 	@Test
 	public void updateGroupTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
-		Group group = new GroupBuilder().name(groupName).description("Description of Group:" + groupName).build();
+		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
 		URI uri = client.createGroup(group);
 		assertNotNull(uri);
 		Group group2 = client.getGroup(groupName);
@@ -268,7 +264,7 @@ public class SsoClientTests {
 	@Test
 	public void groupMembershipTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
-		Group group = new GroupBuilder().name(groupName).description("Description of Group:" + groupName).build();
+		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
 		URI uri = client.createGroup(group);
 		assertNotNull(uri);
 		String uuid = UriUtils.extractId(uri);
@@ -300,7 +296,7 @@ public class SsoClientTests {
 	@Test
 	public void groupMembershipWithPlusTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
-		Group group = new GroupBuilder().name(groupName).description("Description of Group:" + groupName).build();
+		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
 		URI uri = client.createGroup(group);
 		assertNotNull(uri);
 		String uuid = UriUtils.extractId(uri);
@@ -332,8 +328,8 @@ public class SsoClientTests {
 	@Test
 	public void groupContactsTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
-		Group group = new GroupBuilder().name(groupName).description("Description of Group:" + groupName)
-				.type(GroupType.CONTACTS).owner(TEST_USER2).build();
+		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName)
+				.withType(GroupType.CONTACTS).withOwner(TEST_USER2);
 		URI uri = client.createGroup(group);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);

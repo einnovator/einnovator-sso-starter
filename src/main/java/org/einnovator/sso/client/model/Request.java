@@ -33,16 +33,8 @@ public class Request extends EntityBase {
 	 */
 	public Request() {
 	}
-
-	/**
-	 * Create instance of {@code Request} from other {@code Object}.
-	 * 
-	 * @param obj a prototype object
-	 */
-	public Request(Object obj) {
-		super(obj);
-	}
 	
+
 	/**
 	 * Get the value of property {@code type}.
 	 *
@@ -55,7 +47,7 @@ public class Request extends EntityBase {
 	/**
 	 * Set the value of property {@code type}.
 	 *
-	 * @param type the type to set
+	 * @param type the value of property type
 	 */
 	public void setType(RequestType type) {
 		this.type = type;
@@ -73,7 +65,7 @@ public class Request extends EntityBase {
 	/**
 	 * Set the value of property {@code status}.
 	 *
-	 * @param status the status to set
+	 * @param status the value of property status
 	 */
 	public void setStatus(RequestStatus status) {
 		this.status = status;
@@ -91,11 +83,12 @@ public class Request extends EntityBase {
 	/**
 	 * Set the value of property {@code user}.
 	 *
-	 * @param user the user to set
+	 * @param user the value of property user
 	 */
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 
 	/**
 	 * Get the value of property {@code group}.
@@ -106,14 +99,16 @@ public class Request extends EntityBase {
 		return group;
 	}
 
+
 	/**
 	 * Set the value of property {@code group}.
 	 *
-	 * @param group the group to set
+	 * @param group the value of property group
 	 */
 	public void setGroup(Group group) {
 		this.group = group;
 	}
+
 
 	/**
 	 * Get the value of property {@code roles}.
@@ -124,14 +119,16 @@ public class Request extends EntityBase {
 		return roles;
 	}
 
+
 	/**
 	 * Set the value of property {@code roles}.
 	 *
-	 * @param roles the roles to set
+	 * @param roles the value of property roles
 	 */
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+
 
 	/**
 	 * Get the value of property {@code initiator}.
@@ -142,14 +139,77 @@ public class Request extends EntityBase {
 		return initiator;
 	}
 
+
 	/**
 	 * Set the value of property {@code initiator}.
 	 *
-	 * @param initiator the initiator to set
+	 * @param initiator the value of property initiator
 	 */
 	public void setInitiator(User initiator) {
 		this.initiator = initiator;
 	}
+
+
+	/**
+	 * Set the value of property {@code type}.
+	 *
+	 * @param type the value of property type
+	 */
+	public Request withType(RequestType type) {
+		this.type = type;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code status}.
+	 *
+	 * @param status the value of property status
+	 */
+	public Request withStatus(RequestStatus status) {
+		this.status = status;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code user}.
+	 *
+	 * @param user the value of property user
+	 */
+	public Request withUser(User user) {
+		this.user = user;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code group}.
+	 *
+	 * @param group the value of property group
+	 */
+	public Request withGroup(Group group) {
+		this.group = group;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code roles}.
+	 *
+	 * @param roles the value of property roles
+	 */
+	public Request withRoles(List<Role> roles) {
+		this.roles = roles;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code initiator}.
+	 *
+	 * @param initiator the value of property initiator
+	 */
+	public Request withInitiator(User initiator) {
+		this.initiator = initiator;
+		return this;
+	}
+
 
 	@Override
 	public ToStringCreator toString1(ToStringCreator creator) {

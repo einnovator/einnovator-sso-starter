@@ -22,7 +22,7 @@ import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Invitation;
-import org.einnovator.sso.client.model.InvitationFilter;
+import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.Permission;
@@ -40,8 +40,8 @@ import org.einnovator.util.MappingUtils;
 import org.einnovator.util.PageOptions;
 import org.einnovator.util.PageResult;
 import org.einnovator.util.PageUtil;
-import org.einnovator.util.SecurityUtil;
 import org.einnovator.util.model.Application;
+import org.einnovator.util.security.SecurityUtil;
 import org.einnovator.util.web.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -1223,5 +1223,9 @@ public class SsoClient {
 		return ssoClient;
 	}
 
+	public static final User getPrincipalUser() {
+		 Map<String, Object> details = SecurityUtil.getPrincipalDetails();
+		 return MappingUtils.convert(details, User.class);
+	}
 	
 }

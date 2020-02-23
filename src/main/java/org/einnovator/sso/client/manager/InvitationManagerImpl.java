@@ -15,7 +15,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.model.Invitation;
-import org.einnovator.sso.client.model.InvitationFilter;
+import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.model.InvitationStats;
 
 public class InvitationManagerImpl implements InvitationManager {

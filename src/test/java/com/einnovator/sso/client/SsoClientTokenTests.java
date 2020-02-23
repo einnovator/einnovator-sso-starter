@@ -8,12 +8,11 @@ import java.net.URI;
 import java.util.UUID;
 
 import org.einnovator.util.UriUtils;
-import org.einnovator.util.model.AddressBuilder;
+import org.einnovator.util.model.Address;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.model.User;
-import org.einnovator.sso.client.model.UserBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,9 +57,9 @@ public class SsoClientTokenTests {
 	@Test
 	public void createUserAndGetTest() {
 		String username = "tdd-" + UUID.randomUUID().toString();
-		User user = new UserBuilder().username(username).email(username + "@test.org")
-				.password(("Pass123!!-" + username).getBytes())
-				.address(new AddressBuilder().country("USA").city("NY").postalCode("12345").build()).build();
+		User user = new User().withUsername(username).withEmail(username + "@test.org")
+				.withPassword(("Pass123!!-" + username).getBytes())
+				.withAddress(new Address().withCountry("USA").withCity("NY").withPostalCode("12345"));
 		URI uri = client.createUser(user);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
