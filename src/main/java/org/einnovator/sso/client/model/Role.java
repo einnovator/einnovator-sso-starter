@@ -6,8 +6,7 @@ import java.util.List;
 
 import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.ToStringCreator;
-import org.einnovator.util.security.Authority;
-import org.einnovator.util.security.AuthorityBuilder;
+import org.einnovator.util.security.RoleBinding;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
@@ -435,21 +434,21 @@ public class Role extends EntityBase {
 		return permission;
 	}
 
-	public static List<Authority> toAuthorities(Role role, List<User> users) {
+	public static List<RoleBinding> toRoleBindings(Role role, List<User> users) {
 		if (role==null) {
 			return null;
 		}
-		List<Authority> authorities = new ArrayList<>();
+		List<RoleBinding> bindings = new ArrayList<>();
 		for (User user: users) {
-			authorities.add(new AuthorityBuilder()
-					.username(user.getUsername())
-					.userData(user)
-					.group(role.group!=null ? role.group.getUuid() : null)
-					.groupData(role.group)
-					.roles(role.name)
-					.roleData(role)
-					.build());
+			bindings.add(new RoleBinding()
+					.withUsername(user.getUsername())
+					.withUser(user)
+					.withGroupId(role.group!=null ? role.group.getUuid() : null)
+					.withGroup(role.group)
+					.withRoleName(role.name)
+					.withRole(role)
+					);
 		}
-		return authorities;
+		return bindings;
 	}
 }

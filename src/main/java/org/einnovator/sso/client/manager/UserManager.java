@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
@@ -22,9 +23,10 @@ public interface UserManager {
 	 * UUID, username, email.
 	 * 
 	 * @param id the indentifier
+	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code User} if found, null otherwise.
 	 */
-	User getUser(String id);
+	User getUser(String id, SsoClientContext context);
 	
 	/**
 	 * Get {@code User} with specified identifier.
@@ -34,21 +36,22 @@ public interface UserManager {
 	 * 
 	 * @param id the identifier
 	 * @param options (optional) the {@code UserOptions} that tailor which field set or projection to return.
+	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code User} if found, null otherwise.
 	 */
-	User getUser(String id, UserOptions options);
+	User getUser(String id, UserOptions options, SsoClientContext context);
 
-	URI createUser(User user);
+	URI createUser(User user, SsoClientContext context);
 	
-	User updateUser(User user, boolean fullState);
+	User updateUser(User user, boolean fullState, SsoClientContext context);
 
-	User updateUser(User user);
+	User updateUser(User user, SsoClientContext context);
 
-	boolean deleteUser(String userId);
+	boolean deleteUser(String userId, SsoClientContext context);
 	
-	Page<User> listUsers(UserFilter filter, Pageable options);
+	Page<User> listUsers(UserFilter filter, Pageable options, SsoClientContext context);
 	
-	void onUserUpdate(String id, Map<String, Object> details);
+	void onUserUpdate(String id, Map<String, Object> details, SsoClientContext context);
 
 	void clearCache();
 	
@@ -69,16 +72,18 @@ public interface UserManager {
 	 * @param groups list of {@code Group} identifiers
 	 * @param permissions list of {@code Permission} names
 	 * @param pageable a {@code Pageable}
+	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code Page} of {@code User}s  (or null if error)
 	 */
-	Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable);
+	Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable, SsoClientContext context);
 
 	/**
 	 * Get list of UUIDs of {@code Groups} that the {@code User} with specified identifier is member of.
 	 * 
 	 * @param id the {@code User} identifier
+	 * @param context TODO
 	 * @return the list of UUIDs (or null if error)
 	 */
-	List<String> getGroupsUuidForUser(String id);
+	List<String> getGroupsUuidForUser(String id, SsoClientContext context);
 
 }

@@ -60,12 +60,12 @@ public class SsoClientTokenTests {
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes())
 				.withAddress(new Address().withCountry("USA").withCity("NY").withPostalCode("12345"));
-		URI uri = client.createUser(user);
+		URI uri = client.createUser(user, null);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);
 		assertFalse(id.isEmpty());
-		User user2 = client.getUser(id);
+		User user2 = client.getUser(id, null);
 		assertNotNull(user2);
 		assertEquals(id, user2.getId());
 		assertEquals(user.getUsername(), user2.getUsername());

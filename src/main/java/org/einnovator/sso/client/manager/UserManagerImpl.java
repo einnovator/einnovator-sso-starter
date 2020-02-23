@@ -7,11 +7,11 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
-import org.einnovator.util.MappingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
@@ -46,16 +46,16 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	@Override
-	public User getUser(String id) {
+	public User getUser(String id, SsoClientContext context) {
 		if (id==null) {
 			return null;
 		}
 		try {
-			User user = getCacheValue(User.class, getUserCache(), id);
+			User user = getCacheValue(User.class, getUserCache(), id, context);
 			if (user!=null) {
 				return user;
 			}
-			user = ssoClient.getUser(id);	
+			user = ssoClient.getUser(id, context);	
 			return putCacheValue(user, getUserCache(), id);
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode()!=HttpStatus.NOT_FOUND) {
@@ -69,7 +69,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	@Override
-	public User getUser(String id, UserOptions options) {
+	public User getUser(String id, UserOptions options, SsoClientContext context) {
 		if (id==null) {
 			return null;
 		}
@@ -80,7 +80,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			}			
 		}
 		try {
-			User user = ssoClient.getUser(id, options);	
+			User user = ssoClient.getUser(id, options, context);	
 			if (cacheable(options)) {
 				return putCacheValue(user, getUserCache(), id, options);				
 			}
@@ -103,9 +103,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	public URI createUser(User user) {
+	public URI createUser(User user, SsoClientContext context) {
 		try {
-			return ssoClient.createUser(user);
+			return ssoClient.createUser(user, context);
 		} catch (RuntimeException e) {
 			logger.error("createUser:" + e);
 			return null;
@@ -114,9 +114,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 
 	@Override
-	public User updateUser(User user, boolean fullState) {
+	public User updateUser(User user, boolean fullState, SsoClientContext context) {
 		try {
-			ssoClient.updateUser(user);
+			ssoClient.updateUser(user, context);
 			evictCaches(user.getUuid());
 			return user;
 		} catch (RuntimeException e) {
@@ -126,15 +126,15 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	public User updateUser(User user) {
-		return updateUser(user, false);
+	public User updateUser(User user, SsoClientContext context) {
+		return updateUser(user, false, context);
 	}
 	
 	@Override
 	@CacheEvict(value=CACHE_USER, key="#id")
-	public boolean deleteUser(String userId) {
+	public boolean deleteUser(String userId, SsoClientContext context) {
 		try {
-			ssoClient.deleteUser(userId);
+			ssoClient.deleteUser(userId, context);
 			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteUser:" + e);
@@ -144,9 +144,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 	
 	@Override
-	public Page<User> listUsers(UserFilter filter, Pageable pageable) {
+	public Page<User> listUsers(UserFilter filter, Pageable pageable, SsoClientContext context) {
 		try {
-			return ssoClient.listUsers(filter, pageable);
+			return ssoClient.listUsers(filter, pageable, context);
 		} catch (RuntimeException e) {
 			logger.error("listUsers:" + e);
 			return null;
@@ -155,7 +155,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 
 
 	@Override
-	public void onUserUpdate(String id, Map<String, Object> details) {
+	public void onUserUpdate(String id, Map<String, Object> details, SsoClientContext context) {
 		if (id==null) {
 			return;
 		}
@@ -236,12 +236,12 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	@Override
-	public Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable) {
+	public Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable, SsoClientContext context) {
 		UserFilter filter = new UserFilter();
 		filter.setGroups(groups);
 		filter.setPermissions(permissions);
 		try {
-			return ssoClient.listUsers(filter, pageable);
+			return ssoClient.listUsers(filter, pageable, context);
 		} catch (RuntimeException e) {
 			logger.error("listUsers:" + e);
 			return null;
@@ -249,11 +249,11 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	public List<String> getGroupsUuidForUser(String username) {
+	public List<String> getGroupsUuidForUser(String username, SsoClientContext context) {
 		if (username==null) {
 			return null;
 		}
-		User user = getUser(username, UserOptions.FULL);
+		User user = getUser(username, UserOptions.FULL, null);
 		return user!=null ? user.getGroupsUuid() : null;
 	}
 

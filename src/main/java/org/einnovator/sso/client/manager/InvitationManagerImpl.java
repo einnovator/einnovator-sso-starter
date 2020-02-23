@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.model.InvitationStats;
@@ -42,9 +43,9 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 	
 	@Override
-	public URI invite(Invitation invitation, Boolean sendMail) {
+	public URI invite(Invitation invitation, Boolean sendMail, SsoClientContext context) {
 		try {
-			URI uri = client.invite(invitation, sendMail);
+			URI uri = client.invite(invitation, sendMail, null);
 			if (uri == null) {
 				logger.error("invite: " + invitation);
 			}
@@ -57,12 +58,12 @@ public class InvitationManagerImpl implements InvitationManager {
 
 
 	@Override
-	public Invitation getInvitation(String id) {
+	public Invitation getInvitation(String id, SsoClientContext context) {
 		if (id == null) {
 			return null;
 		}
 		try {
-			Invitation invitation = client.getInvitation(id);
+			Invitation invitation = client.getInvitation(id, context);
 			if (invitation == null) {
 				logger.error("getInvitation: " + invitation);
 			}
@@ -81,9 +82,9 @@ public class InvitationManagerImpl implements InvitationManager {
 	
 
 	@Override
-	public Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable) {
+	public Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable, SsoClientContext context) {
 		try {
-			Page<Invitation> invitations = client.listInvitations(filter, pageable);
+			Page<Invitation> invitations = client.listInvitations(filter, pageable, context);
 			if (invitations == null) {
 				logger.error("listInvitations: " + filter + " " + pageable);
 			}
@@ -96,9 +97,9 @@ public class InvitationManagerImpl implements InvitationManager {
 
 
 	@Override
-	public InvitationStats getInvitationStats() {
+	public InvitationStats getInvitationStats(SsoClientContext context) {
 		try {
-			InvitationStats stats = client.getInvitationStats();
+			InvitationStats stats = client.getInvitationStats(context);
 			if (stats == null) {
 				logger.error("getInvitationStats: " + stats);
 			}
@@ -115,12 +116,12 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 
 	@Override
-	public URI getInvitationToken(String id, Boolean sendMail) {
+	public URI getInvitationToken(String id, Boolean sendMail, SsoClientContext context) {
 		if (id == null) {
 			return null;
 		}
 		try {
-			URI token = client.getInvitationToken(id, sendMail);
+			URI token = client.getInvitationToken(id, sendMail, context);
 			if (token == null) {
 				logger.error("getInvitation: " + id + " " + sendMail);
 			}
@@ -137,12 +138,12 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 
 	@Override
-	public Invitation updateInvitation(Invitation invitation) {
+	public Invitation updateInvitation(Invitation invitation, SsoClientContext context) {
 		return updateInvitation(invitation, null);
 	}
 
 	@Override
-	public Invitation updateInvitation(Invitation invitation, Boolean publish) {
+	public Invitation updateInvitation(Invitation invitation, Boolean publish, SsoClientContext context) {
 		try {
 			if (StringUtils.hasText(invitation.getOwner())) {
 				evictCachesForUser(invitation.getOwner());
@@ -150,7 +151,7 @@ public class InvitationManagerImpl implements InvitationManager {
 			if (StringUtils.hasText(invitation.getInvitee())) {
 				evictCachesForUser(invitation.getInvitee());
 			}
-			client.updateInvitation(invitation, publish);
+			client.updateInvitation(invitation, publish, context);
 			return invitation;
 		} catch (RuntimeException e) {
 			logger.error("updateInvitation: " + e + "  " + invitation);

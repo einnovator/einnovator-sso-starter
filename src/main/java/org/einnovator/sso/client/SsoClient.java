@@ -17,12 +17,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.config.SsoEndpoints;
 import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Invitation;
-import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.Permission;
@@ -32,6 +32,7 @@ import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
 import org.einnovator.sso.client.modelx.GroupFilter;
+import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.modelx.MemberFilter;
 import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
@@ -66,7 +67,6 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -300,11 +300,11 @@ public class SsoClient {
 		exchange(restTemplate, request, Void.class);
 	}
 	
-	public User getUser(String id) {
-		return getUser(id, UserOptions.DEFAULT);
+	public User getUser(String id, SsoClientContext context) {
+		return getUser(id, UserOptions.DEFAULT, context);
 	}
 	
-	public User getUser(String id, UserOptions options) {
+	public User getUser(String id, UserOptions options, SsoClientContext context) {
 		id = encodeId(id);
 		URI uri = makeURI(SsoEndpoints.user(id, config));
 		if (options!=null) {
@@ -314,12 +314,12 @@ public class SsoClient {
 		}
 
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<User> result = exchange(request, User.class);
+		ResponseEntity<User> result = exchange(request, User.class, context);
 		return result.getBody();
 	}
 	
 
-	public Page<User> listUsers(UserFilter filter, Pageable pageable) {
+	public Page<User> listUsers(UserFilter filter, Pageable pageable, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.users(config));
 		if (filter!=null || pageable!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -333,46 +333,46 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  User.class);
 	}
 
-	public URI createUser(User user) {
+	public URI createUser(User user, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.users(config));
 		RequestEntity<User> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(user);
 		
-		ResponseEntity<Void> result = exchange(request, Void.class);
+		ResponseEntity<Void> result = exchange(request, Void.class, context);
 		return result.getHeaders().getLocation();
 	}
 	
-	public void updateUser(User user) {
+	public void updateUser(User user, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.user(user.getId(), config));
 		RequestEntity<User> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(user);
 		
-		exchange(request, User.class);
+		exchange(request, User.class, context);
 	}
 	
-	public void deleteUser(String userId) {
+	public void deleteUser(String userId, SsoClientContext context) {
 		userId = encodeId(userId);
 		URI uri = makeURI(SsoEndpoints.user(userId, config));
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 	
-	public URI createGroup(Group group) {
+	public URI createGroup(Group group, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.groups(config));
 		RequestEntity<Group> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(group);
 		
-		ResponseEntity<Group> result = exchange(request, Group.class);
+		ResponseEntity<Group> result = exchange(request, Group.class, context);
 		return result.getHeaders().getLocation();
 	}
 
-	public Group getGroup(String groupId) {
-		return getGroup(groupId, null);
+	public Group getGroup(String groupId, SsoClientContext context) {
+		return getGroup(groupId, null, context);
 	}
 
-	public Group getGroup(String groupId, GroupFilter filter) {
+	public Group getGroup(String groupId, GroupFilter filter, SsoClientContext context) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.group(groupId, config));
 		
@@ -381,21 +381,21 @@ public class SsoClient {
 		}
 
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Group> result = exchange(request, Group.class);
+		ResponseEntity<Group> result = exchange(request, Group.class, context);
 		return result.getBody();
 	}
 	
-	public void updateGroup(Group group) {
+	public void updateGroup(Group group, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.group(encode(group.getId()), config));
 		RequestEntity<Group> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(group);		
-		exchange(request, Group.class);
+		exchange(request, Group.class, context);
 	}
 	
-	public Page<Group> listGroups(Pageable pageable) {
-		return listGroups(pageable, null);
+	public Page<Group> listGroups(Pageable pageable, SsoClientContext context) {
+		return listGroups(pageable, null, context);
 	}
 	
-	public Page<Group> listGroups(Pageable pageable, GroupFilter filter) {
+	public Page<Group> listGroups(Pageable pageable, GroupFilter filter, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.groups(config));
 		if (filter!=null || pageable!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -409,18 +409,18 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  Group.class);
 	}
 	
-	public void deleteGroup(String groupId) {
+	public void deleteGroup(String groupId, SsoClientContext context) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.group(groupId, config));
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 	
-	public Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable) {
+	public Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable, SsoClientContext context) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config));
 		if (filter!=null || pageable!=null) {
@@ -435,11 +435,11 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  Member.class);
 	}
 
-	public Integer countGroupMembers(String groupId, MemberFilter filter) {
+	public Integer countGroupMembers(String groupId, MemberFilter filter, SsoClientContext context) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.countMembers(groupId, config));
 		if (filter!=null) {
@@ -450,16 +450,16 @@ public class SsoClient {
 			uri = appendQueryParameters(uri, params);			
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Integer> result = exchange(request, Integer.class);
+		ResponseEntity<Integer> result = exchange(request, Integer.class, context);
 		return result.getBody();
 	}
 
-	public Member getGroupMember(String groupId, String userId) {
+	public Member getGroupMember(String groupId, String userId, SsoClientContext context) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
 		URI uri = makeURI(SsoEndpoints.member(groupId, userId, config));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Member> result = exchange(request, Member.class);
+		ResponseEntity<Member> result = exchange(request, Member.class, context);
 		try {
 			return result.getBody();			
 		} catch (HttpClientErrorException e) {
@@ -470,30 +470,30 @@ public class SsoClient {
 		}
 	}
 
-	public void addToGroup(String userId, String groupId) {
+	public void addToGroup(String userId, String groupId, SsoClientContext context) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config) + "?username=" + userId);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();		
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 	
-	public void removeFromGroup(String userId, String groupId) {
+	public void removeFromGroup(String userId, String groupId, SsoClientContext context) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config) + "?username=" + userId);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 	
-	public Page<Group> listGroupsForUser(String userId, GroupType type, Pageable pageable) {
+	public Page<Group> listGroupsForUser(String userId, GroupType type, Pageable pageable, SsoClientContext context) {
 		GroupFilter filter = new GroupFilter();
 		filter.setOwner(userId);
 		filter.setType(type);
-		return listGroups(pageable, filter);
+		return listGroups(pageable, filter, context);
 	}
 
-	public Page<Group> listSubGroups(String groupId, GroupType type, boolean direct, Pageable pageable) {
+	public Page<Group> listSubGroups(String groupId, GroupType type, boolean direct, Pageable pageable, SsoClientContext context) {
 		groupId = encode(groupId);
 		GroupFilter filter = new GroupFilter();
 		if (direct) {
@@ -502,20 +502,20 @@ public class SsoClient {
 			filter.setRoot(groupId);
 		}
 		filter.setType(type);
-		return listGroups(pageable, filter);
+		return listGroups(pageable, filter, context);
 	}
 
-	public Integer countGroups(GroupFilter filter) {
+	public Integer countGroups(GroupFilter filter, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.countGroups(config));
 		if (filter!=null) {
 			uri = appendQueryParameters(uri, filter);			
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Integer> result = exchange(request, Integer.class);
+		ResponseEntity<Integer> result = exchange(request, Integer.class, context);
 		return result.getBody();
 	}
 	
-	public Integer countSubGroups(String groupId, GroupType type, boolean direct) {
+	public Integer countSubGroups(String groupId, GroupType type, boolean direct, SsoClientContext context) {
 		GroupFilter filter = new GroupFilter();
 		if (direct) {
 			filter.setParent(groupId);			
@@ -523,62 +523,11 @@ public class SsoClient {
 			filter.setRoot(groupId);
 		}
 		filter.setType(type);
-		return countGroups(filter);
-	}
-		
-	public static User makeUser(Principal principal) {
-		return new User(getProfile(principal));
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getProfile(Principal principal) {
-		User user = getUser(principal);
-		if (user==null) {
-			return null;
-		}
-		return MappingUtils.convert(user, LinkedHashMap.class);			
+		return countGroups(filter, context);
 	}
 
-	public User getUser(Principal principal, boolean invalid) {
-		if (invalid) {
-			try {
-				User user = getUser(principal.getName());				
-				return user;
-			} catch (RuntimeException e) {
-				logger.error("getUser: " + principal.getName() + " " + e);
-			}
-		}
-		return getUser(principal);
-	}
-
-	public static User getUser(Principal principal) {
-		if (principal==null) {
-			return null;
-		}
-		if (!(principal instanceof OAuth2Authentication)) {
-			return new User(principal.getName());
-		}
-		OAuth2Authentication oauth2 = (OAuth2Authentication)principal;
-		Authentication auth = oauth2.getUserAuthentication();
-		@SuppressWarnings("unchecked")
-		Map<String, Object> details = auth!=null ? (Map<String, Object>) auth.getDetails() : null;
-		if (details==null) {
-			return new User(principal.getName());
-		}
-		Object profile = details.get("profile");
-		if (profile==null) {
-			return new User(principal.getName());
-		}
-		try {
-			User user = MappingUtils.fromJson(profile.toString(), User.class);	
-			return user;		
-		} catch (RuntimeException e) {
-			System.err.println(profile.toString() + " : " + e);
-			return new User(principal.getName());
-		}
-	}
 	
-	public URI invite(Invitation invitation, Boolean sendMail) {
+	public URI invite(Invitation invitation, Boolean sendMail, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.invite(config));
 		if (sendMail!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -588,11 +537,11 @@ public class SsoClient {
 			uri = appendQueryParameters(uri, params);			
 		}
 		RequestEntity<Invitation> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(invitation);		
-		ResponseEntity<Void> result = exchange(request, Void.class);
+		ResponseEntity<Void> result = exchange(request, Void.class, context);
 		return result.getHeaders().getLocation();
 	}
 	
-	public Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable) {
+	public Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.invitations(config));
 		if (filter!=null || pageable!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -606,27 +555,27 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  Invitation.class);
 	}
 
 	
-	public Invitation getInvitation(String id) {
+	public Invitation getInvitation(String id, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.invitation(id, config));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Invitation> result = exchange(request, Invitation.class);
+		ResponseEntity<Invitation> result = exchange(request, Invitation.class, context);
 		return result.getBody();
 	}
 
-	public void updateInvitation(Invitation invitation) {
+	public void updateInvitation(Invitation invitation, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.invitation(invitation.getUuid(), config));
 		RequestEntity<Invitation> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(invitation);
 
-		exchange(request, Invitation.class);
+		exchange(request, Invitation.class, context);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void updateInvitation(Invitation invitation, Boolean publish) {
+	public void updateInvitation(Invitation invitation, Boolean publish, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.invitation(invitation.getUuid(), config));
 		if (publish != null ) {
 			Map<String, Object> params = new LinkedHashMap<>();
@@ -636,17 +585,17 @@ public class SsoClient {
 			uri = appendQueryParameters(uri, MappingUtils.convert(params, LinkedHashMap.class));
 		}
 		RequestEntity<Invitation> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(invitation);
-		exchange(request, Invitation.class);
+		exchange(request, Invitation.class, context);
 	}
 
-	public InvitationStats getInvitationStats() {
+	public InvitationStats getInvitationStats(SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.invitationStats(config));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<InvitationStats> result = exchange(request, InvitationStats.class);
+		ResponseEntity<InvitationStats> result = exchange(request, InvitationStats.class, context);
 		return result.getBody();
 	}
 
-	public URI getInvitationToken(String id, Boolean sendMail) {
+	public URI getInvitationToken(String id, Boolean sendMail, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.invitationToken(id, config));
 		if (sendMail!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -656,46 +605,46 @@ public class SsoClient {
 			uri = appendQueryParameters(uri, params);			
 		}
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();		
-		ResponseEntity<Void> result = exchange(request, Void.class);
+		ResponseEntity<Void> result = exchange(request, Void.class, context);
 		return result.getHeaders().getLocation();
 	}
 
-	public URI createPermission(Permission permission) {
+	public URI createPermission(Permission permission, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.permissions(config));
 		RequestEntity<Permission> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(permission);
 		
-		ResponseEntity<Permission> result = exchange(request, Permission.class);
+		ResponseEntity<Permission> result = exchange(request, Permission.class, context);
 		return result.getHeaders().getLocation();
 	}
 	
-	public Permission getPermission(String id) {
+	public Permission getPermission(String id, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.permission(id, config));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Permission> result = exchange(request, Permission.class);
+		ResponseEntity<Permission> result = exchange(request, Permission.class, context);
 		return result.getBody();
 	}
 
 	
-	public Page<Permission> listPermissions(Pageable pageable) {
+	public Page<Permission> listPermissions(Pageable pageable, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.permissions(config));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  Permission.class);
 	}
 	
-	public void deletePermission(String id) {
+	public void deletePermission(String id, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.permission(id, config));
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 
-	public Page<User> listPermissionMembers(String permissionId, Pageable pageable, UserFilter filter) {
-		return listPermissionMembers(permissionId, null, pageable, filter);
+	public Page<User> listPermissionMembers(String permissionId, Pageable pageable, UserFilter filter, SsoClientContext context) {
+		return listPermissionMembers(permissionId, null, pageable, filter, context);
 	}
 
-	public Page<User> listPermissionMembers(String permissionId, String groupId, Pageable pageable, UserFilter filter) {
+	public Page<User> listPermissionMembers(String permissionId, String groupId, Pageable pageable, UserFilter filter, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.permissionMembers(permissionId, config));
 		if (filter != null || pageable != null || groupId!=null) {
 
@@ -713,33 +662,33 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(), User.class);
 	}
 
-	public URI createRole(Role role) {
+	public URI createRole(Role role, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.roles(config));
 		RequestEntity<Role> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(role);
 		
-		ResponseEntity<Role> result = exchange(request, Role.class);
+		ResponseEntity<Role> result = exchange(request, Role.class, context);
 		return result.getHeaders().getLocation();
 	}
 	
-	public Role getRole(String roleId) {
+	public Role getRole(String roleId, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.role(roleId, config));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Role> result = exchange(request, Role.class);
+		ResponseEntity<Role> result = exchange(request, Role.class, context);
 		return result.getBody();
 	}
 	
-	public void updateRole(Role role) {
+	public void updateRole(Role role, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.role(role.getId(), config));
 		RequestEntity<Role> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(role);
 		
-		exchange(request, Role.class);
+		exchange(request, Role.class, context);
 	}
 	
-	public Page<Role> listRoles(RoleFilter filter, Pageable pageable) {
+	public Page<Role> listRoles(RoleFilter filter, Pageable pageable, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.roles(config));
 		if (filter!=null || pageable!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -753,18 +702,18 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  Role.class);
 	}
 	
-	public void deleteRole(String roleId) {
+	public void deleteRole(String roleId, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.role(roleId, config));
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 	
-	public Page<User> listRoleMembers(String roleId, Pageable pageable, UserFilter filter) {
+	public Page<User> listRoleMembers(String roleId, Pageable pageable, UserFilter filter, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config));
 		if (filter!=null || pageable!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -778,11 +727,11 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  User.class);
 	}
 
-	public Integer countRoleMembers(String roleId, UserFilter filter) {
+	public Integer countRoleMembers(String roleId, UserFilter filter, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.countRoleMembers(roleId, config));
 		if (filter!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -792,57 +741,57 @@ public class SsoClient {
 			uri = appendQueryParameters(uri, params);			
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Integer> result = exchange(request, Integer.class);
+		ResponseEntity<Integer> result = exchange(request, Integer.class, context);
 		return result.getBody();
 	}
 
-	public void assignRole(String userId, String roleId) {
+	public void assignRole(String userId, String roleId, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config) + "?username=" + userId);
 		userId = encodeId(userId);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 	
-	public void removeFromRole(String userId, String roleId) {
+	public void removeFromRole(String userId, String roleId, SsoClientContext context) {
 		userId = encodeId(userId);
 		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config) + "?username=" + userId);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 	
-	public Page<Role> listRolesForUser(String userId, Pageable pageable) {
+	public Page<Role> listRolesForUser(String userId, Pageable pageable, SsoClientContext context) {
 		RoleFilter filter = new RoleFilter();
 		userId = encodeId(userId);
 		filter.setUser(userId);
-		return listRoles(filter, pageable);
+		return listRoles(filter, pageable, context);
 	}
 
-	public Page<Role> listRolesForUserInGroup(String userId, String groupId, Pageable pageable) {
+	public Page<Role> listRolesForUserInGroup(String userId, String groupId, Pageable pageable, SsoClientContext context) {
 		RoleFilter filter = new RoleFilter();
 		userId = encodeId(userId);
 		filter.setUser(userId);
 		filter.setGroup(groupId);
-		return listRoles(filter, pageable);
+		return listRoles(filter, pageable, context);
 	}
 
-	public List<Role> listRolesForUser(String userId) {
-		Page<Role> page = listRolesForUser(userId, (Pageable)null);
+	public List<Role> listRolesForUser(String userId, SsoClientContext context) {
+		Page<Role> page = listRolesForUser(userId, (Pageable)null, context);
 		return page!=null ? page.getContent() : null;
 	}
 
-	public List<Role> listRolesForUserInGroup(String userId, String groupId) {
-		Page<Role> page = listRolesForUserInGroup(userId, groupId, (Pageable)null);
+	public List<Role> listRolesForUserInGroup(String userId, String groupId, SsoClientContext context) {
+		Page<Role> page = listRolesForUserInGroup(userId, groupId, (Pageable)null, context);
 		return page!=null ? page.getContent() : null;
 	}
 
-	public void changePassword(String password) {
+	public void changePassword(String password, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.password(config) + "?password=" + password);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 
 	
-	public Client getClient(String id, ClientOptions options) {
+	public Client getClient(String id, ClientOptions options, SsoClientContext context) {
 		id = encodeId(id);
 		URI uri = makeURI(SsoEndpoints.client(id, config));
 		if (options!=null) {
@@ -852,11 +801,11 @@ public class SsoClient {
 		}
 
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Client> result = exchange(request, Client.class);
+		ResponseEntity<Client> result = exchange(request, Client.class, context);
 		return result.getBody();
 	}
 
-	public Page<Client> listClients(ClientFilter filter, Pageable pageable) {
+	public Page<Client> listClients(ClientFilter filter, Pageable pageable, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.clients(config));
 		if (filter!=null || pageable!=null) {
 			Map<String, String> params = new LinkedHashMap<>();
@@ -870,40 +819,44 @@ public class SsoClient {
 		}
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class);
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(),  Client.class);
 	}
 
-	public URI createClient(Client client) {
+	public URI createClient(Client client, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.clients(config));
 		RequestEntity<Client> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(client);
 		
-		ResponseEntity<Void> result = exchange(request, Void.class);
+		ResponseEntity<Void> result = exchange(request, Void.class, context);
 		return result.getHeaders().getLocation();
 	}
 	
-	public void updateClient(Client client) {
+	public void updateClient(Client client, SsoClientContext context) {
 		URI uri = makeURI(SsoEndpoints.client(client.getId(), config));
 		RequestEntity<Client> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(client);
 		
-		exchange(request, Client.class);
+		exchange(request, Client.class, context);
 	}
 	
-	public void deleteClient(String clientId) {
+	public void deleteClient(String clientId, SsoClientContext context) {
 		clientId = encodeId(clientId);
 		URI uri = makeURI(SsoEndpoints.client(clientId, config));
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		
-		exchange(request, Void.class);
+		exchange(request, Void.class, context);
 	}
 
-	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType) throws RestClientException {
+	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType, SsoClientContext context) throws RestClientException {
 		OAuth2RestTemplate restTemplate = this.restTemplate;
-		if (WebUtil.getHttpServletRequest()==null) {
-			if (this.restTemplate0==null) {
-				this.restTemplate0 = makeClientOAuth2RestTemplate();
-			}
-			restTemplate = this.restTemplate0;
+		if (context!=null && context.getRestTemplate()!=null) {
+			restTemplate = context.getRestTemplate();
+		} else {
+			if (WebUtil.getHttpServletRequest()==null) {
+				if (this.restTemplate0==null) {
+					this.restTemplate0 = makeClientOAuth2RestTemplate();
+				}
+				restTemplate = this.restTemplate0;
+			}			
 		}
 		return exchange(restTemplate, request, responseType);
 	}
@@ -1144,40 +1097,29 @@ public class SsoClient {
 		return details.getSessionId();
 	}
 
-	public static String getUsername(Principal principal) {
-		if (principal == null) {
-			return null;
-		}
-		Map<String, Object> profile = SsoClient.getProfile(principal);
-		if (profile == null) {
-			return principal.getName();
-		}
-		if (StringUtils.hasText((String) profile.get("username"))) {
-			return (String) profile.get("username");
-		}
-		return principal.getName();
-	}
-
-
-	public void doLogout() {
+	public void doLogout(SsoClientContext context) {
 		@SuppressWarnings("rawtypes")
 		RequestEntity request2 = RequestEntity.post(makeURI(SsoEndpoints.getTokenRevokeEndpoint(config)))
 				.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).build();
 		try {
-			ResponseEntity<Void> response2 = exchange(request2, Void.class);
+			ResponseEntity<Void> response2 = exchange(request2, Void.class, context);
 			logger.debug("logout:" + response2);
 		} catch (RuntimeException e) {
 			logger.error("logout:" + e);
 		}
 	}
 
-	public void doLogout(Authentication authentication) {
+	public void doLogout(Authentication authentication, SsoClientContext context) {
 		if (authentication == null) {
 			return;
 		}
 		Object details = authentication.getDetails();
 		if (details.getClass().isAssignableFrom(OAuth2AuthenticationDetails.class)) {
 			String accessToken = ((OAuth2AuthenticationDetails) details).getTokenValue();
+			SsoClientConfiguration config = this.config;
+			if (context!=null && context.getConfig()!=null) {
+				config = context.getConfig();
+			}
 			@SuppressWarnings("rawtypes")
 			RequestEntity request2 = RequestEntity.post(makeURI(SsoEndpoints.getTokenRevokeEndpoint(config)))
 					.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)

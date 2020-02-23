@@ -2,9 +2,9 @@ package org.einnovator.sso.client.manager;
 
 
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
 
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
@@ -15,21 +15,21 @@ import org.springframework.data.domain.Pageable;
 
 public interface ClientManager {
 	
-	Client getClient(String id);
+	Client getClient(String id, SsoClientContext context);
 	
-	Client getClient(String id, ClientOptions options);
+	Client getClient(String id, ClientOptions options, SsoClientContext context);
 
-	URI createClient(Client client);
+	URI createClient(Client client, SsoClientContext context);
 	
-	Client updateClient(Client client, boolean fullState);
+	Client updateClient(Client client, boolean fullState, SsoClientContext context);
 
-	Client updateClient(Client client);
+	Client updateClient(Client client, SsoClientContext context);
 
-	boolean deleteClient(String clientId);
+	boolean deleteClient(String clientId, SsoClientContext context);
 	
-	Page<Client> listClients(ClientFilter filter, Pageable options);
+	Page<Client> listClients(ClientFilter filter, Pageable options, SsoClientContext context);
 	
-	void onClientUpdate(String id, Map<String, Object> details);
+	void onClientUpdate(String id, Map<String, Object> details, SsoClientContext context);
 
 	void clearCache();
 	

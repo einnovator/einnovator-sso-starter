@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Member;
@@ -54,9 +55,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public URI createGroup(Group group) {
+	public URI createGroup(Group group, SsoClientContext context) {
 		try {
-			URI uri = client.createGroup(group);
+			URI uri = client.createGroup(group, context);
 			if (uri == null) {
 				logger.error("createGroup: " + group);
 			}
@@ -68,12 +69,12 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Group getGroup(String groupId) {
-		return getGroup(groupId, null);
+	public Group getGroup(String groupId, SsoClientContext context) {
+		return getGroup(groupId, null, context);
 	}
 
 	@Override
-	public Group getGroup(String groupId, GroupFilter filter) {
+	public Group getGroup(String groupId, GroupFilter filter, SsoClientContext context) {
 		if (groupId==null) {
 			return null;
 		}
@@ -84,7 +85,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 					return group;
 				}			
 			}
-			Group group = client.getGroup(groupId, filter);
+			Group group = client.getGroup(groupId, filter, context);
 			if (cacheable(filter)) {
 				putCacheValue(group, getGroupCache(), groupId, filter);
 			}
@@ -105,9 +106,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Group updateGroup(Group group) {
+	public Group updateGroup(Group group, SsoClientContext context) {
 		try {
-			client.updateGroup(group);
+			client.updateGroup(group, context);
 			if (group == null) {
 				logger.error("updateGroup: " + group);
 			}
@@ -120,9 +121,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Page<Group> listGroups(Pageable pageable) {
+	public Page<Group> listGroups(Pageable pageable, SsoClientContext context) {
 		try {
-			Page<Group> groups = client.listGroups(pageable);
+			Page<Group> groups = client.listGroups(pageable, context);
 			if (groups == null) {
 				logger.error("listGroups: " + pageable);
 			}
@@ -134,9 +135,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Page<Group> listGroups(GroupFilter filter, Pageable pageable) {
+	public Page<Group> listGroups(GroupFilter filter, Pageable pageable, SsoClientContext context) {
 		try {
-			Page<Group> groups = client.listGroups(pageable, filter);
+			Page<Group> groups = client.listGroups(pageable, filter, context);
 			if (groups == null) {
 				logger.error("listGroups: " + pageable);
 			}
@@ -149,9 +150,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@CacheEvict(value = CACHE_GROUP, key = "#groupId")
-	public void deleteGroup(String groupId) {
+	public void deleteGroup(String groupId, SsoClientContext context) {
 		try {
-			client.deleteGroup(groupId);
+			client.deleteGroup(groupId, context);
 			if (groupId == null) {
 				logger.error("deleteGroup: " + groupId);
 			}
@@ -161,9 +162,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Page<Member> listMembers(String groupId, MemberFilter filter, Pageable pageable) {
+	public Page<Member> listMembers(String groupId, MemberFilter filter, Pageable pageable, SsoClientContext context) {
 		try {
-			Page<Member> members = client.listGroupMembers(groupId, filter, pageable);
+			Page<Member> members = client.listGroupMembers(groupId, filter, pageable, context);
 			if (members == null) {
 				logger.error("listGroupMembers: " + groupId);
 			}
@@ -175,7 +176,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Integer countMembers(String groupId, MemberFilter filter) {
+	public Integer countMembers(String groupId, MemberFilter filter, SsoClientContext context) {
 		if (groupId==null) {
 			return null;
 		}		
@@ -188,7 +189,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 		}
 
 		try {
-			count = client.countGroupMembers(groupId, filter);
+			count = client.countGroupMembers(groupId, filter, context);
 			if (count!=null && filter==null) {
 				return putCacheValue(count, getGroupMemberCountCache(), groupId);
 			}
@@ -201,12 +202,12 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 
 	@Override
-	public void addMember(String userId, String groupId) {
+	public void addMember(String userId, String groupId, SsoClientContext context) {
 		try {
 			if (groupId == null) {
 				logger.error("addToGroup: " + userId + " " + groupId);
 			}
-			client.addToGroup(userId, groupId);
+			client.addToGroup(userId, groupId, context);
 			evictCaches(groupId);
 			userManager.evictCaches(userId);
 		} catch (RuntimeException e) {
@@ -216,13 +217,13 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@CacheEvict(value = CACHE_GROUP_MEMBERS, key = "#groupId + #userId")
-	public void removeMember(String userId, String groupId) {
+	public void removeMember(String userId, String groupId, SsoClientContext context) {
 		if (groupId == null) {
 			logger.error("removeFromGroup: " + userId + " " + groupId);
 			return;
 		}
 		try {
-			client.removeFromGroup(userId, groupId);
+			client.removeFromGroup(userId, groupId, context);
 			evictCaches(groupId);
 			userManager.evictCaches(userId);
 		} catch (RuntimeException e) {
@@ -231,9 +232,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Member getMember(String groupId, String userId) {
+	public Member getMember(String groupId, String userId, SsoClientContext context) {
 		try {
-			Member member = client.getGroupMember(groupId, userId);
+			Member member = client.getGroupMember(groupId, userId, context);
 			if (groupId == null) {
 				logger.error("getGroupMember: " + groupId + " " + userId);
 			}
@@ -247,14 +248,14 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@Cacheable(value = CACHE_GROUP_MEMBERS, key = "#groupId + ':' + #userId")
-	public boolean isMember(String groupId, String userId) {
-		return getMember(groupId, userId) != null;
+	public boolean isMember(String groupId, String userId, SsoClientContext context) {
+		return getMember(groupId, userId, context) != null;
 	}
 
 	@Override
-	public Page<Group> listGroupsForUser(String userId, GroupType type, Pageable pageable) {
+	public Page<Group> listGroupsForUser(String userId, GroupType type, Pageable pageable, SsoClientContext context) {
 		try {
-			return client.listGroupsForUser(userId, type, pageable);
+			return client.listGroupsForUser(userId, type, pageable, context);
 		} catch (RuntimeException e) {
 			logger.error("listGroupsForUser: " + e + " " + userId + " " + type + " " + pageable);
 			return null;
@@ -262,9 +263,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Page<Group> listSubGroups(String groupId, GroupType type, boolean direct, Pageable pageable) {
+	public Page<Group> listSubGroups(String groupId, GroupType type, boolean direct, Pageable pageable, SsoClientContext context) {
 		try {
-			return client.listSubGroups(groupId, type, direct, pageable);
+			return client.listSubGroups(groupId, type, direct, pageable, context);
 		} catch (RuntimeException e) {
 			logger.error("listSubGroups: " + e + " " + groupId + " " + type + " " + direct + " " + pageable);
 			return null;
@@ -272,9 +273,9 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Integer countSubGroups(String groupId, GroupType type, boolean direct) {
+	public Integer countSubGroups(String groupId, GroupType type, boolean direct, SsoClientContext context) {
 		try {
-			return client.countSubGroups(groupId, type, direct);
+			return client.countSubGroups(groupId, type, direct, context);
 		} catch (RuntimeException e) {
 			logger.error("countSubGroups: " + e + " " + groupId + " " + type + " " + direct);
 			return null;
@@ -283,7 +284,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 
 	@Override
-	public void onGroupUpdate(String id, Map<String, Object> details) {
+	public void onGroupUpdate(String id, Map<String, Object> details, SsoClientContext context) {
 		if (id == null || details == null) {
 			return;
 		}
@@ -327,7 +328,8 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 		return cache;
 	}
 
-	public void onGroupMemberUpdate(String id, String userId) {
+	@Override
+	public void onGroupMemberUpdate(String id, String userId, SsoClientContext context) {
 		Cache cache = getGroupMembersCache();
 		cache.evict(id + ":" + userId);
 		Cache cache2 = getGroupMemberCountCache();

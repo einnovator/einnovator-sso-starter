@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.User;
@@ -206,8 +207,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyPermissionUserInGroup(String userId, String groupId, String... perms) {
-		List<Role> roles = listRolesForUserInGroup(userId, groupId);
+	public boolean hasAnyPermissionUserInGroup(String userId, String groupId, SsoClientContext context, String... perms) {
+		List<Role> roles = listRolesForUserInGroup(userId, groupId, context);
 		if (roles != null) {
 			for (Role role : roles) {
 				for (String perm : perms) {
@@ -230,8 +231,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	
 	@Override
-	public List<Permission> getPermissionsUserInGroup(String userId, String groupId) {
-		List<Role> roles = listRolesForUserInGroup(userId, groupId);
+	public List<Permission> getPermissionsUserInGroup(String userId, String groupId, SsoClientContext context) {
+		List<Role> roles = listRolesForUserInGroup(userId, groupId, context);
 		List<Permission> perms = new ArrayList<>();
 		if (roles != null) {
 			for (Role role : roles) {
@@ -248,8 +249,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Map<String, Boolean> getPermissionMapUserInGroup(String userId, String groupId) {
-		List<Permission> perms = getPermissionsUserInGroup(userId, groupId);
+	public Map<String, Boolean> getPermissionMapUserInGroup(String userId, String groupId, SsoClientContext context) {
+		List<Permission> perms = getPermissionsUserInGroup(userId, groupId, context);
 		if (perms == null) {
 			return null;
 		}
@@ -261,8 +262,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyPermissionUser(String userId, String... perms) {
-		List<Role> roles = listRolesForUser(userId);
+	public boolean hasAnyPermissionUser(String userId, SsoClientContext context, String... perms) {
+		List<Role> roles = listRolesForUser(userId, context);
 		if (roles != null) {
 			for (Role role : roles) {
 				for (String perm : perms) {
@@ -277,9 +278,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRolesForUser(String userId, Pageable options) {
+	public Page<Role> listRolesForUser(String userId, Pageable options, SsoClientContext context) {
 		try {
-			return client.listRolesForUser(userId, options);
+			return client.listRolesForUser(userId, options, context);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUser: " + userId + " " + options + " " + e);
 			return null;
@@ -287,9 +288,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRolesForUserInGroup(String userId, String groupId, Pageable options) {
+	public Page<Role> listRolesForUserInGroup(String userId, String groupId, Pageable options, SsoClientContext context) {
 		try {
-			return client.listRolesForUserInGroup(userId, groupId, options);
+			return client.listRolesForUserInGroup(userId, groupId, options, context);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUserInGroup: " + userId + " " + groupId + " " + options + " " + e);
 			return null;
@@ -297,9 +298,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public List<Role> listRolesForUser(String userId) {
+	public List<Role> listRolesForUser(String userId, SsoClientContext context) {
 		try {
-			return client.listRolesForUser(userId);
+			return client.listRolesForUser(userId, context);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUser: " + e + " " + userId + " " + e);
 			return null;
@@ -307,9 +308,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public List<Role> listRolesForUserInGroup(String userId, String groupId) {
+	public List<Role> listRolesForUserInGroup(String userId, String groupId, SsoClientContext context) {
 		try {
-			return client.listRolesForUserInGroup(userId, groupId);
+			return client.listRolesForUserInGroup(userId, groupId, context);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUserInGroup: " + e + " " + userId);
 			return null;
@@ -354,10 +355,10 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public boolean isMember(String userId, String... groups) {
+	public boolean isMember(String userId, SsoClientContext context, String... groups) {
 		if (groups != null) {
 			for (String groupId : groups) {
-				if (groupManager.isMember(userId, groupId)) {
+				if (groupManager.isMember(userId, groupId, context)) {
 					return true;
 				}
 			}
@@ -386,8 +387,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyRoleUser(String userId, String... roles) {
-		User user = userManager.getUser(userId);
+	public boolean hasAnyRoleUser(String userId, SsoClientContext context, String... roles) {
+		User user = userManager.getUser(userId, context);
 		if (user == null) {
 			return false;
 		}
@@ -406,8 +407,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyRoleUserInGroup(String userId, String groupId, String... roles) {
-		User user = userManager.getUser(userId);
+	public boolean hasAnyRoleUserInGroup(String userId, String groupId, SsoClientContext context, String... roles) {
+		User user = userManager.getUser(userId, context);
 		if (user == null) {
 			return false;
 		}
@@ -427,9 +428,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean isAdmin(String userId) {
+	public boolean isAdmin(String userId, SsoClientContext context) {
 		String[] admin = getAdmin();
-		if (hasAnyRoleUser(userId, admin)) {
+		if (hasAnyRoleUser(userId, context, admin)) {
 			return true;
 		}
 		return false;
@@ -437,9 +438,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public URI createRole(Role role) {
+	public URI createRole(Role role, SsoClientContext context) {
 		try {
-			URI uri = client.createRole(role);
+			URI uri = client.createRole(role, context);
 			if (uri == null) {
 				logger.error("createRole: " + role);
 			}
@@ -451,9 +452,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Role getRole(String roleId) {
+	public Role getRole(String roleId, SsoClientContext context) {
 		try {
-			Role group = client.getRole(roleId);
+			Role group = client.getRole(roleId, context);
 			if (group == null) {
 				logger.error("getRole: " + group);
 			}
@@ -470,9 +471,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void updateRole(Role role) {
+	public void updateRole(Role role, SsoClientContext context) {
 		try {
-			client.updateRole(role);
+			client.updateRole(role, context);
 			if (role == null) {
 				logger.error("updateRole: " + role);
 			}
@@ -483,9 +484,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRoles(RoleFilter filter, Pageable options) {
+	public Page<Role> listRoles(RoleFilter filter, Pageable options, SsoClientContext context) {
 		try {
-			Page<Role> groups = client.listRoles(filter, options);
+			Page<Role> groups = client.listRoles(filter, options, context);
 			if (groups == null) {
 				logger.error("listRoles: " + options);
 			}
@@ -497,9 +498,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void deleteRole(String roleId) {
+	public void deleteRole(String roleId, SsoClientContext context) {
 		try {
-			client.deleteRole(roleId);
+			client.deleteRole(roleId, context);
 			if (roleId == null) {
 				logger.error("deleteRole: " + roleId);
 			}
@@ -509,9 +510,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<User> listRoleMembers(String roleId, Pageable options, UserFilter filter) {
+	public Page<User> listRoleMembers(String roleId, Pageable options, UserFilter filter, SsoClientContext context) {
 		try {
-			Page<User> members = client.listRoleMembers(roleId, options, filter);
+			Page<User> members = client.listRoleMembers(roleId, options, filter, context);
 			if (members == null) {
 				logger.error("listRoleMembers: " + roleId);
 			}
@@ -523,9 +524,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Integer countRoleMembers(String roleId, UserFilter filter) {
+	public Integer countRoleMembers(String roleId, UserFilter filter, SsoClientContext context) {
 		try {
-			Integer n = client.countRoleMembers(roleId, filter);
+			Integer n = client.countRoleMembers(roleId, filter, context);
 			return n;
 		} catch (RuntimeException e) {
 			logger.error("countRoleMembers: " + roleId + "  " + e);
@@ -534,21 +535,21 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void assignRole(String userId, String roleId) {
+	public void assignRole(String userId, String roleId, SsoClientContext context) {
 		try {
 			if (roleId == null) {
 				logger.error("assignRole: " + userId + " " + roleId);
 			}
-			client.assignRole(userId, roleId);
+			client.assignRole(userId, roleId, context);
 		} catch (RuntimeException e) {
 			logger.error("assignRole: " + userId + " " + roleId + " " + e);
 		}
 	}
 
 	@Override
-	public void removeFromRole(String userId, String roleId) {
+	public void removeFromRole(String userId, String roleId, SsoClientContext context) {
 		try {
-			client.removeFromRole(userId, roleId);
+			client.removeFromRole(userId, roleId, context);
 			if (roleId == null) {
 				logger.error("removeFromRole: " + userId + " " + roleId);
 			}
@@ -575,12 +576,12 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public List<Role> listGlobalRoles() {
-		return listRolesForGroup(null);
+	public List<Role> listGlobalRoles(SsoClientContext context) {
+		return listRolesForGroup(null, context);
 	}
 
 	@Override
-	public List<Role> listRolesForGroup(String groupId) {
+	public List<Role> listRolesForGroup(String groupId, SsoClientContext context) {
 		String key = groupId != null ? groupId : "";
 		Role[] roles = getCacheValue(Role[].class, getGroupRolesCache(), key);
 		if (roles != null) {
@@ -592,7 +593,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 				filter.setGlobal(true);
 			}
 			filter.setGroup(groupId);
-			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE));
+			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE), context);
 			if (page == null || page.getContent() == null) {
 				return null;
 			}
@@ -611,9 +612,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public boolean hasAnyPermissionUserInAnyGroup(String username, List<String> groupIds, String... perms) {
+	public boolean hasAnyPermissionUserInAnyGroup(String username, List<String> groupIds, SsoClientContext context, String... perms) {
 		for (String groupId : groupIds) {
-			if (hasAnyPermissionUserInGroup(username, groupId, perms)) {
+			if (hasAnyPermissionUserInGroup(username, groupId, context, perms)) {
 				return true;
 			}
 		}
@@ -640,7 +641,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 			if (Role.isRole(authority)) {
 				String roleId = Role.getRoleName(authority);
 				String groupId = Role.getGroup(authority);
-				List<Role> roles = groupId != null ? listRolesForGroup(groupId) : listGlobalRoles();
+				List<Role> roles = groupId != null ? listRolesForGroup(groupId, null) : listGlobalRoles(null);
 				Role role = Role.findRole(roleId, roles);
 				if (role != null && role.getPermissions() != null) {
 					for (Permission perm : role.getPermissions()) {

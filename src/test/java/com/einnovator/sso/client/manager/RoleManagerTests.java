@@ -62,7 +62,7 @@ public class RoleManagerTests {
 	
 	@Test
 	public void listRolesForUser() {
-		List<Role> roles = roleManager.listRolesForUser(TEST_USER);
+		List<Role> roles = roleManager.listRolesForUser(TEST_USER, null);
 		assertNotNull(roles);
 		System.out.println(roles);
 	}
@@ -76,7 +76,7 @@ public class RoleManagerTests {
 		for (GrantedAuthority authority: authorities) {
 			System.out.println(authority);
 		}
-		User user = userManager.getUser(TEST_USER);
+		User user = userManager.getUser(TEST_USER, null, null);
 		System.out.println(user);
 		System.out.println(user.getRoles());
 	}

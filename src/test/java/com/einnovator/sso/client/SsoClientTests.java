@@ -86,7 +86,7 @@ public class SsoClientTests {
 	public void listUsersTest() {
 		OAuth2AccessToken token = client.getToken(TEST_USER2, TEST_PASSWORD);
 		System.out.println(token);
-		Page<User> users = client.listUsers(null, null);
+		Page<User> users = client.listUsers(null, null, null);
 		System.out.println(users);
 		assertNotNull(users);
 		assertNotNull(users.getContent());
@@ -99,7 +99,7 @@ public class SsoClientTests {
 		String prefix = "t";
 		UserFilter filter = new UserFilter();
 		filter.setQ("^" + prefix);
-		Page<User> users = client.listUsers(filter, null);
+		Page<User> users = client.listUsers(filter, null, null);
 		assertNotNull(users);
 		assertNotNull(users);
 		assertNotNull(users.getContent());
@@ -115,7 +115,7 @@ public class SsoClientTests {
 		OAuth2AccessToken token = client.getToken(TEST_USER2, TEST_PASSWORD);
 		System.out.println(token);
 		String username = TEST_USER2;
-		User user = client.getUser(username);
+		User user = client.getUser(username, null);
 		assertNotNull(user);
 		assertEquals(username, user.getUsername());
 	}
@@ -125,10 +125,10 @@ public class SsoClientTests {
 		String username = "tdd-" + UUID.randomUUID().toString();
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes());
-		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user));
+		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user, null));
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
-		User user2 = run("SsoClientTests:createUserTest:getUser", () -> client.getUser(id));
+		User user2 = run("SsoClientTests:createUserTest:getUser", () -> client.getUser(id, null));
 		assertNotNull(user2);
 		System.out.println(user2);
 	}
@@ -146,12 +146,12 @@ public class SsoClientTests {
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes())
 				.withAddress(new Address().withCountry("USA").withCity("NY").withPostalCode("12345"));
-		URI uri = client.createUser(user);
+		URI uri = client.createUser(user, null);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);
 		assertFalse(id.isEmpty());
-		User user2 = client.getUser(id);
+		User user2 = client.getUser(id, null);
 		assertNotNull(user2);
 		assertEquals(id, user2.getId());
 		assertEquals(user.getUsername(), user2.getUsername());
@@ -160,13 +160,13 @@ public class SsoClientTests {
 	@Test
 	public void updateExistingUserTest() {
 		String username = TEST_USER;
-		User user = client.getUser(username);
+		User user = client.getUser(username, null);
 		assertNotNull(user);
 		assertEquals(username, user.getUsername());
 		user.getAddress().setCity("City-" + UUID.randomUUID().toString());
 		user.setMobilePhone(new Phone("90000" + new Random().nextInt(9999)));
-		client.updateUser(user);
-		User user2 = client.getUser(username);
+		client.updateUser(user, null);
+		User user2 = client.getUser(username, null);
 		assertNotNull(user2);
 		assertEquals(username, user2.getUsername());
 		assertEquals(user.getAddress().getCity(), user2.getAddress().getCity());
@@ -177,7 +177,7 @@ public class SsoClientTests {
 	@Test
 	public void updateExistingUserPartialTest() {
 		String username = TEST_USER;
-		User user = client.getUser(username);
+		User user = client.getUser(username, null);
 		assertNotNull(user);
 		assertEquals(username, user.getUsername());
 		Address address = new Address();
@@ -186,8 +186,8 @@ public class SsoClientTests {
 		address.setCity("City-" + UUID.randomUUID().toString());
 		user.setWebsite("http://website.test.org");
 		user.setSocial("http://social.test.org");
-		client.updateUser(user);
-		User user2 = client.getUser(username);
+		client.updateUser(user, null);
+		User user2 = client.getUser(username, null);
 		assertNotNull(user2);
 		assertEquals(username, user2.getUsername());
 		assertEquals(user.getWebsite(), user2.getWebsite());
@@ -199,8 +199,8 @@ public class SsoClientTests {
 		user.setProfile(null);
 		user.getAddress().setLine1(null);
 		user.getAddress().setCity("City-" + UUID.randomUUID().toString());
-		client.updateUser(user);
-		User user3 = client.getUser(username);
+		client.updateUser(user, null);
+		User user3 = client.getUser(username, null);
 		assertNotNull(user3);
 		assertEquals(username, user2.getUsername());
 		assertEquals(user.getWebsite(), user3.getWebsite());
@@ -213,27 +213,27 @@ public class SsoClientTests {
 	public void createGroupTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
 		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
-		URI uri = client.createGroup(group);
+		URI uri = client.createGroup(group, null);
 		assertNotNull(uri);
-		client.deleteGroup(groupName);
+		client.deleteGroup(groupName, null);
 	}
 
 	@Test
 	public void createGroupAndGetTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
 		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
-		URI uri = client.createGroup(group);
+		URI uri = client.createGroup(group, null);
 		assertNotNull(uri);
 		String groupName2 = UriUtils.extractId(uri);
 		assertNotNull(groupName2);
 		assertFalse(groupName2.isEmpty());
 		assertEquals(groupName, groupName2);
-		Group group2 = client.getGroup(groupName2);
+		Group group2 = client.getGroup(groupName2, null);
 		assertNotNull(group2);
 		assertEquals(groupName2, group2.getName());
-		client.deleteGroup(groupName2);
+		client.deleteGroup(groupName2, null);
 		try {
-			client.getGroup(groupName2);
+			client.getGroup(groupName2, null);
 			fail();
 		} catch (RuntimeException e) {
 		}
@@ -243,19 +243,19 @@ public class SsoClientTests {
 	public void updateGroupTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
 		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
-		URI uri = client.createGroup(group);
+		URI uri = client.createGroup(group, null);
 		assertNotNull(uri);
-		Group group2 = client.getGroup(groupName);
+		Group group2 = client.getGroup(groupName, null);
 		assertNotNull(group2);
 		assertEquals(groupName, group2.getName());
 		group2.setDescription("Other Description");
-		client.updateGroup(group2);
-		Group group3 = client.getGroup(groupName);
+		client.updateGroup(group2, null);
+		Group group3 = client.getGroup(groupName, null);
 		assertNotNull(group3);
 		assertEquals(group2.getDescription(), group3.getDescription());
-		client.deleteGroup(groupName);
+		client.deleteGroup(groupName, null);
 		try {
-			client.getGroup(groupName);
+			client.getGroup(groupName, null);
 			fail();
 		} catch (RuntimeException e) {
 		}
@@ -265,14 +265,14 @@ public class SsoClientTests {
 	public void groupMembershipTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
 		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
-		URI uri = client.createGroup(group);
+		URI uri = client.createGroup(group, null);
 		assertNotNull(uri);
 		String uuid = UriUtils.extractId(uri);
-		Group group2 = client.getGroup(uuid);
+		Group group2 = client.getGroup(uuid, null);
 		assertNotNull(group2);
 		String userId = TEST_USER;
-		client.addToGroup(userId, uuid);
-		Page<Member> members = client.listGroupMembers(uuid, null, null);
+		client.addToGroup(userId, uuid, null);
+		Page<Member> members = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members);
 		assertNotNull(members.getContent());
 		assertFalse(members.getContent().isEmpty());
@@ -280,14 +280,14 @@ public class SsoClientTests {
 		assertNotNull(members.getContent().get(0));
 		assertNotNull(members.getContent().get(0).getUser());
 		assertEquals(userId, members.getContent().get(0).getUser().getId());
-		client.removeFromGroup(userId, uuid);
-		Page<Member> members2 = client.listGroupMembers(uuid, null, null);
+		client.removeFromGroup(userId, uuid, null);
+		Page<Member> members2 = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members2);
 		assertNotNull(members.getContent());
 		assertTrue(members2.getContent().isEmpty());
-		client.deleteGroup(uuid);
+		client.deleteGroup(uuid, null);
 		try {
-			client.getGroup(uuid);
+			client.getGroup(uuid, null);
 			fail();
 		} catch (RuntimeException e) {
 		}
@@ -297,14 +297,14 @@ public class SsoClientTests {
 	public void groupMembershipWithPlusTest() {
 		String groupName = "group-" + UUID.randomUUID().toString();
 		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName);
-		URI uri = client.createGroup(group);
+		URI uri = client.createGroup(group, null);
 		assertNotNull(uri);
 		String uuid = UriUtils.extractId(uri);
-		Group group2 = client.getGroup(uuid);
+		Group group2 = client.getGroup(uuid, null);
 		assertNotNull(group2);
 		String userId = TEST_USERX1;
-		client.addToGroup(userId, uuid);
-		Page<Member> members = client.listGroupMembers(uuid, null, null);
+		client.addToGroup(userId, uuid, null);
+		Page<Member> members = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members);
 		assertNotNull(members.getContent());
 		assertFalse(members.getContent().isEmpty());
@@ -312,14 +312,14 @@ public class SsoClientTests {
 		assertNotNull(members.getContent().get(0));
 		assertNotNull(members.getContent().get(0).getUser());
 		assertEquals(userId, members.getContent().get(0).getUser().getId());
-		client.removeFromGroup(userId, uuid);
-		Page<Member> members2 = client.listGroupMembers(uuid, null, null);
+		client.removeFromGroup(userId, uuid, null);
+		Page<Member> members2 = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members2);
 		assertNotNull(members.getContent());
 		assertTrue(members2.getContent().isEmpty());
-		client.deleteGroup(uuid);
+		client.deleteGroup(uuid, null);
 		try {
-			client.getGroup(uuid);
+			client.getGroup(uuid, null);
 			fail();
 		} catch (RuntimeException e) {
 		}
@@ -330,18 +330,18 @@ public class SsoClientTests {
 		String groupName = "group-" + UUID.randomUUID().toString();
 		Group group = new Group().withName(groupName).withDescription("Description of Group:" + groupName)
 				.withType(GroupType.CONTACTS).withOwner(TEST_USER2);
-		URI uri = client.createGroup(group);
+		URI uri = client.createGroup(group, null);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
-		Group group2 = client.getGroup(id);
+		Group group2 = client.getGroup(id, null);
 		assertNotNull(group2);
 		GroupFilter filter = new GroupFilter();
 		filter.setType(GroupType.CONTACTS);
-		Page<Group> groups = client.listGroups(null, filter);
+		Page<Group> groups = client.listGroups(null, filter, null);
 		assertFalse(groups.getNumberOfElements()==0);
 		assertFalse(groups.getContent().isEmpty());
-		client.addToGroup(TEST_USER, id);
-		Page<Member> members = client.listGroupMembers(id, null, null);
+		client.addToGroup(TEST_USER, id, null);
+		Page<Member> members = client.listGroupMembers(id, null, null, null);
 		assertNotNull(members);
 		assertNotNull(members.getContent());
 		assertFalse(members.getContent().isEmpty());
@@ -349,14 +349,14 @@ public class SsoClientTests {
 		assertNotNull(members.getContent().get(0));
 		assertEquals(TEST_USER, members.getContent().get(0).getUser().getId());
 
-		client.removeFromGroup(TEST_USER, id);
-		Page<Member> members2 = client.listGroupMembers(id, null, null);
+		client.removeFromGroup(TEST_USER, id, null);
+		Page<Member> members2 = client.listGroupMembers(id, null, null, null);
 		assertNotNull(members2);
 		assertNotNull(members.getContent());
 		assertTrue(members2.getContent().isEmpty());
-		client.deleteGroup(id);
+		client.deleteGroup(id, null);
 		try {
-			client.getGroup(groupName);
+			client.getGroup(groupName, null);
 			fail();
 		} catch (RuntimeException e) {
 		}
@@ -383,14 +383,14 @@ public class SsoClientTests {
 		invitation.setOwner(TEST_USER2);
 		invitation.setType(type);
 		invitation.setDescription("Test invitation: " + UUID.randomUUID());
-		URI uri = client.invite(invitation, sendMail);
+		URI uri = client.invite(invitation, sendMail, null);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);
-		Invitation invitation2 = client.getInvitation(id);
+		Invitation invitation2 = client.getInvitation(id, null);
 		assertNotNull(invitation2);
 		assertEquals(id, invitation2.getUuid());
-		URI tokenUri = client.getInvitationToken(id, sendMail);
+		URI tokenUri = client.getInvitationToken(id, sendMail, null);
 		assertNotNull(tokenUri);
 		assertTrue(tokenUri.toString().indexOf("?token=") > 0);
 		String token = tokenUri.toString().substring(tokenUri.toString().indexOf("=") + 1);
@@ -401,7 +401,7 @@ public class SsoClientTests {
 	@Test
 	public void listInvitationsTest() {
 		//InvitationFilter filter = new InvitationFilter();
-		Page<Invitation> invitations = client.listInvitations(null, null);
+		Page<Invitation> invitations = client.listInvitations(null, null, null);
 		assertNotNull(invitations);
 		assertNotNull(invitations.getContent());
 		assertFalse(invitations.getContent().isEmpty());

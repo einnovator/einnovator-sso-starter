@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
@@ -33,9 +34,9 @@ public class PermissionManagerImpl implements PermissionManager {
 
 	
 	@Override
-	public URI createPermission(Permission permission) {
+	public URI createPermission(Permission permission, SsoClientContext context) {
 		try {
-			URI uri = client.createPermission(permission);
+			URI uri = client.createPermission(permission, context);
 			if (uri == null) {
 				logger.error("createPermission: " + permission);
 			}
@@ -47,9 +48,9 @@ public class PermissionManagerImpl implements PermissionManager {
 	}
 
 	@Override
-	public Permission getPermission(String id) {
+	public Permission getPermission(String id, SsoClientContext context) {
 		try {
-			Permission group = client.getPermission(id);
+			Permission group = client.getPermission(id, context);
 			if (group == null) {
 				logger.error("getPermission: " + group);
 			}
@@ -68,9 +69,9 @@ public class PermissionManagerImpl implements PermissionManager {
 
 
 	@Override
-	public Page<Permission> listPermissions(Pageable pageable) {
+	public Page<Permission> listPermissions(Pageable pageable, SsoClientContext context) {
 		try {
-			return client.listPermissions(pageable);
+			return client.listPermissions(pageable, context);
 		} catch (RuntimeException e) {
 			logger.error("listPermissions: " + e + " " + pageable);
 			return null;
@@ -81,9 +82,9 @@ public class PermissionManagerImpl implements PermissionManager {
 
 
 	@Override
-	public boolean deletePermission(String permissionId) {
+	public boolean deletePermission(String permissionId, SsoClientContext context) {
 		try {
-			client.deletePermission(permissionId);
+			client.deletePermission(permissionId, context);
 			if (permissionId == null) {
 				logger.error("deletePermission: " + permissionId);
 			}
@@ -97,18 +98,18 @@ public class PermissionManagerImpl implements PermissionManager {
 
 
 	@Override
-	public Page<User> listPermissionMembers(String permissionId, Pageable pageable, UserFilter filter) {
+	public Page<User> listPermissionMembers(String permissionId, Pageable pageable, UserFilter filter, SsoClientContext context) {
 		try {
-			return client.listPermissionMembers(permissionId, pageable, filter);
+			return client.listPermissionMembers(permissionId, pageable, filter, context);
 		} catch (RuntimeException e) {
 			logger.error("listPermissions: " + e + " " + permissionId + " " + pageable + " " + filter);
 			return null;
 		}
 	}
 	
-	public Page<User> listPermissionMembers(String permissionId, String groupId, Pageable pageable, UserFilter filter) {
+	public Page<User> listPermissionMembers(String permissionId, String groupId, Pageable pageable, UserFilter filter, SsoClientContext context) {
 		try {
-			return client.listPermissionMembers(permissionId, groupId, pageable, filter);
+			return client.listPermissionMembers(permissionId, groupId, pageable, filter, context);
 		} catch (RuntimeException e) {
 			logger.error("listPermissions: " + e + " " + permissionId + " " + groupId + " " + pageable + " " + filter);
 			return null;
