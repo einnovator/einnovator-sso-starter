@@ -176,6 +176,7 @@ public class Permission extends EntityBase {
 	 * Set the value of property {@code key}.
 	 *
 	 * @param key the value of property key
+	 * @return this {@code Permission}
 	 */
 	public Permission withKey(String key) {
 		this.key = key;
@@ -187,6 +188,7 @@ public class Permission extends EntityBase {
 	 * Set the value of property {@code name}.
 	 *
 	 * @param name the value of property name
+	 * @return this {@code Permission}
 	 */
 	public Permission withName(String name) {
 		this.name = name;
@@ -198,6 +200,7 @@ public class Permission extends EntityBase {
 	 * Set the value of property {@code app}.
 	 *
 	 * @param app the value of property app
+	 * @return this {@code Permission}
 	 */
 	public Permission withApp(String app) {
 		this.app = app;
@@ -209,6 +212,7 @@ public class Permission extends EntityBase {
 	 * Set the value of property {@code description}.
 	 *
 	 * @param description the value of property description
+	 * @return this {@code Permission}
 	 */
 	public Permission withDescription(String description) {
 		this.description = description;
@@ -220,6 +224,7 @@ public class Permission extends EntityBase {
 	 * Set the value of property {@code category}.
 	 *
 	 * @param category the value of property category
+	 * @return this {@code Permission}
 	 */
 	public Permission withCategory(String category) {
 		this.category = category;
@@ -231,6 +236,7 @@ public class Permission extends EntityBase {
 	 * Set the value of property {@code img}.
 	 *
 	 * @param img the value of property img
+	 * @return this {@code Permission}
 	 */
 	public Permission withImg(String img) {
 		this.img = img;
@@ -242,6 +248,7 @@ public class Permission extends EntityBase {
 	 * Set the value of property {@code icon}.
 	 *
 	 * @param icon the value of property icon
+	 * @return this {@code Permission}
 	 */
 	public Permission withIcon(String icon) {
 		this.icon = icon;

@@ -332,15 +332,19 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code details}.
 	 *
 	 * @param details the value of property details
+
 	 */
 	public void setDetails(ClientDetails details) {
 		this.details = details;
 	}
 
+	// With
+	
 	/**
 	 * Set the value of property {@code clientId}.
 	 *
 	 * @param clientId the value of property clientId
+	 * @return this {@code Client}
 	 */
 	public Client withClientId(String clientId) {
 		this.clientId = clientId;
@@ -351,6 +355,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code clientSecret}.
 	 *
 	 * @param clientSecret the value of property clientSecret
+	 * @return this {@code Client}
 	 */
 	public Client withClientSecret(String clientSecret) {
 		this.clientSecret = clientSecret;
@@ -361,6 +366,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code scope}.
 	 *
 	 * @param scope the value of property scope
+	 * @return this {@code Client}
 	 */
 	public Client withScope(Set<String> scope) {
 		this.scope = scope;
@@ -371,6 +377,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code resourceIds}.
 	 *
 	 * @param resourceIds the value of property resourceIds
+	 * @return this {@code Client}
 	 */
 	public Client withResourceIds(Set<String> resourceIds) {
 		this.resourceIds = resourceIds;
@@ -381,6 +388,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code authorizedGrantTypes}.
 	 *
 	 * @param authorizedGrantTypes the value of property authorizedGrantTypes
+	 * @return this {@code Client}
 	 */
 	public Client withAuthorizedGrantTypes(Set<String> authorizedGrantTypes) {
 		this.authorizedGrantTypes = authorizedGrantTypes;
@@ -391,6 +399,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code registeredRedirectUris}.
 	 *
 	 * @param registeredRedirectUris the value of property registeredRedirectUris
+	 * @return this {@code Client}
 	 */
 	public Client withRegisteredRedirectUris(Set<String> registeredRedirectUris) {
 		this.registeredRedirectUris = registeredRedirectUris;
@@ -401,6 +410,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code autoApproveScopes}.
 	 *
 	 * @param autoApproveScopes the value of property autoApproveScopes
+	 * @return this {@code Client}
 	 */
 	public Client withAutoApproveScopes(Set<String> autoApproveScopes) {
 		this.autoApproveScopes = autoApproveScopes;
@@ -411,6 +421,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code authorities}.
 	 *
 	 * @param authorities the value of property authorities
+	 * @return this {@code Client}
 	 */
 	public Client withAuthorities(List<GrantedAuthority> authorities) {
 		this.authorities = authorities;
@@ -421,6 +432,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code accessTokenValiditySeconds}.
 	 *
 	 * @param accessTokenValiditySeconds the value of property accessTokenValiditySeconds
+	 * @return this {@code Client}
 	 */
 	public Client withAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
 		this.accessTokenValiditySeconds = accessTokenValiditySeconds;
@@ -431,6 +443,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code refreshTokenValiditySeconds}.
 	 *
 	 * @param refreshTokenValiditySeconds the value of property refreshTokenValiditySeconds
+	 * @return this {@code Client}
 	 */
 	public Client withRefreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
 		this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
@@ -441,6 +454,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code additionalInformation}.
 	 *
 	 * @param additionalInformation the value of property additionalInformation
+	 * @return this {@code Client}
 	 */
 	public Client withAdditionalInformation(Map<String, Object> additionalInformation) {
 		this.additionalInformation = additionalInformation;
@@ -451,6 +465,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code avatar}.
 	 *
 	 * @param avatar the value of property avatar
+	 * @return this {@code Client}
 	 */
 	public Client withAvatar(String avatar) {
 		this.avatar = avatar;
@@ -461,6 +476,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code thumbnail}.
 	 *
 	 * @param thumbnail the value of property thumbnail
+	 * @return this {@code Client}
 	 */
 	public Client withThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
@@ -471,6 +487,7 @@ public class Client extends EntityBase {
 	 * Set the value of property {@code details}.
 	 *
 	 * @param details the value of property details
+	 * @return this {@code Client}
 	 */
 	public Client withDetails(ClientDetails details) {
 		this.details = details;

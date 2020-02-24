@@ -13,6 +13,7 @@ import org.springframework.cache.Cache;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.client.RestClientException;
 
 public interface GroupManager {
 
@@ -24,8 +25,6 @@ public interface GroupManager {
 
 	Group updateGroup(Group group, SsoClientContext context);
 
-	Page<Group> listGroups(Pageable pageable, SsoClientContext context);
-
 	Page<Group> listGroups(GroupFilter filter, Pageable pageable, SsoClientContext context);
 
 	void deleteGroup(String groupId, SsoClientContext context);
@@ -34,8 +33,21 @@ public interface GroupManager {
 
 	Integer countMembers(String groupId, MemberFilter filter, SsoClientContext context);
 
-	void addMember(String userId, String groupId, SsoClientContext context);
+	URI addMember(String userId, String groupId, SsoClientContext context);
 
+	/**
+	 * Add user a new {@code Group}
+	 * 
+	 * <b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), any for root {@code Group}s. 
+	 * For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group},  or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * 
+	 * @param member the {@code Member} to add to Group
+	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
+	 * @param context optional {@code SsoClientContext}
+	 * @return the location {@code URI} for the created {@code Member}, or null if request fails
+	 */
+	public URI addMember(Member member, String groupId, SsoClientContext context);
+	
 	void removeMember(String userId, String groupId, SsoClientContext context);
 
 	Member getMember(String groupId, String userId, SsoClientContext context);

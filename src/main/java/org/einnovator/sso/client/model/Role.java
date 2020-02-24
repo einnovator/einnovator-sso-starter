@@ -47,8 +47,8 @@ public class Role extends EntityBase {
 	/**
 	 * Create instance of {@code Role}.
 	 *
-	 * @param name
-	 * @param builtin
+	 * @param name the name
+	 * @param builtin true if group role prototype
 	 */
 	public Role(String name, Boolean builtin) {
 		this.name = name;
@@ -216,11 +216,16 @@ public class Role extends EntityBase {
 	public void setGroup(Group group) {
 		this.group = group;
 	}
+	
+	//
+	// With
+	//
 
 	/**
 	 * Set the value of property {@code name}.
 	 *
 	 * @param name the value of property name
+	 * @return this {@code Role}
 	 */
 	public Role withName(String name) {
 		this.name = name;
@@ -231,6 +236,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code type}.
 	 *
 	 * @param type the value of property type
+	 * @return this {@code Role}
 	 */
 	public Role withType(RoleType type) {
 		this.type = type;
@@ -241,6 +247,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code description}.
 	 *
 	 * @param description the value of property description
+	 * @return this {@code Role}
 	 */
 	public Role withDescription(String description) {
 		this.description = description;
@@ -251,6 +258,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code userCount}.
 	 *
 	 * @param userCount the value of property userCount
+	 * @return this {@code Role}
 	 */
 	public Role withUserCount(Integer userCount) {
 		this.userCount = userCount;
@@ -261,6 +269,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code builtin}.
 	 *
 	 * @param builtin the value of property builtin
+	 * @return this {@code Role}
 	 */
 	public Role withBuiltin(Boolean builtin) {
 		this.builtin = builtin;
@@ -271,6 +280,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code app}.
 	 *
 	 * @param app the value of property app
+	 * @return this {@code Role}
 	 */
 	public Role withApp(String app) {
 		this.app = app;
@@ -281,6 +291,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code global}.
 	 *
 	 * @param global the value of property global
+	 * @return this {@code Role}
 	 */
 	public Role withGlobal(Boolean global) {
 		this.global = global;
@@ -291,6 +302,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code permissions}.
 	 *
 	 * @param permissions the value of property permissions
+	 * @return this {@code Role}
 	 */
 	public Role withPermissions(List<Permission> permissions) {
 		this.permissions = permissions;
@@ -301,6 +313,7 @@ public class Role extends EntityBase {
 	 * Set the value of property {@code group}.
 	 *
 	 * @param group the value of property group
+	 * @return this {@code Role}
 	 */
 	public Role withGroup(Group group) {
 		this.group = group;
@@ -339,6 +352,10 @@ public class Role extends EntityBase {
 				.append("permissions", permissions);
 
 	}
+	
+	//
+	// static util
+	//
 
 	public static boolean isRole(GrantedAuthority authority) {
 		return authority.getAuthority().startsWith("ROLE_");

@@ -271,7 +271,7 @@ public class SsoClientTests {
 		Group group2 = client.getGroup(uuid, null);
 		assertNotNull(group2);
 		String userId = TEST_USER;
-		client.addToGroup(userId, uuid, null);
+		client.addMemberToGroup(userId, uuid, null);
 		Page<Member> members = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members);
 		assertNotNull(members.getContent());
@@ -280,7 +280,7 @@ public class SsoClientTests {
 		assertNotNull(members.getContent().get(0));
 		assertNotNull(members.getContent().get(0).getUser());
 		assertEquals(userId, members.getContent().get(0).getUser().getId());
-		client.removeFromGroup(userId, uuid, null);
+		client.removeMemberFromGroup(userId, uuid, null);
 		Page<Member> members2 = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members2);
 		assertNotNull(members.getContent());
@@ -303,7 +303,7 @@ public class SsoClientTests {
 		Group group2 = client.getGroup(uuid, null);
 		assertNotNull(group2);
 		String userId = TEST_USERX1;
-		client.addToGroup(userId, uuid, null);
+		client.addMemberToGroup(userId, uuid, null);
 		Page<Member> members = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members);
 		assertNotNull(members.getContent());
@@ -312,7 +312,7 @@ public class SsoClientTests {
 		assertNotNull(members.getContent().get(0));
 		assertNotNull(members.getContent().get(0).getUser());
 		assertEquals(userId, members.getContent().get(0).getUser().getId());
-		client.removeFromGroup(userId, uuid, null);
+		client.removeMemberFromGroup(userId, uuid, null);
 		Page<Member> members2 = client.listGroupMembers(uuid, null, null, null);
 		assertNotNull(members2);
 		assertNotNull(members.getContent());
@@ -337,10 +337,10 @@ public class SsoClientTests {
 		assertNotNull(group2);
 		GroupFilter filter = new GroupFilter();
 		filter.setType(GroupType.CONTACTS);
-		Page<Group> groups = client.listGroups(null, filter, null);
+		Page<Group> groups = client.listGroups(filter, null, null);
 		assertFalse(groups.getNumberOfElements()==0);
 		assertFalse(groups.getContent().isEmpty());
-		client.addToGroup(TEST_USER, id, null);
+		client.addMemberToGroup(TEST_USER, id, null);
 		Page<Member> members = client.listGroupMembers(id, null, null, null);
 		assertNotNull(members);
 		assertNotNull(members.getContent());
@@ -349,7 +349,7 @@ public class SsoClientTests {
 		assertNotNull(members.getContent().get(0));
 		assertEquals(TEST_USER, members.getContent().get(0).getUser().getId());
 
-		client.removeFromGroup(TEST_USER, id, null);
+		client.removeMemberFromGroup(TEST_USER, id, null);
 		Page<Member> members2 = client.listGroupMembers(id, null, null, null);
 		assertNotNull(members2);
 		assertNotNull(members.getContent());
@@ -387,7 +387,7 @@ public class SsoClientTests {
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);
-		Invitation invitation2 = client.getInvitation(id, null);
+		Invitation invitation2 = client.getInvitation(id, null, null);
 		assertNotNull(invitation2);
 		assertEquals(id, invitation2.getUuid());
 		URI tokenUri = client.getInvitationToken(id, sendMail, null);

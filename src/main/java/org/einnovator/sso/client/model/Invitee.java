@@ -34,7 +34,9 @@ public class Invitee extends EntityBase {
 	}
 	
 	/**
-	 * @return
+	 * Get the value of property {@code status}.
+	 * 
+	 * @return the status
 	 */
 	public InvitationStatus getStatus() {
 		return status;
@@ -139,10 +141,15 @@ public class Invitee extends EntityBase {
 		this.status = status;
 	}
 
+	//
+	// With
+	//
+	
 	/**
 	 * Set the value of property {@code status}.
 	 *
 	 * @param status the value of property status
+	 * @return this {@code Invitee}
 	 */
 	public Invitee withStatus(InvitationStatus status) {
 		this.status = status;
@@ -153,6 +160,7 @@ public class Invitee extends EntityBase {
 	 * Set the value of property {@code username}.
 	 *
 	 * @param username the value of property username
+	 * @return this {@code Invitee}
 	 */
 	public Invitee withUsername(String username) {
 		this.username = username;
@@ -163,6 +171,7 @@ public class Invitee extends EntityBase {
 	 * Set the value of property {@code group}.
 	 *
 	 * @param group the value of property group
+	 * @return this {@code Invitee}
 	 */
 	public Invitee withGroup(Group group) {
 		this.group = group;
@@ -173,6 +182,7 @@ public class Invitee extends EntityBase {
 	 * Set the value of property {@code sendDate}.
 	 *
 	 * @param sendDate the value of property sendDate
+	 * @return this {@code Invitee}
 	 */
 	public Invitee withSendDate(Date sendDate) {
 		this.sendDate = sendDate;
@@ -183,6 +193,7 @@ public class Invitee extends EntityBase {
 	 * Set the value of property {@code action}.
 	 *
 	 * @param action the value of property action
+	 * @return this {@code Invitee}
 	 */
 	public Invitee withAction(String action) {
 		this.action = action;
@@ -193,6 +204,7 @@ public class Invitee extends EntityBase {
 	 * Set the value of property {@code responseDate}.
 	 *
 	 * @param responseDate the value of property responseDate
+	 * @return this {@code Invitee}
 	 */
 	public Invitee withResponseDate(Date responseDate) {
 		this.responseDate = responseDate;

@@ -33,7 +33,7 @@ public interface RoleManager {
 
 	void assignRole(String username, String roleId, SsoClientContext context);
 
-	void removeFromRole(String username, String roleId, SsoClientContext context);
+	void unassignRole(String username, String roleId, SsoClientContext context);
 
 	Page<Role> listRolesForUser(String userId, Pageable pageable, SsoClientContext context);
 

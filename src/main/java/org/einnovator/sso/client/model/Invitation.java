@@ -471,11 +471,16 @@ public class Invitation  extends EntityBase {
 	public void setMeta(Map<String, Object> meta) {
 		this.meta = meta;
 	}
+	
+	//
+	// With
+	//
 
 	/**
 	 * Set the value of property {@code type}.
 	 *
 	 * @param type the value of property type
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withType(InvitationType type) {
 		this.type = type;
@@ -486,6 +491,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code otherType}.
 	 *
 	 * @param otherType the value of property otherType
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withOtherType(String otherType) {
 		this.otherType = otherType;
@@ -496,6 +502,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code app}.
 	 *
 	 * @param app the value of property app
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withApp(String app) {
 		this.app = app;
@@ -506,6 +513,8 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code invitee}.
 	 *
 	 * @param invitee the value of property invitee
+	 * @return this {@code Group}
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withInvitee(String invitee) {
 		this.invitee = invitee;
@@ -516,6 +525,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code invitedUser}.
 	 *
 	 * @param invitedUser the value of property invitedUser
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withInvitedUser(User invitedUser) {
 		this.invitedUser = invitedUser;
@@ -526,6 +536,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code owner}.
 	 *
 	 * @param owner the value of property owner
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withOwner(String owner) {
 		this.owner = owner;
@@ -536,6 +547,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code user}.
 	 *
 	 * @param user the value of property user
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withUser(User user) {
 		this.user = user;
@@ -546,6 +558,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code status}.
 	 *
 	 * @param status the value of property status
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withStatus(InvitationStatus status) {
 		this.status = status;
@@ -556,6 +569,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code error}.
 	 *
 	 * @param error the value of property error
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withError(InvitationError error) {
 		this.error = error;
@@ -566,6 +580,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code redirectUri}.
 	 *
 	 * @param redirectUri the value of property redirectUri
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withRedirectUri(String redirectUri) {
 		this.redirectUri = redirectUri;
@@ -576,6 +591,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code site}.
 	 *
 	 * @param site the value of property site
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withSite(String site) {
 		this.site = site;
@@ -586,6 +602,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code description}.
 	 *
 	 * @param description the value of property description
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withDescription(String description) {
 		this.description = description;
@@ -596,6 +613,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code subject}.
 	 *
 	 * @param subject the value of property subject
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withSubject(String subject) {
 		this.subject = subject;
@@ -606,6 +624,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code template}.
 	 *
 	 * @param template the value of property template
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withTemplate(String template) {
 		this.template = template;
@@ -616,6 +635,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code autoLogin}.
 	 *
 	 * @param autoLogin the value of property autoLogin
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withAutoLogin(Boolean autoLogin) {
 		this.autoLogin = autoLogin;
@@ -626,6 +646,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code invitees}.
 	 *
 	 * @param invitees the value of property invitees
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withInvitees(List<Invitee> invitees) {
 		this.invitees = invitees;
@@ -636,6 +657,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code formattedDate}.
 	 *
 	 * @param formattedDate the value of property formattedDate
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withFormattedDate(String formattedDate) {
 		this.formattedDate = formattedDate;
@@ -646,6 +668,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code trigger0}.
 	 *
 	 * @param trigger0 the value of property trigger0
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withTrigger0(Trigger trigger0) {
 		this.trigger0 = trigger0;
@@ -656,6 +679,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code trigger1}.
 	 *
 	 * @param trigger1 the value of property trigger1
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withTrigger1(Trigger trigger1) {
 		this.trigger1 = trigger1;
@@ -666,6 +690,7 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code env}.
 	 *
 	 * @param env the value of property env
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withEnv(Map<String, Object> env) {
 		this.env = env;
@@ -676,12 +701,19 @@ public class Invitation  extends EntityBase {
 	 * Set the value of property {@code meta}.
 	 *
 	 * @param meta the value of property meta
+	 * @return this {@code Invitation}
 	 */
 	public Invitation withMeta(Map<String, Object> meta) {
 		this.meta = meta;
 		return this;
 	}
 
+	/**
+	 * Set the value of property {@code invitees}.
+	 *
+	 * @param invitees the value of property invitees
+	 * @return this {@code Invitation}
+	 */
 	public Invitation withInvitees(Invitee... invitees) {
 		if (invitees!=null) {
 			if (this.invitees==null) {
@@ -695,12 +727,24 @@ public class Invitation  extends EntityBase {
 		}
 		return this;
 	}
-
+	
+	/**
+	 * Set the value of property {@code groups}.
+	 *
+	 * @param groups the value of property groups
+	 * @return this {@code Invitation}
+	 */
 	public Invitation withGroups(List<Group> groups) {
 		this.groups = groups;
 		return this;
 	}
 
+	/**
+	 * Set the value of property {@code groups}.
+	 *
+	 * @param groups the value of property groups
+	 * @return this {@code Invitation}
+	 */
 	public Invitation withGroups(Group... groups) {
 		if (groups!=null) {
 			if (this.groups==null) {

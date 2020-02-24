@@ -19,10 +19,10 @@ public interface UserManager {
 	/**
 	 * Get {@code User} with specified identifier.
 	 * 
-	 * Identifier {@code id} can be the value of properties that have unique constraints, that is:
+	 * Identifier {@code id} is the value of property with unique constraints, that is:
 	 * UUID, username, email.
 	 * 
-	 * @param id the indentifier
+	 * @param id the identifier
 	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code User} if found, null otherwise.
 	 */
@@ -31,11 +31,11 @@ public interface UserManager {
 	/**
 	 * Get {@code User} with specified identifier.
 	 * 
-	 * Identifier {@code id} can be the value of properties that have unique constraints, that is:
+	 * Identifier {@code id} is the value of property with unique constraints, that is:
 	 * UUID, username, email.
 	 * 
 	 * @param id the identifier
-	 * @param options (optional) the {@code UserOptions} that tailor which field set or projection to return.
+	 * @param options (optional) the {@code UserOptions} that tailor which fields are returned (projection)
 	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code User} if found, null otherwise.
 	 */

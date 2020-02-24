@@ -828,10 +828,15 @@ public class User extends EntityBase {
 		this.roles = roles;
 	}
 
+	//
+	// With
+	//
+	
 	/**
 	 * Set the value of property {@code username}.
 	 *
 	 * @param username the value of property username
+	 * @return this {@code User}
 	 */
 	public User withUsername(String username) {
 		this.username = username;
@@ -842,6 +847,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code email}.
 	 *
 	 * @param email the value of property email
+	 * @return this {@code User}
 	 */
 	public User withEmail(String email) {
 		this.email = email;
@@ -852,6 +858,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code email2}.
 	 *
 	 * @param email2 the value of property email2
+	 * @return this {@code User}
 	 */
 	public User withEmail2(String email2) {
 		this.email2 = email2;
@@ -862,6 +869,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code email3}.
 	 *
 	 * @param email3 the value of property email3
+	 * @return this {@code User}
 	 */
 	public User withEmail3(String email3) {
 		this.email3 = email3;
@@ -872,6 +880,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code firstName}.
 	 *
 	 * @param firstName the value of property firstName
+	 * @return this {@code User}
 	 */
 	public User withFirstName(String firstName) {
 		this.firstName = firstName;
@@ -882,6 +891,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code lastName}.
 	 *
 	 * @param lastName the value of property lastName
+	 * @return this {@code User}
 	 */
 	public User withLastName(String lastName) {
 		this.lastName = lastName;
@@ -892,6 +902,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code title}.
 	 *
 	 * @param title the value of property title
+	 * @return this {@code User}
 	 */
 	public User withTitle(String title) {
 		this.title = title;
@@ -902,6 +913,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code gender}.
 	 *
 	 * @param gender the value of property gender
+	 * @return this {@code User}
 	 */
 	public User withGender(GenderType gender) {
 		this.gender = gender;
@@ -912,6 +924,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code birthdate}.
 	 *
 	 * @param birthdate the value of property birthdate
+	 * @return this {@code User}
 	 */
 	public User withBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
@@ -922,6 +935,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code mobilePhone}.
 	 *
 	 * @param mobilePhone the value of property mobilePhone
+	 * @return this {@code User}
 	 */
 	public User withMobilePhone(Phone mobilePhone) {
 		this.mobilePhone = mobilePhone;
@@ -932,6 +946,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code phone}.
 	 *
 	 * @param phone the value of property phone
+	 * @return this {@code User}
 	 */
 	public User withPhone(Phone phone) {
 		this.phone = phone;
@@ -942,6 +957,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code phone2}.
 	 *
 	 * @param phone2 the value of property phone2
+	 * @return this {@code User}
 	 */
 	public User withPhone2(Phone phone2) {
 		this.phone2 = phone2;
@@ -952,6 +968,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code middleName}.
 	 *
 	 * @param middleName the value of property middleName
+	 * @return this {@code User}
 	 */
 	public User withMiddleName(String middleName) {
 		this.middleName = middleName;
@@ -962,6 +979,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code nickname}.
 	 *
 	 * @param nickname the value of property nickname
+	 * @return this {@code User}
 	 */
 	public User withNickname(String nickname) {
 		this.nickname = nickname;
@@ -972,6 +990,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code timezone}.
 	 *
 	 * @param timezone the value of property timezone
+	 * @return this {@code User}
 	 */
 	public User withTimezone(String timezone) {
 		this.timezone = timezone;
@@ -982,6 +1001,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code locale}.
 	 *
 	 * @param locale the value of property locale
+	 * @return this {@code User}
 	 */
 	public User withLocale(String locale) {
 		this.locale = locale;
@@ -992,6 +1012,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code avatar}.
 	 *
 	 * @param avatar the value of property avatar
+	 * @return this {@code User}
 	 */
 	public User withAvatar(String avatar) {
 		this.avatar = avatar;
@@ -1002,6 +1023,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code idhash}.
 	 *
 	 * @param idhash the value of property idhash
+	 * @return this {@code User}
 	 */
 	public User withIdhash(String idhash) {
 		this.idhash = idhash;
@@ -1012,6 +1034,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code idicon}.
 	 *
 	 * @param idicon the value of property idicon
+	 * @return this {@code User}
 	 */
 	public User withIdicon(String idicon) {
 		this.idicon = idicon;
@@ -1022,6 +1045,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code cover}.
 	 *
 	 * @param cover the value of property cover
+	 * @return this {@code User}
 	 */
 	public User withCover(String cover) {
 		this.cover = cover;
@@ -1032,6 +1056,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code cover2}.
 	 *
 	 * @param cover2 the value of property cover2
+	 * @return this {@code User}
 	 */
 	public User withCover2(String cover2) {
 		this.cover2 = cover2;
@@ -1042,6 +1067,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code signature}.
 	 *
 	 * @param signature the value of property signature
+	 * @return this {@code User}
 	 */
 	public User withSignature(String signature) {
 		this.signature = signature;
@@ -1052,6 +1078,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code website}.
 	 *
 	 * @param website the value of property website
+	 * @return this {@code User}
 	 */
 	public User withWebsite(String website) {
 		this.website = website;
@@ -1062,6 +1089,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code social}.
 	 *
 	 * @param social the value of property social
+	 * @return this {@code User}
 	 */
 	public User withSocial(String social) {
 		this.social = social;
@@ -1072,6 +1100,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code social2}.
 	 *
 	 * @param social2 the value of property social2
+	 * @return this {@code User}
 	 */
 	public User withSocial2(String social2) {
 		this.social2 = social2;
@@ -1082,6 +1111,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code status}.
 	 *
 	 * @param status the value of property status
+	 * @return this {@code User}
 	 */
 	public User withStatus(UserStatus status) {
 		this.status = status;
@@ -1092,6 +1122,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code enabled}.
 	 *
 	 * @param enabled the value of property enabled
+	 * @return this {@code User}
 	 */
 	public User withEnabled(Boolean enabled) {
 		this.enabled = enabled;
@@ -1102,6 +1133,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code currentGroup}.
 	 *
 	 * @param currentGroup the value of property currentGroup
+	 * @return this {@code User}
 	 */
 	public User withCurrentGroup(String currentGroup) {
 		this.currentGroup = currentGroup;
@@ -1112,6 +1144,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code profileGroup}.
 	 *
 	 * @param profileGroup the value of property profileGroup
+	 * @return this {@code User}
 	 */
 	public User withProfileGroup(String profileGroup) {
 		this.profileGroup = profileGroup;
@@ -1122,6 +1155,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code authenticated}.
 	 *
 	 * @param authenticated the value of property authenticated
+	 * @return this {@code User}
 	 */
 	public User withAuthenticated(Boolean authenticated) {
 		this.authenticated = authenticated;
@@ -1132,6 +1166,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code onboarding}.
 	 *
 	 * @param onboarding the value of property onboarding
+	 * @return this {@code User}
 	 */
 	public User withOnboarding(Integer onboarding) {
 		this.onboarding = onboarding;
@@ -1142,6 +1177,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code address}.
 	 *
 	 * @param address the value of property address
+	 * @return this {@code User}
 	 */
 	public User withAddress(Address address) {
 		this.address = address;
@@ -1152,6 +1188,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code description}.
 	 *
 	 * @param description the value of property description
+	 * @return this {@code User}
 	 */
 	public User withDescription(String description) {
 		this.description = description;
@@ -1162,6 +1199,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code password}.
 	 *
 	 * @param password the value of property password
+	 * @return this {@code User}
 	 */
 	public User withPassword(byte[] password) {
 		this.password = password;
@@ -1172,6 +1210,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code securityQuestion}.
 	 *
 	 * @param securityQuestion the value of property securityQuestion
+	 * @return this {@code User}
 	 */
 	public User withSecurityQuestion(String securityQuestion) {
 		this.securityQuestion = securityQuestion;
@@ -1182,6 +1221,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code securityAnswer}.
 	 *
 	 * @param securityAnswer the value of property securityAnswer
+	 * @return this {@code User}
 	 */
 	public User withSecurityAnswer(String securityAnswer) {
 		this.securityAnswer = securityAnswer;
@@ -1192,6 +1232,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code profile}.
 	 *
 	 * @param profile the value of property profile
+	 * @return this {@code User}
 	 */
 	public User withProfile(Map<String, Object> profile) {
 		this.profile = profile;
@@ -1202,6 +1243,7 @@ public class User extends EntityBase {
 	 * Set the value of property {@code membership}.
 	 *
 	 * @param membership the value of property membership
+	 * @return this {@code User}
 	 */
 	public User withMembership(List<Member> membership) {
 		this.membership = membership;
@@ -1212,12 +1254,17 @@ public class User extends EntityBase {
 	 * Set the value of property {@code roles}.
 	 *
 	 * @param roles the value of property roles
+	 * @return this {@code User}
 	 */
 	public User withRoles(List<Role> roles) {
 		this.roles = roles;
 		return this;
 	}
 
+	//
+	// util
+	//
+	
 	public Object getProfileAttribute(String name) {
 		if (profile!=null) {
 			return profile.get(name);
@@ -1436,6 +1483,10 @@ public class User extends EntityBase {
 				.append("membership", membership)
 				.append("roles", roles);
 	}
+	
+	//
+	// static util
+	//
 	
 	public static List<String> getUsernames(Iterable<User> users) {
 		List<String> usernames = new ArrayList<>();

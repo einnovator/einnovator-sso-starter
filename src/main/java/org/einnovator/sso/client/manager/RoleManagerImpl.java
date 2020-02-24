@@ -547,9 +547,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void removeFromRole(String userId, String roleId, SsoClientContext context) {
+	public void unassignRole(String userId, String roleId, SsoClientContext context) {
 		try {
-			client.removeFromRole(userId, roleId, context);
+			client.unassignRole(userId, roleId, context);
 			if (roleId == null) {
 				logger.error("removeFromRole: " + userId + " " + roleId);
 			}

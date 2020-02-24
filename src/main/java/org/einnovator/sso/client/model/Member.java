@@ -169,10 +169,15 @@ public class Member extends EntityBase {
 		this.roles = roles;
 	}
 
+	//
+	// With
+	//
+	
 	/**
 	 * Set the value of property {@code user}.
 	 *
 	 * @param user the value of property user
+	 * @return this {@code Member}
 	 */
 	public Member withUser(User user) {
 		this.user = user;
@@ -183,6 +188,7 @@ public class Member extends EntityBase {
 	 * Set the value of property {@code group}.
 	 *
 	 * @param group the value of property group
+	 * @return this {@code Member}
 	 */
 	public Member withGroup(Group group) {
 		this.group = group;
@@ -193,6 +199,7 @@ public class Member extends EntityBase {
 	 * Set the value of property {@code title}.
 	 *
 	 * @param title the value of property title
+	 * @return this {@code Member}
 	 */
 	public Member withTitle(String title) {
 		this.title = title;
@@ -204,6 +211,7 @@ public class Member extends EntityBase {
 	 * Set the value of property {@code startDate}.
 	 *
 	 * @param startDate the value of property startDate
+	 * @return this {@code Member}
 	 */
 	public Member withStartDate(Date startDate) {
 		this.startDate = startDate;
@@ -214,6 +222,7 @@ public class Member extends EntityBase {
 	 * Set the value of property {@code endDate}.
 	 *
 	 * @param endDate the value of property endDate
+	 * @return this {@code Member}
 	 */
 	public Member withEndDate(Date endDate) {
 		this.endDate = endDate;
@@ -224,6 +233,7 @@ public class Member extends EntityBase {
 	 * Set the value of property {@code enabled}.
 	 *
 	 * @param enabled the value of property enabled
+	 * @return this {@code Member}
 	 */
 	public Member withEnabled(Boolean enabled) {
 		this.enabled = enabled;
@@ -234,6 +244,7 @@ public class Member extends EntityBase {
 	 * Set the value of property {@code roles}.
 	 *
 	 * @param roles the value of property roles
+	 * @return this {@code Member}
 	 */
 	public Member withRoles(List<Role> roles) {
 		this.roles = roles;
@@ -253,6 +264,10 @@ public class Member extends EntityBase {
 				.append("roles", roles)
 				;
 	}
+	
+	//
+	// Static utils
+	//
 	
 	public static List<User> getUsers(List<Member> members) {
 		if (members==null) {

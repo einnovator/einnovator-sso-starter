@@ -612,6 +612,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code name}.
 	 *
 	 * @param name the value of property name
+	 * @return this {@code Group}
 	 */
 	public Group withName(String name) {
 		this.name = name;
@@ -622,6 +623,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code type}.
 	 *
 	 * @param type the value of property type
+	 * @return this {@code Group}
 	 */
 	public Group withType(GroupType type) {
 		this.type = type;
@@ -632,6 +634,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code email}.
 	 *
 	 * @param email the value of property email
+	 * @return this {@code Group}
 	 */
 	public Group withEmail(String email) {
 		this.email = email;
@@ -642,6 +645,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code email2}.
 	 *
 	 * @param email2 the value of property email2
+	 * @return this {@code Group}
 	 */
 	public Group withEmail2(String email2) {
 		this.email2 = email2;
@@ -652,6 +656,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code owner}.
 	 *
 	 * @param owner the value of property owner
+	 * @return this {@code Group}
 	 */
 	public Group withOwner(String owner) {
 		this.owner = owner;
@@ -662,6 +667,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code parentId}.
 	 *
 	 * @param parentId the value of property parentId
+	 * @return this {@code Group}
 	 */
 	public Group withParentId(String parentId) {
 		this.parentId = parentId;
@@ -672,6 +678,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code rootId}.
 	 *
 	 * @param rootId the value of property rootId
+	 * @return this {@code Group}
 	 */
 	public Group withRootId(String rootId) {
 		this.rootId = rootId;
@@ -682,6 +689,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code phone}.
 	 *
 	 * @param phone the value of property phone
+	 * @return this {@code Group}
 	 */
 	public Group withPhone(Phone phone) {
 		this.phone = phone;
@@ -692,6 +700,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code phone2}.
 	 *
 	 * @param phone2 the value of property phone2
+	 * @return this {@code Group}
 	 */
 	public Group withPhone2(Phone phone2) {
 		this.phone2 = phone2;
@@ -702,6 +711,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code fax}.
 	 *
 	 * @param fax the value of property fax
+	 * @return this {@code Group}
 	 */
 	public Group withFax(Phone fax) {
 		this.fax = fax;
@@ -712,6 +722,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code avatar}.
 	 *
 	 * @param avatar the value of property avatar
+	 * @return this {@code Group}
 	 */
 	public Group withAvatar(String avatar) {
 		this.avatar = avatar;
@@ -722,6 +733,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code cover}.
 	 *
 	 * @param cover the value of property cover
+	 * @return this {@code Group}
 	 */
 	public Group withCover(String cover) {
 		this.cover = cover;
@@ -732,6 +744,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code cover2}.
 	 *
 	 * @param cover2 the value of property cover2
+	 * @return this {@code Group}
 	 */
 	public Group withCover2(String cover2) {
 		this.cover2 = cover2;
@@ -742,6 +755,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code description}.
 	 *
 	 * @param description the value of property description
+	 * @return this {@code Group}
 	 */
 	public Group withDescription(String description) {
 		this.description = description;
@@ -752,6 +766,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code website}.
 	 *
 	 * @param website the value of property website
+	 * @return this {@code Group}
 	 */
 	public Group withWebsite(String website) {
 		this.website = website;
@@ -762,6 +777,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code social}.
 	 *
 	 * @param social the value of property social
+	 * @return this {@code Group}
 	 */
 	public Group withSocial(String social) {
 		this.social = social;
@@ -772,6 +788,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code social2}.
 	 *
 	 * @param social2 the value of property social2
+	 * @return this {@code Group}
 	 */
 	public Group withSocial2(String social2) {
 		this.social2 = social2;
@@ -782,6 +799,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code address}.
 	 *
 	 * @param address the value of property address
+	 * @return this {@code Group}
 	 */
 	public Group withAddress(Address address) {
 		this.address = address;
@@ -792,6 +810,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code memberCount}.
 	 *
 	 * @param memberCount the value of property memberCount
+	 * @return this {@code Group}
 	 */
 	public Group withMemberCount(Long memberCount) {
 		this.memberCount = memberCount;
@@ -802,6 +821,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code groups}.
 	 *
 	 * @param groups the value of property groups
+	 * @return this {@code Group}
 	 */
 	public Group withGroups(List<Group> groups) {
 		this.groups = groups;
@@ -812,6 +832,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code level}.
 	 *
 	 * @param level the value of property level
+	 * @return this {@code Group}
 	 */
 	public Group withLevel(Integer level) {
 		this.level = level;
@@ -822,6 +843,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code groupCount}.
 	 *
 	 * @param groupCount the value of property groupCount
+	 * @return this {@code Group}
 	 */
 	public Group withGroupCount(Integer groupCount) {
 		this.groupCount = groupCount;
@@ -832,6 +854,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code groupCount2}.
 	 *
 	 * @param groupCount2 the value of property groupCount2
+	 * @return this {@code Group}
 	 */
 	public Group withGroupCount2(Integer groupCount2) {
 		this.groupCount2 = groupCount2;
@@ -842,6 +865,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code subLevelCount}.
 	 *
 	 * @param subLevelCount the value of property subLevelCount
+	 * @return this {@code Group}
 	 */
 	public Group withSubLevelCount(Integer subLevelCount) {
 		this.subLevelCount = subLevelCount;
@@ -852,6 +876,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code authenticated}.
 	 *
 	 * @param authenticated the value of property authenticated
+	 * @return this {@code Group}
 	 */
 	public Group withAuthenticated(Boolean authenticated) {
 		this.authenticated = authenticated;
@@ -862,6 +887,7 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code onboarding}.
 	 *
 	 * @param onboarding the value of property onboarding
+	 * @return this {@code Group}
 	 */
 	public Group withOnboarding(Integer onboarding) {
 		this.onboarding = onboarding;
@@ -872,12 +898,17 @@ public class Group extends EntityBase {
 	 * Set the value of property {@code profile}.
 	 *
 	 * @param profile the value of property profile
+	 * @return this {@code Group}
 	 */
 	public Group withProfile(Map<String, Object> profile) {
 		this.profile = profile;
 		return this;
 	}
 
+	//
+	// Tree
+	//
+	
 	public void addGroup(Group group) {
 		if (this.groups == null) {
 			this.groups = new ArrayList<>();
@@ -924,6 +955,10 @@ public class Group extends EntityBase {
 				;
 	}
 
+	//
+	// Tree static utils
+	//
+	
 	public static Group find(String id, List<? extends Group> groups) {
 		return find(id, groups, false);
 	}

@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.modelx.InvitationFilter;
+import org.einnovator.sso.client.modelx.InvitationOptions;
 import org.einnovator.sso.client.model.InvitationStats;
 
 public class InvitationManagerImpl implements InvitationManager {
@@ -58,12 +60,12 @@ public class InvitationManagerImpl implements InvitationManager {
 
 
 	@Override
-	public Invitation getInvitation(String id, SsoClientContext context) {
+	public Invitation getInvitation(String id, InvitationOptions options, SsoClientContext context) {
 		if (id == null) {
 			return null;
 		}
 		try {
-			Invitation invitation = client.getInvitation(id, context);
+			Invitation invitation = client.getInvitation(id, options, context);
 			if (invitation == null) {
 				logger.error("getInvitation: " + invitation);
 			}
@@ -156,6 +158,18 @@ public class InvitationManagerImpl implements InvitationManager {
 		} catch (RuntimeException e) {
 			logger.error("updateInvitation: " + e + "  " + invitation);
 			return null;
+		}
+	}
+
+	@Override
+	@CacheEvict(value=CACHE_INVITATION, key="#id")
+	public boolean deleteInvitation(String id, SsoClientContext context) {
+		try {
+			client.deleteInvitation(id, context);
+			return true;
+		} catch (RuntimeException e) {
+			logger.error("deleteInvitation:" + e);
+			return false;
 		}
 	}
 

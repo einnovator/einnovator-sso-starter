@@ -149,11 +149,15 @@ public class Request extends EntityBase {
 		this.initiator = initiator;
 	}
 
+	//
+	// With
+	//
 
 	/**
 	 * Set the value of property {@code type}.
 	 *
 	 * @param type the value of property type
+	 * @return this {@code Request}
 	 */
 	public Request withType(RequestType type) {
 		this.type = type;
@@ -164,6 +168,7 @@ public class Request extends EntityBase {
 	 * Set the value of property {@code status}.
 	 *
 	 * @param status the value of property status
+	 * @return this {@code Request}
 	 */
 	public Request withStatus(RequestStatus status) {
 		this.status = status;
@@ -174,6 +179,7 @@ public class Request extends EntityBase {
 	 * Set the value of property {@code user}.
 	 *
 	 * @param user the value of property user
+	 * @return this {@code Request}
 	 */
 	public Request withUser(User user) {
 		this.user = user;
@@ -184,6 +190,7 @@ public class Request extends EntityBase {
 	 * Set the value of property {@code group}.
 	 *
 	 * @param group the value of property group
+	 * @return this {@code Request}
 	 */
 	public Request withGroup(Group group) {
 		this.group = group;
@@ -194,6 +201,7 @@ public class Request extends EntityBase {
 	 * Set the value of property {@code roles}.
 	 *
 	 * @param roles the value of property roles
+	 * @return this {@code Request}
 	 */
 	public Request withRoles(List<Role> roles) {
 		this.roles = roles;
@@ -204,6 +212,7 @@ public class Request extends EntityBase {
 	 * Set the value of property {@code initiator}.
 	 *
 	 * @param initiator the value of property initiator
+	 * @return this {@code Request}
 	 */
 	public Request withInitiator(User initiator) {
 		this.initiator = initiator;

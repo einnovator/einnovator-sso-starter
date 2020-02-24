@@ -120,24 +120,11 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 		}
 	}
 
-	@Override
-	public Page<Group> listGroups(Pageable pageable, SsoClientContext context) {
-		try {
-			Page<Group> groups = client.listGroups(pageable, context);
-			if (groups == null) {
-				logger.error("listGroups: " + pageable);
-			}
-			return groups;
-		} catch (RuntimeException e) {
-			logger.error("getGroup: " + pageable + "  " + e);
-			return null;
-		}
-	}
 
 	@Override
 	public Page<Group> listGroups(GroupFilter filter, Pageable pageable, SsoClientContext context) {
 		try {
-			Page<Group> groups = client.listGroups(pageable, filter, context);
+			Page<Group> groups = client.listGroups(filter, pageable, context);
 			if (groups == null) {
 				logger.error("listGroups: " + pageable);
 			}
@@ -202,16 +189,36 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 
 	@Override
-	public void addMember(String userId, String groupId, SsoClientContext context) {
+	public URI addMember(String userId, String groupId, SsoClientContext context) {
 		try {
 			if (groupId == null) {
-				logger.error("addToGroup: " + userId + " " + groupId);
+				logger.error("addToGroup: " + userId);
 			}
-			client.addToGroup(userId, groupId, context);
+			URI uri = client.addMemberToGroup(userId, groupId, context);
 			evictCaches(groupId);
 			userManager.evictCaches(userId);
+			return uri;
 		} catch (RuntimeException e) {
 			logger.error("addToGroup: " + userId + " " + groupId);
+			return null;
+		}
+	}
+	
+	@Override
+	public URI addMember(Member member, String groupId, SsoClientContext context) {
+		try {
+			if (groupId == null) {
+				logger.error("addToGroup: " + member);
+			}
+			URI uri = client.addMemberToGroup(member, groupId, context);
+			evictCaches(groupId);
+			if (member.getUser()!=null && member.getUser().getUuid()!=null) {
+				userManager.evictCaches(member.getUser().getUuid());				
+			}
+			return uri;
+		} catch (RuntimeException e) {
+			logger.error("addToGroup: " + member + " " + groupId);
+			return null;
 		}
 	}
 
@@ -223,7 +230,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 			return;
 		}
 		try {
-			client.removeFromGroup(userId, groupId, context);
+			client.removeMemberFromGroup(userId, groupId, context);
 			evictCaches(groupId);
 			userManager.evictCaches(userId);
 		} catch (RuntimeException e) {
