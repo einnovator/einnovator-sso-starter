@@ -3,10 +3,8 @@ package org.einnovator.sso.client.manager;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 import org.einnovator.sso.client.config.SsoClientContext;
-import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.RoleFilter;
@@ -54,29 +52,6 @@ public interface RoleManager {
 	boolean hasAnyRoleInGroup(Principal principal, String groupId, String... roles);
 
 	boolean hasAnyRoleInGroup(String groupId, String... roles);
-
-	boolean hasAnyPermissionUser(String username, SsoClientContext context, String... perms);
-
-	boolean hasAnyPermissionUserInGroup(String username, String groupId, SsoClientContext context, String... perms);
-	boolean hasAnyPermissionUserInAnyGroup(String username, List<String> groupId, SsoClientContext context, String... perms);
-
-	boolean hasAnyPermission(Principal principal, String... perms);
-
-	boolean hasAnyPermission(String... perms);
-
-	boolean hasAnyPermissionInGroup(Principal principal, String groupId, String... perms);
-	boolean hasAnyPermissionInAnyGroup(Principal principal, List<String> groupId, String... perms);
-
-	boolean hasAnyPermissionInGroup(String groupId, String... perms);
-	boolean hasAnyPermissionInAnyGroup(List<String> groupId, String... perms);
-
-	List<Permission> getPermissionsUserInGroup(String userId, String groupId, SsoClientContext context);
-
-	Map<String, Boolean> getPermissionMapUserInGroup(String userId, String groupId, SsoClientContext context);
-
-	String makeRoleName(String role, String groupId);
-
-	String makePermissionName(String perm, String groupId);
 
 	boolean isMember(String username, SsoClientContext context, String... groups);
 

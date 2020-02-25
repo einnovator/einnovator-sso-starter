@@ -13,7 +13,6 @@ import org.springframework.cache.Cache;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.client.RestClientException;
 
 public interface GroupManager {
 

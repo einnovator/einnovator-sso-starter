@@ -5,17 +5,13 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientContext;
-import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.RoleFilter;
@@ -33,7 +29,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 
 public class RoleManagerImpl extends ManagerBase implements RoleManager {
@@ -41,14 +36,11 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	public static final String CACHE_ROLE = "Role";
 	public static final String CACHE_GROUP_ROLES = "GroupRoles";
 
-	public static final String ROLE_PREFIX = "ROLE_";
 
 	public static final String ATTRIBUTE_ROLES = "ROLES";
 
 	public static final String ROLE_CLIENT = "ROLE_CLIENT";
-
 	public static final String ROLE_USER = "ROLE_USER";
-
 	private static final String ROLE_ADMIN = "admin";
 
 	private static final String ROLE_SUPERUSER = "superuser";
@@ -99,47 +91,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	@Override
 	public boolean hasAnyRole(Principal principal, String... roles) {
-		for (String role : roles) {
-			if (hasAnyRoleInternal(principal, role)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean hasAnyRoleInternal(Principal principal, String role) {
 		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
-		if (authorities != null) {
-			for (GrantedAuthority authority : authorities) {
-				if (roleEquals(role, authority.getAuthority())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private boolean roleEquals(String role0, String role1) {
-		if (role0 == null || role1 == null) {
-			return false;
-		}
-		if (role0.equalsIgnoreCase(role1)) {
-			return true;
-		}
-		if (role0.startsWith(ROLE_PREFIX)) {
-			if (!role1.startsWith(ROLE_PREFIX)) {
-				if (role0.substring(ROLE_PREFIX.length()).equalsIgnoreCase(role1)) {
-					return true;
-				}
-			}
-		} else {
-			if (role1.startsWith(ROLE_PREFIX)) {
-				if (role1.substring(ROLE_PREFIX.length()).equalsIgnoreCase(role0)) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return Role.hasAnyRole(authorities, roles);
 	}
 
 	@Override
@@ -149,132 +102,13 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	@Override
 	public boolean hasAnyRoleInGroup(Principal principal, String groupId, String... roles) {
-		for (String role : roles) {
-			if (hasAnyRole(principal, makeRoleName(role, groupId))) {
-				return true;
-			}
-		}
-		return false;
+		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
+		return Role.hasAnyRoleInGroup(authorities, groupId, roles);
 	}
 
 	@Override
 	public boolean hasAnyRoleInGroup(String groupId, String... roles) {
 		return hasAnyRoleInGroup(SecurityUtil.getPrincipal(), groupId, roles);
-	}
-
-	//
-	@Override
-	public boolean hasAnyPermission(Principal principal, String... perms) {
-		for (String perm : perms) {
-			if (hasAnyPermissionInternal(principal, perm)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	
-
-	@Override
-	public boolean hasAnyPermissionInGroup(Principal principal, String groupId, String... perms) {
-		for (String perm : perms) {
-			if (hasAnyPermissionInternal(principal, makePermissionName(perm, groupId))) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean hasAnyPermission(String... perms) {
-		return hasAnyPermission(SecurityUtil.getPrincipal(), perms);
-	}
-
-	private boolean hasAnyPermissionInternal(Principal principal, String perm) {
-		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
-		if (authorities == null) {
-			authorities = SecurityUtil.getAuthorities();
-		}
-		if (authorities != null) {
-			authorities = addPermissions(authorities);
-			for (GrantedAuthority authority : authorities) {
-				if (perm.equals(authority.getAuthority())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean hasAnyPermissionUserInGroup(String userId, String groupId, SsoClientContext context, String... perms) {
-		List<Role> roles = listRolesForUserInGroup(userId, groupId, context);
-		if (roles != null) {
-			for (Role role : roles) {
-				for (String perm : perms) {
-					if (role.findPermission(perm) != null) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.einnovator.sso.client.manager.RoleManager#hasAnyPermissionInGroup(java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public boolean hasAnyPermissionInGroup(String groupId, String... perms) {
-		return hasAnyPermissionInGroup(SecurityUtil.getPrincipal(), groupId, perms);
-	}
-
-	
-	@Override
-	public List<Permission> getPermissionsUserInGroup(String userId, String groupId, SsoClientContext context) {
-		List<Role> roles = listRolesForUserInGroup(userId, groupId, context);
-		List<Permission> perms = new ArrayList<>();
-		if (roles != null) {
-			for (Role role : roles) {
-				if (role.getPermissions() != null) {
-					for (Permission perm : role.getPermissions()) {
-						if (Permission.find(perm.getKey(), perms) == null) {
-							perms.add(perm);
-						}
-					}
-				}
-			}
-		}
-		return perms;
-	}
-
-	@Override
-	public Map<String, Boolean> getPermissionMapUserInGroup(String userId, String groupId, SsoClientContext context) {
-		List<Permission> perms = getPermissionsUserInGroup(userId, groupId, context);
-		if (perms == null) {
-			return null;
-		}
-		Map<String, Boolean> map = new LinkedHashMap<>();
-		for (Permission perm : perms) {
-			map.put(perm.getKey(), true);
-		}
-		return map;
-	}
-
-	@Override
-	public boolean hasAnyPermissionUser(String userId, SsoClientContext context, String... perms) {
-		List<Role> roles = listRolesForUser(userId, context);
-		if (roles != null) {
-			for (Role role : roles) {
-				for (String perm : perms) {
-					if (role.findPermission(perm) != null) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-
 	}
 
 	@Override
@@ -318,25 +152,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	}
 
-	@Override
-	public String makeRoleName(String role, String groupId) {
-		if (!StringUtils.isEmpty(groupId)) {
-			return role + "@" + groupId;
-		}
-		return role;
-	}
 
-	public String makeRoleName(Role role) {
-		return makeRoleName(role.getName(), role.getGroup()!=null ? role.getGroup().getUuid() : null);
-	}
-
-	@Override
-	public String makePermissionName(String permission, String groupId) {
-		if (!StringUtils.isEmpty(groupId)) {
-			return permission + "@" + groupId;
-		}
-		return permission;
-	}
 
 	@Override
 	public boolean isAdmin(Principal principal) {
@@ -417,9 +233,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 			return false;
 		}
 		for (String role : roles) {
-			role = makeRoleName(role, groupId);
+			role = Role.makeRoleName(role, groupId);
 			for (Role role2 : roles2) {
-				if (role.equalsIgnoreCase(makeRoleName(role2))) {
+				if (role.equalsIgnoreCase(role2.getFullName())) {
 					return true;
 				}
 			}
@@ -559,23 +375,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyPermissionInAnyGroup(Principal principal, List<String> groupIds, String... perms) {
-		for (String groupId: groupIds) {
-			if (hasAnyPermissionInGroup(principal, groupId, perms)) {
-				return true;
-			}
-		}
-		return false;
-
-	}
-
-	@Override
-	public boolean hasAnyPermissionInAnyGroup(List<String> groupId, String... perms) {
-		return hasAnyPermissionInAnyGroup((Principal)null, groupId, perms);
-	}
-
-
-	@Override
 	public List<Role> listGlobalRoles(SsoClientContext context) {
 		return listRolesForGroup(null, context);
 	}
@@ -601,24 +400,13 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 			return page.getContent();
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode() != HttpStatus.NOT_FOUND) {
-				logger.error("listRolesForGroup:" + groupId + "  " + e);
+				logger.error(String.format("listRolesForGroup: %s %s", groupId, e));
 			}
 			return null;
 		} catch (RuntimeException e) {
-			logger.error("listRolesForGroup: " + groupId + "  " + e);
+			logger.error(String.format("listRolesForGroup: %s %s", groupId, e));
 			return null;
 		}
-	}
-
-
-	@Override
-	public boolean hasAnyPermissionUserInAnyGroup(String username, List<String> groupIds, SsoClientContext context, String... perms) {
-		for (String groupId : groupIds) {
-			if (hasAnyPermissionUserInGroup(username, groupId, context, perms)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public Cache getRoleCache() {
@@ -631,27 +419,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 		return cache;
 	}
 
-	public final Collection<GrantedAuthority> addPermissions(Collection<? extends GrantedAuthority> authorities) {
-		if (authorities == null) {
-			return null;
-		}
-		Collection<GrantedAuthority> authorities2 = new LinkedHashSet<>();
-		for (GrantedAuthority authority : authorities) {
-			authorities2.add(authority);
-			if (Role.isRole(authority)) {
-				String roleId = Role.getRoleName(authority);
-				String groupId = Role.getGroup(authority);
-				List<Role> roles = groupId != null ? listRolesForGroup(groupId, null) : listGlobalRoles(null);
-				Role role = Role.findRole(roleId, roles);
-				if (role != null && role.getPermissions() != null) {
-					for (Permission perm : role.getPermissions()) {
-						authorities2.add(Role.makeGrantedAuthority(perm, role.getGroup()));
-					}
-				}
-			}
-		}
-		return authorities2;
-	}
 
 	@EventListener
 	public void onEvent(ApplicationEvent event) {
@@ -660,7 +427,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 		}
 		if (event instanceof PayloadApplicationEvent) {
 			Role role = getNotificationSource(((PayloadApplicationEvent<?>) event).getPayload(), Role.class);
-			logger.debug("onEvent:" + role + " " + ((PayloadApplicationEvent<?>) event).getPayload());
+			if (logger.isDebugEnabled()) {
+				logger.debug(String.format("onEvent: %s %s", role, ((PayloadApplicationEvent<?>) event).getPayload()));
+			}
 			if (role != null) {
 				updateCaches(role);
 			}
@@ -674,9 +443,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 			Role role2 = getCacheValue(Role.class, cache, role.getUuid());
 			if (role2 != null) {
 				MappingUtils.updateObjectFrom(role2, role);
-				if (role.getPermissions() != null) {
-					role2.setPermissions(role.getPermissions());
-				}
 			} else {
 				//putCacheValue(role.getUuid(), cache, role);
 			}
@@ -692,9 +458,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 					Role role2 = Role.findRole(role.getUuid(), roles);
 					if (role2 != null) {
 						MappingUtils.updateObjectFrom(role2, role);
-						if (role.getPermissions() != null) {
-							role2.setPermissions(role.getPermissions());
-						}
 					}
 				}
 			}

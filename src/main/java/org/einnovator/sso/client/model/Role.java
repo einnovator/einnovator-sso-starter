@@ -1,7 +1,7 @@
 package org.einnovator.sso.client.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.einnovator.util.model.EntityBase;
@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -18,8 +19,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Role extends EntityBase {	
 
+	public static final String ROLE_PREFIX = "ROLE_";
+
 	private String name;
 
+	private String displayName;
+	
 	private RoleType type;
 
 	private String description;
@@ -31,8 +36,6 @@ public class Role extends EntityBase {
 	private String app;
 
 	private Boolean global;
-	
-	private List<Permission> permissions;
 	
 	private Group group;
 
@@ -71,6 +74,24 @@ public class Role extends EntityBase {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Get the value of property {@code displayName}.
+	 *
+	 * @return the displayName
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	/**
+	 * Set the value of property {@code displayName}.
+	 *
+	 * @param displayName the value of property displayName
+	 */
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	/**
@@ -182,24 +203,6 @@ public class Role extends EntityBase {
 	}
 
 	/**
-	 * Get the value of property {@code permissions}.
-	 *
-	 * @return the permissions
-	 */
-	public List<Permission> getPermissions() {
-		return permissions;
-	}
-
-	/**
-	 * Set the value of property {@code permissions}.
-	 *
-	 * @param permissions the value of property permissions
-	 */
-	public void setPermissions(List<Permission> permissions) {
-		this.permissions = permissions;
-	}
-
-	/**
 	 * Get the value of property {@code group}.
 	 *
 	 * @return the group
@@ -298,16 +301,6 @@ public class Role extends EntityBase {
 		return this;
 	}
 
-	/**
-	 * Set the value of property {@code permissions}.
-	 *
-	 * @param permissions the value of property permissions
-	 * @return this {@code Role}
-	 */
-	public Role withPermissions(List<Permission> permissions) {
-		this.permissions = permissions;
-		return this;
-	}
 
 	/**
 	 * Set the value of property {@code group}.
@@ -320,37 +313,31 @@ public class Role extends EntityBase {
 		return this;
 	}
 	
-	public Role withPermissions(Permission... permissions) {
-		if (this.permissions==null) {
-			this.permissions = new ArrayList<>();
+	//
+	// util
+	//
+	
+	@JsonIgnore
+	public String getFullName() {
+		if (group!=null && group.getUuid()!=null) {
+			return makeRoleName(name, group.getUuid());
 		}
-		this.permissions.addAll(Arrays.asList(permissions));
-		return this;
+		return name;
 	}
-
-	public Permission findPermission(String id) {
-		if (permissions!=null) {
-			for (Permission perm: permissions) {
-				if (id.equals(perm.getUuid()) || id.equals((perm.getKey()))) {
-					return perm;
-				}
-			}
-		}
-		return null;
-	}
-		
+	
+	
 	@Override
 	public ToStringCreator toString1(ToStringCreator creator) {
 		return super.toString1(creator)
 				.append("name", name)
+				.append("displayName", displayName)
+				.append("type", type)
 				.append("builtin", builtin)
 				.append("app", app)
 				.append("global", global)
 				.append("userCount", userCount)
 				.append("group", group)
-				.append("description", description)
-				.append("permissions", permissions);
-
+				.append("description", description);
 	}
 	
 	//
@@ -379,14 +366,6 @@ public class Role extends EntityBase {
 		return new SimpleGrantedAuthority(name);
 	}
 
-	public static GrantedAuthority makeGrantedAuthority(Permission perm, Group group) {
-		String name = perm.getKey();
-		name = name.replace(' ', '_');
-		if (group != null) {
-			name += "@" + group.getUuid();
-		}
-		return new SimpleGrantedAuthority(name);
-	}
 
 	public static String getRoleName(GrantedAuthority authority) {
 		if (isRole(authority)) {
@@ -403,11 +382,6 @@ public class Role extends EntityBase {
 	public static String getGroup(GrantedAuthority authority) {
 		int i = authority.getAuthority().indexOf("@");
 		return i > 0 && i < authority.getAuthority().length() - 1 ? authority.getAuthority().substring(i + 1) : null;
-	}
-
-	public static List<Permission> getPermissionForRole(String roleId, List<Role> roles) {
-		Role role = findRole(roleId, roles);
-		return role != null ? role.permissions : null;
 	}
 
 	public static Role findRole(String roleId, List<Role> roles) {
@@ -436,13 +410,22 @@ public class Role extends EntityBase {
 
 	public static String makeRoleName(String role, String groupId) {
 		if (!StringUtils.isEmpty(groupId)) {
-			if (!role.startsWith("ROLE_")) {
-				role = "ROLE_" + role;
-			}
+			role = normalize(role);
 			return role + "@" + groupId;
 		}
 		return role;
 	}
+
+	public static String normalize(String role) {
+		if (role!=null) {
+			role = role.trim();
+			if (!role.startsWith("ROLE_")) {
+				role = "ROLE_" + role;				 
+			}
+		}
+		return role;
+	}
+
 
 	public static String makePermissionName(String permission, String groupId) {
 		if (!StringUtils.isEmpty(groupId)) {
@@ -468,4 +451,65 @@ public class Role extends EntityBase {
 		}
 		return bindings;
 	}
+	
+	public static boolean hasAnyRole(Collection<? extends GrantedAuthority> authorities, String... roles) {
+		if (roles!=null) {
+			for (String role: roles) {
+				if (hasRole(role, authorities)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean hasRole(String role, Collection<? extends GrantedAuthority> authorities) {
+		if (authorities != null) {
+			for (GrantedAuthority authority : authorities) {
+				if (equals(role, authority.getAuthority())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean hasAnyRoleInGroup(Collection<? extends GrantedAuthority> authorities, String groupId, String... roles) {
+		for (String role : roles) {
+			if (hasRole(makeRoleName(role, groupId), authorities)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean hasRoleInGroup(String role, String groupId, Collection<? extends GrantedAuthority> authorities) {
+		role = makeRoleName(role, groupId);
+		return hasRole(role, authorities);
+	}
+	
+	public static boolean equals(String role0, String role1) {
+		if (role0 == null || role1 == null) {
+			return false;
+		}
+		if (role0.equalsIgnoreCase(role1)) {
+			return true;
+		}
+		if (role0.startsWith(ROLE_PREFIX)) {
+			if (!role1.startsWith(ROLE_PREFIX)) {
+				if (role0.substring(ROLE_PREFIX.length()).equalsIgnoreCase(role1)) {
+					return true;
+				}
+			}
+		} else {
+			if (role1.startsWith(ROLE_PREFIX)) {
+				if (role1.substring(ROLE_PREFIX.length()).equalsIgnoreCase(role0)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+
 }

@@ -25,7 +25,6 @@ import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.model.Member;
-import org.einnovator.sso.client.model.Permission;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.SsoRegistration;
 import org.einnovator.sso.client.model.User;
@@ -1313,67 +1312,6 @@ public class SsoClient {
 	public List<Role> listRolesForUserInGroup(String userId, String groupId, SsoClientContext context) {
 		Page<Role> page = listRolesForUserInGroup(userId, groupId, (Pageable)null, context);
 		return page!=null ? page.getContent() : null;
-	}
-
-	//
-	// Permissions (deprecated)
-	//
-	
-	public URI createPermission(Permission permission, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.permissions(config));
-		RequestEntity<Permission> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(permission);
-		
-		ResponseEntity<Permission> result = exchange(request, Permission.class, context);
-		return result.getHeaders().getLocation();
-	}
-	
-	public Permission getPermission(String id, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.permission(id, config));
-		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Permission> result = exchange(request, Permission.class, context);
-		return result.getBody();
-	}
-
-	
-	public Page<Permission> listPermissions(Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.permissions(config));
-		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
-		return PageUtil.create2(result.getBody(),  Permission.class);
-	}
-	
-	public void deletePermission(String id, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.permission(id, config));
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
-		
-		exchange(request, Void.class, context);
-	}
-
-	public Page<User> listPermissionMembers(String permissionId, Pageable pageable, UserFilter filter, SsoClientContext context) {
-		return listPermissionMembers(permissionId, null, pageable, filter, context);
-	}
-
-	public Page<User> listPermissionMembers(String permissionId, String groupId, Pageable pageable, UserFilter filter, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.permissionMembers(permissionId, config));
-		if (filter != null || pageable != null || groupId!=null) {
-
-			Map<String, String> params = new LinkedHashMap<>();
-			if (filter != null) {
-				params.putAll(MappingUtils.toMapFormatted(filter));
-			}
-			if (pageable != null) {
-				params.putAll(MappingUtils.toMapFormatted(new PageOptions(pageable)));
-			}
-			if (groupId!=null) {
-				params.put("groupId", groupId);
-			}
-			uri = appendQueryParameters(uri, params);
-		}
-		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
-		return PageUtil.create2(result.getBody(), User.class);
 	}
 
 	//

@@ -6,8 +6,6 @@ import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.GroupManagerImpl;
 import org.einnovator.sso.client.manager.InvitationManager;
 import org.einnovator.sso.client.manager.InvitationManagerImpl;
-import org.einnovator.sso.client.manager.PermissionManager;
-import org.einnovator.sso.client.manager.PermissionManagerImpl;
 import org.einnovator.sso.client.manager.RoleManager;
 import org.einnovator.sso.client.manager.RoleManagerImpl;
 import org.einnovator.sso.client.manager.SsoManager;
@@ -47,8 +45,6 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 
@@ -169,12 +165,7 @@ public class SsoClientSecurityConfigurer {
 	public RoleManager roleManager() {
 		return new RoleManagerImpl();
 	}
-
-	@Bean
-	public PermissionManager permissionManager() {
-		return new PermissionManagerImpl();
-	}
-
+	
 	@Bean
 	public SsoManager ssoManager(OAuth2ClientContext context) {
 		return new SsoManagerImpl();
