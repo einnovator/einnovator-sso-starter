@@ -1,15 +1,13 @@
 package org.einnovator.sso.client.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.ToStringCreator;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -45,19 +43,11 @@ public class Invitation  extends EntityBase {
 	
 	private Boolean autoLogin;
 
-	private List<Invitee> invitees;
-
-	private List<Group> groups;	
-
 	private String formattedDate;
 	
-	private Trigger trigger0;
-
-	private Trigger trigger1;
-
 	private Map<String, Object> env;
 
-	private Map<String, Object> meta;
+	private Group group;
 
 	/**
 	 * Create instance of {@code Invitation}.
@@ -347,42 +337,6 @@ public class Invitation  extends EntityBase {
 	}
 
 	/**
-	 * Get the value of property {@code invitees}.
-	 *
-	 * @return the invitees
-	 */
-	public List<Invitee> getInvitees() {
-		return invitees;
-	}
-
-	/**
-	 * Set the value of property {@code invitees}.
-	 *
-	 * @param invitees the value of property invitees
-	 */
-	public void setInvitees(List<Invitee> invitees) {
-		this.invitees = invitees;
-	}
-
-	/**
-	 * Get the value of property {@code groups}.
-	 *
-	 * @return the groups
-	 */
-	public List<Group> getGroups() {
-		return groups;
-	}
-
-	/**
-	 * Set the value of property {@code groups}.
-	 *
-	 * @param groups the value of property groups
-	 */
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
-	}
-
-	/**
 	 * Get the value of property {@code formattedDate}.
 	 *
 	 * @return the formattedDate
@@ -398,42 +352,6 @@ public class Invitation  extends EntityBase {
 	 */
 	public void setFormattedDate(String formattedDate) {
 		this.formattedDate = formattedDate;
-	}
-
-	/**
-	 * Get the value of property {@code trigger0}.
-	 *
-	 * @return the trigger0
-	 */
-	public Trigger getTrigger0() {
-		return trigger0;
-	}
-
-	/**
-	 * Set the value of property {@code trigger0}.
-	 *
-	 * @param trigger0 the value of property trigger0
-	 */
-	public void setTrigger0(Trigger trigger0) {
-		this.trigger0 = trigger0;
-	}
-
-	/**
-	 * Get the value of property {@code trigger1}.
-	 *
-	 * @return the trigger1
-	 */
-	public Trigger getTrigger1() {
-		return trigger1;
-	}
-
-	/**
-	 * Set the value of property {@code trigger1}.
-	 *
-	 * @param trigger1 the value of property trigger1
-	 */
-	public void setTrigger1(Trigger trigger1) {
-		this.trigger1 = trigger1;
 	}
 
 	/**
@@ -454,22 +372,23 @@ public class Invitation  extends EntityBase {
 		this.env = env;
 	}
 
+
 	/**
-	 * Get the value of property {@code meta}.
+	 * Get the value of property {@code group}.
 	 *
-	 * @return the meta
+	 * @return the group
 	 */
-	public Map<String, Object> getMeta() {
-		return meta;
+	public Group getGroup() {
+		return group;
 	}
 
 	/**
-	 * Set the value of property {@code meta}.
+	 * Set the value of property {@code group}.
 	 *
-	 * @param meta the value of property meta
+	 * @param group the value of property group
 	 */
-	public void setMeta(Map<String, Object> meta) {
-		this.meta = meta;
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 	
 	//
@@ -643,17 +562,6 @@ public class Invitation  extends EntityBase {
 	}
 
 	/**
-	 * Set the value of property {@code invitees}.
-	 *
-	 * @param invitees the value of property invitees
-	 * @return this {@code Invitation}
-	 */
-	public Invitation withInvitees(List<Invitee> invitees) {
-		this.invitees = invitees;
-		return this;
-	}
-
-	/**
 	 * Set the value of property {@code formattedDate}.
 	 *
 	 * @param formattedDate the value of property formattedDate
@@ -664,27 +572,7 @@ public class Invitation  extends EntityBase {
 		return this;
 	}
 
-	/**
-	 * Set the value of property {@code trigger0}.
-	 *
-	 * @param trigger0 the value of property trigger0
-	 * @return this {@code Invitation}
-	 */
-	public Invitation withTrigger0(Trigger trigger0) {
-		this.trigger0 = trigger0;
-		return this;
-	}
-
-	/**
-	 * Set the value of property {@code trigger1}.
-	 *
-	 * @param trigger1 the value of property trigger1
-	 * @return this {@code Invitation}
-	 */
-	public Invitation withTrigger1(Trigger trigger1) {
-		this.trigger1 = trigger1;
-		return this;
-	}
+	
 
 	/**
 	 * Set the value of property {@code env}.
@@ -698,66 +586,16 @@ public class Invitation  extends EntityBase {
 	}
 
 	/**
-	 * Set the value of property {@code meta}.
+	 * Set the value of property {@code group}.
 	 *
-	 * @param meta the value of property meta
+	 * @param group the value of property group
 	 * @return this {@code Invitation}
 	 */
-	public Invitation withMeta(Map<String, Object> meta) {
-		this.meta = meta;
-		return this;
-	}
-
-	/**
-	 * Set the value of property {@code invitees}.
-	 *
-	 * @param invitees the value of property invitees
-	 * @return this {@code Invitation}
-	 */
-	public Invitation withInvitees(Invitee... invitees) {
-		if (invitees!=null) {
-			if (this.invitees==null) {
-				this.invitees = new ArrayList<>();
-			}
-			for (Invitee invitee: invitees) {
-				if (invitee!=null) {
-					this.invitees.add(invitee);					
-				}
-			}
-		}
+	public Invitation withGroup(Group group) {
+		this.group = group;
 		return this;
 	}
 	
-	/**
-	 * Set the value of property {@code groups}.
-	 *
-	 * @param groups the value of property groups
-	 * @return this {@code Invitation}
-	 */
-	public Invitation withGroups(List<Group> groups) {
-		this.groups = groups;
-		return this;
-	}
-
-	/**
-	 * Set the value of property {@code groups}.
-	 *
-	 * @param groups the value of property groups
-	 * @return this {@code Invitation}
-	 */
-	public Invitation withGroups(Group... groups) {
-		if (groups!=null) {
-			if (this.groups==null) {
-				this.groups = new ArrayList<>();
-			}
-			for (Group group: groups) {
-				if (group!=null) {
-					this.groups.add(group);					
-				}
-			}
-		}
-		return this;
-	}
 
 	public static Invitation makeInvitation(Map<String, Object> map) {
 		Invitation invitation = MappingUtils.makeObject(Invitation.class, map);
@@ -771,10 +609,9 @@ public class Invitation  extends EntityBase {
 			.append("otherType", otherType)
 			.append("invitee", invitee)
 			.append("owner", owner)
-			.append("invitees", invitees)
 			.append("status", status)
 			.append("error", error)
-			.append("groups", groups)
+			.append("group", group!=null ? group.getUuid() + " " + group.getName() : null)
 			.append("template", template)
 			.append("subject", subject)
 			.append("description", description)
@@ -782,7 +619,6 @@ public class Invitation  extends EntityBase {
 			.append("autoLogin", autoLogin)
 			.append("site", site)
 			.append("env", env)
-			.append("meta", meta)
 			;
 	}
 	
