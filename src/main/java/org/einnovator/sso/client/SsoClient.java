@@ -97,6 +97,8 @@ public class SsoClient {
 	@Autowired(required=false)
 	private Application application;
 
+	private boolean web = true;
+	
 	@Autowired
 	public SsoClient(SsoClientConfiguration config) {
 		this.config = config;
@@ -106,6 +108,13 @@ public class SsoClient {
 		this.config = config;
 		this.restTemplate = restTemplate;
 		this.oauth2ClientContext = restTemplate.getOAuth2ClientContext();
+	}
+
+	public SsoClient(OAuth2RestTemplate restTemplate, SsoClientConfiguration config, boolean web) {
+		this.config = config;
+		this.restTemplate = restTemplate;
+		this.oauth2ClientContext = restTemplate.getOAuth2ClientContext();
+		this.web = web;
 	}
 
 	public SsoClient(SsoClientConfiguration config, ClientHttpRequestFactory clientHttpRequestFactory) {
@@ -244,6 +253,24 @@ public class SsoClient {
 	 */
 	public void setRestTemplate0(OAuth2RestTemplate restTemplate0) {
 		this.restTemplate0 = restTemplate0;
+	}
+
+	/**
+	 * Get the value of property {@code web}.
+	 *
+	 * @return the web
+	 */
+	public boolean isWeb() {
+		return web;
+	}
+
+	/**
+	 * Set the value of property {@code web}.
+	 *
+	 * @param web the value of property web
+	 */
+	public void setWeb(boolean web) {
+		this.web = web;
 	}
 
 	public boolean isAutoSetupToken() {
@@ -1447,7 +1474,7 @@ public class SsoClient {
 		if (context!=null && context.getRestTemplate()!=null) {
 			restTemplate = context.getRestTemplate();
 		} else {
-			if (WebUtil.getHttpServletRequest()==null) {
+			if (WebUtil.getHttpServletRequest()==null && web) {
 				if (this.restTemplate0==null) {
 					this.restTemplate0 = makeClientOAuth2RestTemplate();
 				}

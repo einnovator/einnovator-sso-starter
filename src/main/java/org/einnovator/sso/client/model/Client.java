@@ -51,12 +51,13 @@ public class Client extends EntityBase {
 	@JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
 	private Set<String> autoApproveScopes;
 	
+	@JsonIgnore
 	private List<GrantedAuthority> authorities = Collections.emptyList();
+
 	@JsonProperty("access_token_validity")
-	
 	private Integer accessTokenValiditySeconds;
+
 	@JsonProperty("refresh_token_validity")
-	
 	private Integer refreshTokenValiditySeconds;
 	
 	private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
