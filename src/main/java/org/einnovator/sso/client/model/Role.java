@@ -21,6 +21,11 @@ public class Role extends EntityBase {
 
 	public static final String ROLE_PREFIX = "ROLE_";
 
+	public static final String ROLE_CLIENT = "CLIENT";
+	public static final String ROLE_USER = "USER";
+	public static final String ROLE_ADMIN = "ADMIN";
+	public static final String ROLE_SUPERUSER = "SUPERUSER";
+
 	private String name;
 
 	private String displayName;
@@ -328,24 +333,30 @@ public class Role extends EntityBase {
 	//
 
 	public static boolean isRole(GrantedAuthority authority) {
-		return authority.getAuthority().startsWith("ROLE_");
+		return authority.getAuthority().startsWith(Role.ROLE_PREFIX);
 	}
 
 	public static boolean isPermission(GrantedAuthority authority) {
 		return !isRole(authority);
 	}
 
-	public static String makeGrantedAuthorityName(String name) {
-		name = name.replace(' ', '_');
-		return name;
-	}
 
 	public static GrantedAuthority makeGrantedAuthority(Role role) {
-		String name = "ROLE_" + role.name;
-		name = name.replace(' ', '_');
-		if (role.group != null) {
-			name += "@" + role.group.getUuid();
+		return makeGrantedAuthority(role.getName(), role.getGroup());
+	}
+
+	public static GrantedAuthority makeGrantedAuthority(String name, Group group) {
+		return makeGrantedAuthority(name, group!=null ? group.getUuid() : null);
+	}
+
+	public static GrantedAuthority makeGrantedAuthority(String name, String group) {
+		if (name==null) {
+			return null;
 		}
+		if (group != null && !group.isEmpty()) {
+			name += "@" + group;
+		}
+		name = normalize(name);
 		return new SimpleGrantedAuthority(name);
 	}
 
@@ -370,8 +381,8 @@ public class Role extends EntityBase {
 	public static Role findRole(String roleId, List<Role> roles) {
 		if (roles != null) {
 			for (Role role : roles) {
-				if (roleId.equals(role.getUuid()) || roleId.equals(role.name)
-						|| roleId.equals(makeGrantedAuthorityName(role.name))) {
+				if (equals(roleId, role.getName()))
+				if (roleId.equals(role.getUuid()) || equals(roleId, role.getName())) {
 					return role;
 				}
 			}
@@ -382,8 +393,7 @@ public class Role extends EntityBase {
 	public static Role findRole(String roleId, Role[] roles) {
 		if (roles != null) {
 			for (Role role : roles) {
-				if (roleId.equals(role.getUuid()) || roleId.equals(role.name)
-						|| roleId.equals(makeGrantedAuthorityName(role.name))) {
+				if (roleId.equals(role.getUuid()) || equals(roleId, role.getName())) {
 					return role;
 				}
 			}
@@ -402,20 +412,13 @@ public class Role extends EntityBase {
 	public static String normalize(String role) {
 		if (role!=null) {
 			role = role.trim();
-			if (!role.startsWith("ROLE_")) {
-				role = "ROLE_" + role;				 
+			if (!role.startsWith(Role.ROLE_PREFIX)) {
+				role = ROLE_PREFIX + role;				 
 			}
 		}
 		return role;
 	}
 
-
-	public static String makePermissionName(String permission, String groupId) {
-		if (!StringUtils.isEmpty(groupId)) {
-			return permission + "@" + groupId;
-		}
-		return permission;
-	}
 
 	public static List<RoleBinding> toRoleBindings(Role role, List<User> users) {
 		if (role==null) {
@@ -457,7 +460,7 @@ public class Role extends EntityBase {
 		return false;
 	}
 	
-	public static boolean hasAnyRoleInGroup(Collection<? extends GrantedAuthority> authorities, String groupId, String... roles) {
+	public static boolean hasAnyRoleInGroup(String groupId, Collection<? extends GrantedAuthority> authorities, String... roles) {
 		for (String role : roles) {
 			if (hasRole(makeRoleName(role, groupId), authorities)) {
 				return true;
@@ -475,6 +478,8 @@ public class Role extends EntityBase {
 		if (role0 == null || role1 == null) {
 			return false;
 		}
+		role0 = role0.trim();
+		role1 = role1.trim();
 		if (role0.equalsIgnoreCase(role1)) {
 			return true;
 		}

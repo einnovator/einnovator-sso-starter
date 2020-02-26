@@ -40,12 +40,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	public static final String ATTRIBUTE_ROLES = "ROLES";
 
-	public static final String ROLE_CLIENT = "ROLE_CLIENT";
-	public static final String ROLE_USER = "ROLE_USER";
-	private static final String ROLE_ADMIN = "admin";
-
-	private static final String ROLE_SUPERUSER = "superuser";
-
 	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
@@ -104,7 +98,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	@Override
 	public boolean hasAnyRoleInGroup(Principal principal, String groupId, String... roles) {
 		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
-		return Role.hasAnyRoleInGroup(authorities, groupId, roles);
+		return Role.hasAnyRoleInGroup(groupId, authorities, roles);
 	}
 
 	@Override
@@ -185,11 +179,11 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	protected String[] getAdmin() {
-		return new String[] { ROLE_ADMIN };
+		return new String[] { Role.ROLE_ADMIN };
 	}
 
 	protected String[] getSuperuser() {
-		return new String[] { ROLE_SUPERUSER };
+		return new String[] { Role.ROLE_SUPERUSER };
 	}
 
 	@Override
@@ -197,7 +191,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 		if (principal == null) {
 			return false;
 		}
-		if (hasAnyRole(new String[] { ROLE_CLIENT })) {
+		if (hasAnyRole(new String[] { Role.ROLE_CLIENT })) {
 			return true;
 		}
 		return false;
