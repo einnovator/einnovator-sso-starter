@@ -12,6 +12,7 @@ import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
+import org.einnovator.util.web.RequestOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
@@ -103,9 +104,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	public URI createUser(User user, SsoClientContext context) {
+	public URI createUser(User user, RequestOptions options, SsoClientContext context) {
 		try {
-			return ssoClient.createUser(user, context);
+			return ssoClient.createUser(user, options, context);
 		} catch (RuntimeException e) {
 			logger.error("createUser:" + e);
 			return null;
@@ -114,9 +115,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 
 	@Override
-	public User updateUser(User user, boolean fullState, SsoClientContext context) {
+	public User updateUser(User user, RequestOptions options, SsoClientContext context) {
 		try {
-			ssoClient.updateUser(user, context);
+			ssoClient.updateUser(user, options, context);
 			evictCaches(user.getUuid());
 			return user;
 		} catch (RuntimeException e) {
@@ -124,17 +125,13 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			return null;
 		}
 	}
-	
-	@Override
-	public User updateUser(User user, SsoClientContext context) {
-		return updateUser(user, false, context);
-	}
+
 	
 	@Override
 	@CacheEvict(value=CACHE_USER, key="#id")
-	public boolean deleteUser(String userId, SsoClientContext context) {
+	public boolean deleteUser(String userId, RequestOptions options, SsoClientContext context) {
 		try {
-			ssoClient.deleteUser(userId, context);
+			ssoClient.deleteUser(userId, options, context);
 			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteUser:" + e);

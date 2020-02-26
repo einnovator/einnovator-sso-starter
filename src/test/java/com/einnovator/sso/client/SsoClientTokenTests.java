@@ -60,7 +60,7 @@ public class SsoClientTokenTests {
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes())
 				.withAddress(new Address().withCountry("USA").withCity("NY").withPostalCode("12345"));
-		URI uri = client.createUser(user, null);
+		URI uri = client.createUser(user, null, null);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);

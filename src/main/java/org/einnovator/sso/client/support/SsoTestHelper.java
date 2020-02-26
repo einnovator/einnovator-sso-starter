@@ -15,6 +15,12 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
+/**
+ * Helper class for running tests that need a JWT token to invoke secure services.
+ * 
+ * @author support@einnovator.org
+ *
+ */
 public class SsoTestHelper {
 
 
@@ -55,7 +61,7 @@ public class SsoTestHelper {
 			config.setServer(server);
 			config.setClientId(clientId);
 			config.setClientSecret(clientSecret);
-			return new SsoClient(config, config.getConnection().makeClientHttpRequestFactory());
+			return new SsoClient(config);
 		}
 		
 		@Bean

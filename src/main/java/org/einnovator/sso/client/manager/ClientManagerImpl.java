@@ -10,6 +10,7 @@ import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
+import org.einnovator.util.web.RequestOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.Cache.ValueWrapper;
@@ -85,9 +86,9 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	}
 	
 	@Override
-	public URI createClient(Client client, SsoClientContext context) {
+	public URI createClient(Client client, RequestOptions options, SsoClientContext context) {
 		try {
-			return ssoClient.createClient(client, context);
+			return ssoClient.createClient(client, options, context);
 		} catch (RuntimeException e) {
 			logger.error("createClient:" + e);
 			return null;
@@ -96,9 +97,9 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	
 
 	@Override
-	public Client updateClient(Client client, boolean fullState, SsoClientContext context) {
+	public Client updateClient(Client client, RequestOptions options, SsoClientContext context) {
 		try {
-			ssoClient.updateClient(client, context);
+			ssoClient.updateClient(client, options, context);
 			evictCaches(client.getUuid());
 			return client;
 		} catch (RuntimeException e) {
@@ -108,14 +109,9 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	}
 	
 	@Override
-	public Client updateClient(Client client, SsoClientContext context) {
-		return updateClient(client, false, context);
-	}
-	
-	@Override
-	public boolean deleteClient(String clientId, SsoClientContext context) {
+	public boolean deleteClient(String clientId, RequestOptions options, SsoClientContext context) {
 		try {
-			ssoClient.deleteClient(clientId, context);
+			ssoClient.deleteClient(clientId, options, context);
 			evictCaches(clientId);
 			return true;
 		} catch (RuntimeException e) {

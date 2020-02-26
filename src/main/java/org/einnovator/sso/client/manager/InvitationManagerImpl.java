@@ -19,6 +19,7 @@ import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.modelx.InvitationOptions;
+import org.einnovator.util.web.RequestOptions;
 import org.einnovator.sso.client.model.InvitationStats;
 
 public class InvitationManagerImpl implements InvitationManager {
@@ -45,9 +46,9 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 	
 	@Override
-	public URI invite(Invitation invitation, Boolean sendMail, SsoClientContext context) {
+	public URI invite(Invitation invitation, InvitationOptions options, SsoClientContext context) {
 		try {
-			URI uri = client.invite(invitation, sendMail, null);
+			URI uri = client.invite(invitation, options, context);
 			if (uri == null) {
 				logger.error("invite: " + invitation);
 			}
@@ -99,9 +100,9 @@ public class InvitationManagerImpl implements InvitationManager {
 
 
 	@Override
-	public InvitationStats getInvitationStats(SsoClientContext context) {
+	public InvitationStats getInvitationStats(RequestOptions options, SsoClientContext context) {
 		try {
-			InvitationStats stats = client.getInvitationStats(context);
+			InvitationStats stats = client.getInvitationStats(options, context);
 			if (stats == null) {
 				logger.error("getInvitationStats: " + stats);
 			}
@@ -118,14 +119,14 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 
 	@Override
-	public URI getInvitationToken(String id, Boolean sendMail, SsoClientContext context) {
+	public URI getInvitationToken(String id, InvitationOptions options, SsoClientContext context) {
 		if (id == null) {
 			return null;
 		}
 		try {
-			URI token = client.getInvitationToken(id, sendMail, context);
+			URI token = client.getInvitationToken(id, options, context);
 			if (token == null) {
-				logger.error("getInvitation: " + id + " " + sendMail);
+				logger.error("getInvitation: " + id + " " + options);
 			}
 			return token;
 		} catch (HttpStatusCodeException e) {
@@ -140,12 +141,7 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 
 	@Override
-	public Invitation updateInvitation(Invitation invitation, SsoClientContext context) {
-		return updateInvitation(invitation, null);
-	}
-
-	@Override
-	public Invitation updateInvitation(Invitation invitation, Boolean publish, SsoClientContext context) {
+	public Invitation updateInvitation(Invitation invitation, RequestOptions options, SsoClientContext context) {
 		try {
 			if (StringUtils.hasText(invitation.getOwner())) {
 				evictCachesForUser(invitation.getOwner());
@@ -153,7 +149,7 @@ public class InvitationManagerImpl implements InvitationManager {
 			if (StringUtils.hasText(invitation.getInvitee())) {
 				evictCachesForUser(invitation.getInvitee());
 			}
-			client.updateInvitation(invitation, publish, context);
+			client.updateInvitation(invitation, options, context);
 			return invitation;
 		} catch (RuntimeException e) {
 			logger.error("updateInvitation: " + e + "  " + invitation);
@@ -163,9 +159,9 @@ public class InvitationManagerImpl implements InvitationManager {
 
 	@Override
 	@CacheEvict(value=CACHE_INVITATION, key="#id")
-	public boolean deleteInvitation(String id, SsoClientContext context) {
+	public boolean deleteInvitation(String id, RequestOptions options, SsoClientContext context) {
 		try {
-			client.deleteInvitation(id, context);
+			client.deleteInvitation(id, options, context);
 			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteInvitation:" + e);

@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.TestPropertySource;
@@ -62,7 +63,7 @@ public class RoleManagerTests {
 	
 	@Test
 	public void listRolesForUser() {
-		List<Role> roles = roleManager.listRolesForUser(TEST_USER, null);
+		Page<Role> roles = roleManager.listRolesForUser(TEST_USER, null, null, null);
 		assertNotNull(roles);
 		System.out.println(roles);
 	}

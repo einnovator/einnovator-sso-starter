@@ -85,7 +85,7 @@ public class SsoClientLoadTests {
 		String username = "tdd-" + UUID.randomUUID().toString();
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes());
-		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user, null));
+		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user, null, null));
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		User user2 = run("SsoClientTests:createUserTest:getUser", () -> client.getUser(id, null));
@@ -102,7 +102,7 @@ public class SsoClientLoadTests {
 			String username = "tdd-" + UUID.randomUUID().toString();
 			User user = new User().withUsername(username).withEmail(username + "@test.org")
 					.withPassword(("Pass123!!-" + username).getBytes());
-			URI uri = run("SsoClientTests:" + name + ":createUser", () -> client.createUser(user, null));
+			URI uri = run("SsoClientTests:" + name + ":createUser", () -> client.createUser(user, null, null));
 			assertNotNull(uri);
 			String id = UriUtils.extractId(uri);
 			User user2 = run("SsoClientTests:" + name + ":getUser", () -> client.getUser(id, null));
@@ -155,7 +155,7 @@ public class SsoClientLoadTests {
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes())
 				.withAddress(new Address().withCountry("USA").withCity("NY").withPostalCode("12345"));
-		URI uri = client.createUser(user, null);
+		URI uri = client.createUser(user, null, null);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);

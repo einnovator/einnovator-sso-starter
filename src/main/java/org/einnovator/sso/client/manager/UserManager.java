@@ -9,6 +9,7 @@ import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
+import org.einnovator.util.web.RequestOptions;
 import org.springframework.cache.Cache;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Page;
@@ -37,17 +38,35 @@ public interface UserManager {
 	 * @param id the identifier
 	 * @param options (optional) the {@code UserOptions} that tailor which fields are returned (projection)
 	 * @param context optional {@code SsoClientContext}
-	 * @return the {@code User} if found, null otherwise.
+	 * @return the {@code User} if found, null otherwise or if request failed.
 	 */
 	User getUser(String id, UserOptions options, SsoClientContext context);
 
-	URI createUser(User user, SsoClientContext context);
+	/**
+	 * Create a new {@code User}
+	 * 
+	 * 
+	 * <p><b>Required Security Credentials</b>: Client or Admin (global ROLE_ADMIN).
+	 * 
+	 * @param user the {@code User}
+	 * @param context optional {@code SsoClientContext}
+	 * @return the location {@code URI} for the created {@code User}, or null if request failed.
+	 */
+	URI createUser(User user, RequestOptions options, SsoClientContext context);
 	
-	User updateUser(User user, boolean fullState, SsoClientContext context);
+	/**
+	 * Update existing {@code User}
+	 * 
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), or owner.
+	 * 
+	 * @param user the {@code User}
+	 * @param options optional {@code RequestOptions}
+	 * @param context optional {@code SsoClientContext}
+	 * @return the same {@code User}, or null if request failed.
+	 */
+	User updateUser(User user, RequestOptions options, SsoClientContext context);
 
-	User updateUser(User user, SsoClientContext context);
-
-	boolean deleteUser(String userId, SsoClientContext context);
+	boolean deleteUser(String userId, RequestOptions options, SsoClientContext context);
 	
 	Page<User> listUsers(UserFilter filter, Pageable options, SsoClientContext context);
 	

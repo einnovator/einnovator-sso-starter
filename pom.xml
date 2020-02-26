@@ -120,17 +120,17 @@
 					</doctitle>
 					<top>
 					 <![CDATA[
-					 See: <a href="#overview">Description<a>
+					 <div style="position:absolute;right:10"><a href="http://home.einnovator.org">EInnovator</a></div>
 					 ]]> 
 					</top>
 					<description>
 					 <![CDATA[
 					 This is the documentation for Java Client Library and Spring Boot Starter for EInnovator SSO Gateway Service.
-					 Copyright 2019, <a href="http://home.einnovator.org">EInnovator, LTD.<a>
+					 See: <a href="#overview">Description<a>
 					 ]]> 
 					</description>
 					<bottom>
-						 <![CDATA[Copyright 2019, <a href="http://home.einnovator.org">EInnovator, LTD.<a>]]> 
+						 <![CDATA[Copyright 2019, <a href="http://home.einnovator.org">EInnovator, LTD.</a>]]> 
 					</bottom>
 				</configuration>
 				<executions>

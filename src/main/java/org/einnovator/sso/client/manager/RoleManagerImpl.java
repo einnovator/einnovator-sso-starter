@@ -16,9 +16,12 @@ import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleType;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.RoleFilter;
+import org.einnovator.sso.client.modelx.RoleOptions;
 import org.einnovator.sso.client.modelx.UserFilter;
+import org.einnovator.sso.client.modelx.UserOptions;
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.security.SecurityUtil;
+import org.einnovator.util.web.RequestOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -107,9 +110,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRolesForUser(String userId, Pageable options, SsoClientContext context) {
+	public Page<Role> listRolesForUser(String userId, RoleFilter filter, Pageable options, SsoClientContext context) {
 		try {
-			return client.listRolesForUser(userId, options, context);
+			return client.listRolesForUser(userId, filter, options, context);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUser: " + userId + " " + options + " " + e);
 			return null;
@@ -117,36 +120,14 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRolesForUserInGroup(String userId, String groupId, Pageable options, SsoClientContext context) {
+	public Page<Role> listRolesForUserInGroup(String userId, String groupId, RoleFilter filter, Pageable options, SsoClientContext context) {
 		try {
-			return client.listRolesForUserInGroup(userId, groupId, options, context);
+			return client.listRolesForUserInGroup(userId, groupId, filter, options, context);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUserInGroup: " + userId + " " + groupId + " " + options + " " + e);
 			return null;
 		}
 	}
-
-	@Override
-	public List<Role> listRolesForUser(String userId, SsoClientContext context) {
-		try {
-			return client.listRolesForUser(userId, context);
-		} catch (RuntimeException e) {
-			logger.error("listRolesForUser: " + e + " " + userId + " " + e);
-			return null;
-		}
-	}
-
-	@Override
-	public List<Role> listRolesForUserInGroup(String userId, String groupId, SsoClientContext context) {
-		try {
-			return client.listRolesForUserInGroup(userId, groupId, context);
-		} catch (RuntimeException e) {
-			logger.error("listRolesForUserInGroup: " + e + " " + userId);
-			return null;
-		}
-
-	}
-
 
 
 	@Override
@@ -166,10 +147,13 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public boolean isMember(String userId, SsoClientContext context, String... groups) {
+	public boolean isMember(String userId,  UserOptions options, SsoClientContext context, String... groups) {
 		if (groups != null) {
 			for (String groupId : groups) {
-				if (groupManager.isMember(userId, groupId, context)) {
+				if (groupId==null || groupId.isEmpty()) {
+					continue;
+				}
+				if (groupManager.isMember(userId, groupId, options, context)) {
 					return true;
 				}
 			}
@@ -249,9 +233,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public URI createRole(Role role, SsoClientContext context) {
+	public URI createRole(Role role, RequestOptions options, SsoClientContext context) {
 		try {
-			URI uri = client.createRole(role, context);
+			URI uri = client.createRole(role, options, context);
 			if (uri == null) {
 				logger.error("createRole: " + role);
 			}
@@ -263,9 +247,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Role getRole(String roleId, SsoClientContext context) {
+	public Role getRole(String roleId, RoleOptions options, SsoClientContext context) {
 		try {
-			Role group = client.getRole(roleId, context);
+			Role group = client.getRole(roleId, options, context);
 			if (group == null) {
 				logger.error("getRole: " + group);
 			}
@@ -282,9 +266,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void updateRole(Role role, SsoClientContext context) {
+	public void updateRole(Role role, RequestOptions options, SsoClientContext context) {
 		try {
-			client.updateRole(role, context);
+			client.updateRole(role, options, context);
 			if (role == null) {
 				logger.error("updateRole: " + role);
 			}
@@ -309,9 +293,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void deleteRole(String roleId, SsoClientContext context) {
+	public void deleteRole(String roleId, RequestOptions options, SsoClientContext context) {
 		try {
-			client.deleteRole(roleId, context);
+			client.deleteRole(roleId, options, context);
 			if (roleId == null) {
 				logger.error("deleteRole: " + roleId);
 			}
@@ -321,9 +305,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<User> listRoleMembers(String roleId, Pageable options, UserFilter filter, SsoClientContext context) {
+	public Page<User> listRoleMembers(String roleId, UserFilter filter, Pageable pageable, SsoClientContext context) {
 		try {
-			Page<User> members = client.listRoleMembers(roleId, options, filter, context);
+			Page<User> members = client.listRoleMembers(roleId, filter, pageable, context);
 			if (members == null) {
 				logger.error("listRoleMembers: " + roleId);
 			}
@@ -346,21 +330,21 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void assignRole(String userId, String roleId, SsoClientContext context) {
+	public void assignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
 		try {
 			if (roleId == null) {
 				logger.error("assignRole: " + userId + " " + roleId);
 			}
-			client.assignRole(userId, roleId, context);
+			client.assignRole(userId, roleId, options, context);
 		} catch (RuntimeException e) {
 			logger.error("assignRole: " + userId + " " + roleId + " " + e);
 		}
 	}
 
 	@Override
-	public void unassignRole(String userId, String roleId, SsoClientContext context) {
+	public void unassignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
 		try {
-			client.unassignRole(userId, roleId, context);
+			client.unassignRole(userId, roleId, options, context);
 			if (roleId == null) {
 				logger.error("removeFromRole: " + userId + " " + roleId);
 			}
@@ -369,10 +353,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 		}
 	}
 
-	@Override
-	public List<Role> listGlobalRoles(SsoClientContext context) {
-		return listRolesForGroup(null, context);
-	}
 
 	@Override
 	public List<Role> listRolesForGroup(String groupId, SsoClientContext context) {
