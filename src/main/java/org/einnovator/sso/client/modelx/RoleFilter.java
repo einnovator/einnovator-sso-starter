@@ -11,14 +11,6 @@ public class RoleFilter extends RoleOptions {
 	
 	private String group;
 	
-	private Boolean inherited;
-	
-	private Boolean builtin;
-	
-	private Boolean custom;
-	
-	private Boolean global;
-
 	private String user;
 	
 	private RoleType type;
@@ -85,85 +77,6 @@ public class RoleFilter extends RoleOptions {
 	public void setGroup(String group) {
 		this.group = group;
 	}
-
-	/**
-	 * Get the value of property {@code inherited}.
-	 *
-	 * @return the inherited
-	 */
-	public Boolean getInherited() {
-		return inherited;
-	}
-
-
-	/**
-	 * Set the value of property {@code inherited}.
-	 *
-	 * @param inherited the inherited to set
-	 */
-	public void setInherited(Boolean inherited) {
-		this.inherited = inherited;
-	}
-
-	/**
-	 * Get the value of property {@code builtin}.
-	 *
-	 * @return the builtin
-	 */
-	public Boolean getBuiltin() {
-		return builtin;
-	}
-
-
-	/**
-	 * Set the value of property {@code builtin}.
-	 *
-	 * @param builtin the builtin to set
-	 */
-	public void setBuiltin(Boolean builtin) {
-		this.builtin = builtin;
-	}
-
-
-	/**
-	 * Get the value of property {@code custom}.
-	 *
-	 * @return the custom
-	 */
-	public Boolean getCustom() {
-		return custom;
-	}
-
-
-	/**
-	 * Set the value of property {@code custom}.
-	 *
-	 * @param custom the custom to set
-	 */
-	public void setCustom(Boolean custom) {
-		this.custom = custom;
-	}
-
-
-	/**
-	 * Get the value of property {@code global}.
-	 *
-	 * @return the global
-	 */
-	public Boolean getGlobal() {
-		return global;
-	}
-
-
-	/**
-	 * Set the value of property {@code global}.
-	 *
-	 * @param global the global to set
-	 */
-	public void setGlobal(Boolean global) {
-		this.global = global;
-	}
-
 
 	/**
 	 * Get the value of property {@code user}.
@@ -241,51 +154,6 @@ public class RoleFilter extends RoleOptions {
 	}
 
 	/**
-	 * Set the value of property {@code inherited}.
-	 *
-	 * @param inherited the inherited to with
-	 * @return this
-	 */
-	public RoleFilter withInherited(Boolean inherited) {
-		this.inherited = inherited;
-		return this;
-	}
-
-	/**
-	 * Set the value of property {@code builtin}.
-	 *
-	 * @param builtin the builtin to with
-	 * @return this
-	 */
-	public RoleFilter withBuiltin(Boolean builtin) {
-		this.builtin = builtin;
-		return this;
-	}
-
-
-	/**
-	 * Set the value of property {@code custom}.
-	 *
-	 * @param custom the custom to with
-	 * @return this
-	 */
-	public RoleFilter withCustom(Boolean custom) {
-		this.custom = custom;
-		return this;
-	}
-
-	/**
-	 * Set the value of property {@code global}.
-	 *
-	 * @param global the global to with
-	 * @return this
-	 */
-	public RoleFilter withGlobal(Boolean global) {
-		this.global = global;
-		return this;
-	}
-
-	/**
 	 * Set the value of property {@code user}.
 	 *
 	 * @param user the user to with
@@ -316,10 +184,6 @@ public class RoleFilter extends RoleOptions {
 				.append("q", q)
 				.append("group", group)
 				.append("name", name)
-				.append("inherited", inherited)
-				.append("builtin", builtin)
-				.append("global", global)
-				.append("custom", custom)
 				.append("user", user)
 				.append("type", type)
 			;

@@ -27,17 +27,15 @@ public class Role extends EntityBase {
 	
 	private RoleType type;
 
+	private Group group;
+
 	private String description;
 
 	private Integer userCount;
-	
-	private Boolean builtin;
+
+	private Integer requestCount;
 
 	private String app;
-
-	private Boolean global;
-	
-	private Group group;
 
 	
 	/**
@@ -51,12 +49,26 @@ public class Role extends EntityBase {
 	 * Create instance of {@code Role}.
 	 *
 	 * @param name the name
-	 * @param builtin true if group role prototype
+	 * @param displayName the displayName
+	 * @param type the type
 	 */
-	public Role(String name, Boolean builtin) {
+	public Role(String name, String displayName, RoleType type) {
 		this.name = name;
-		this.builtin = builtin;
+		this.displayName = displayName;
+		this.type = type;
 	}
+	
+	/**
+	 * Create instance of {@code Role}.
+	 *
+	 * @param name the name
+	 * @param type the type
+	 */
+	public Role(String name, RoleType type) {
+		this.name = name;
+		this.type = type;
+	}
+	
 	
 	/**
 	 * Get the value of property {@code name}.
@@ -147,25 +159,7 @@ public class Role extends EntityBase {
 	public void setUserCount(Integer userCount) {
 		this.userCount = userCount;
 	}
-
-	/**
-	 * Get the value of property {@code builtin}.
-	 *
-	 * @return the builtin
-	 */
-	public Boolean getBuiltin() {
-		return builtin;
-	}
-
-	/**
-	 * Set the value of property {@code builtin}.
-	 *
-	 * @param builtin the value of property builtin
-	 */
-	public void setBuiltin(Boolean builtin) {
-		this.builtin = builtin;
-	}
-
+	
 	/**
 	 * Get the value of property {@code app}.
 	 *
@@ -182,24 +176,6 @@ public class Role extends EntityBase {
 	 */
 	public void setApp(String app) {
 		this.app = app;
-	}
-
-	/**
-	 * Get the value of property {@code global}.
-	 *
-	 * @return the global
-	 */
-	public Boolean getGlobal() {
-		return global;
-	}
-
-	/**
-	 * Set the value of property {@code global}.
-	 *
-	 * @param global the value of property global
-	 */
-	public void setGlobal(Boolean global) {
-		this.global = global;
 	}
 
 	/**
@@ -220,6 +196,25 @@ public class Role extends EntityBase {
 		this.group = group;
 	}
 	
+
+	/**
+	 * Get the value of property {@code requestCount}.
+	 *
+	 * @return the requestCount
+	 */
+	public Integer getRequestCount() {
+		return requestCount;
+	}
+
+	/**
+	 * Set the value of property {@code requestCount}.
+	 *
+	 * @param requestCount the value of property requestCount
+	 */
+	public void setRequestCount(Integer requestCount) {
+		this.requestCount = requestCount;
+	}
+
 	//
 	// With
 	//
@@ -268,14 +263,15 @@ public class Role extends EntityBase {
 		return this;
 	}
 
+
 	/**
-	 * Set the value of property {@code builtin}.
+	 * Set the value of property {@code requestCount}.
 	 *
-	 * @param builtin the value of property builtin
+	 * @param requestCount the value of property requestCount
 	 * @return this {@code Role}
 	 */
-	public Role withBuiltin(Boolean builtin) {
-		this.builtin = builtin;
+	public Role withRequestCount(Integer requestCount) {
+		this.requestCount = requestCount;
 		return this;
 	}
 
@@ -289,18 +285,6 @@ public class Role extends EntityBase {
 		this.app = app;
 		return this;
 	}
-
-	/**
-	 * Set the value of property {@code global}.
-	 *
-	 * @param global the value of property global
-	 * @return this {@code Role}
-	 */
-	public Role withGlobal(Boolean global) {
-		this.global = global;
-		return this;
-	}
-
 
 	/**
 	 * Set the value of property {@code group}.
@@ -332,11 +316,10 @@ public class Role extends EntityBase {
 				.append("name", name)
 				.append("displayName", displayName)
 				.append("type", type)
-				.append("builtin", builtin)
 				.append("app", app)
-				.append("global", global)
 				.append("userCount", userCount)
-				.append("group", group)
+				.append("requestCount", requestCount)
+				.append("group", group!=null ? group.getUuid() + " " + group.getName() : null)
 				.append("description", description);
 	}
 	

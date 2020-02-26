@@ -43,12 +43,15 @@ public class SsoLogoutController {
 		
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			
-			logger.info("logout: Invalidating session: " + session.getId());
+			if (logger.isDebugEnabled()) {
+				logger.info(String.format("logout: Invalidating session: %s", session.getId()));				
+			}
 			session.invalidate();
 		}
 		SecurityContext context = SecurityContextHolder.getContext();
-	    logger.info("logout:" + principal.getName());
+		if (logger.isDebugEnabled()) {
+			logger.info(String.format("logout: %s", principal.getName()));				
+		}
 		if (context!=null) {
 			logoutHandler.doLogout(request, response, context.getAuthentication());			
 			context.setAuthentication(null);
@@ -56,13 +59,19 @@ public class SsoLogoutController {
 		}
 
 	    String redirectUrl = request.getHeader("Referer");
-	    logger.info("logout:" + redirectUrl);
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("logout: redirect: %s", redirectUrl));				
+		}
 	    if (SsoEndpoints.getLogoutEndpoint(config).equals(redirectUrl)) {
-		    logger.info("logout:[COMPLETED]");
+			if (logger.isDebugEnabled()) {
+			    logger.debug("logout:[COMPLETED]");				
+			}
 	    	return redirect("/");
 	    } else {
-		    logger.info("logout:[REDIRECT]: " + SsoEndpoints.getLogoutEndpoint(config));
-			return "redirect:" + SsoEndpoints.getLogoutEndpoint(config);	    	
+			if (logger.isDebugEnabled()) {
+		    	logger.info(String.format("logout:[REDIRECT]: %s", SsoEndpoints.getLogoutEndpoint(config)));				
+			}
+			return redirect(SsoEndpoints.getLogoutEndpoint(config));	    	
 	    }
 	}
 	

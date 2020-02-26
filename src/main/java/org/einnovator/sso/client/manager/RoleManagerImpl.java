@@ -13,6 +13,7 @@ import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Role;
+import org.einnovator.sso.client.model.RoleType;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.UserFilter;
@@ -389,7 +390,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 		try {
 			RoleFilter filter = new RoleFilter();
 			if (groupId == null) {
-				filter.setGlobal(true);
+				filter.setType(RoleType.GLOBAL);
 			}
 			filter.setGroup(groupId);
 			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE), context);
@@ -450,8 +451,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 		Cache cache2 = getGroupRolesCache();
 		if (cache2 != null) {
 
-			String key = role.getGroup() != null ? role.getGroup().getUuid()
-					: Boolean.TRUE.equals(role.getGlobal()) ? "" : null;
+			String key = role.getGroup() != null ? role.getGroup().getUuid(): (role.getType()==null || role.getType()==RoleType.GROUP) ? "" : null;
 			if (key != null) {
 				Role[] roles = getCacheValue(Role[].class, getGroupRolesCache(), key);
 				if (roles != null) {
