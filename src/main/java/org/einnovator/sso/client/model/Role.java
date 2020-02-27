@@ -2,7 +2,9 @@ package org.einnovator.sso.client.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.ToStringCreator;
@@ -363,7 +365,8 @@ public class Role extends EntityBase {
 
 	public static String getRoleName(GrantedAuthority authority) {
 		if (isRole(authority)) {
-			String name = authority.getAuthority().substring("ROLE_".length());
+			String name = authority.getAuthority();
+			name = unnormalize(name);
 			int i = name.indexOf("@");
 			if (i > 0 && i < name.length() - 1) {
 				name = name.substring(0, i);
@@ -419,7 +422,16 @@ public class Role extends EntityBase {
 		return role;
 	}
 
-
+	public static String unnormalize(String role) {
+		if (role!=null) {
+			role = role.trim();
+			if (role.startsWith(Role.ROLE_PREFIX)) {
+				role = role.substring(Role.ROLE_PREFIX.length());
+			}
+			role = role.replace('_', ' ').replaceAll("\\s+","");
+		}
+		return role;
+	}
 	public static List<RoleBinding> toRoleBindings(Role role, List<User> users) {
 		if (role==null) {
 			return null;
@@ -499,5 +511,17 @@ public class Role extends EntityBase {
 		return false;
 	}
 	
-
+	public static List<String> getGroups(Collection<? extends GrantedAuthority> authorities) {
+		Set<String> ids = new HashSet<>();
+		if (authorities==null) {
+			return null;
+		}
+		for (GrantedAuthority authority: authorities) {
+			String groupId = Role.getGroup(authority);
+			if (groupId!=null) {
+				ids.add(groupId);
+			}
+		}
+		return new ArrayList<>(ids);
+	}
 }
