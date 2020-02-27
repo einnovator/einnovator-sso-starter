@@ -18,7 +18,6 @@ import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.RoleOptions;
 import org.einnovator.sso.client.modelx.UserFilter;
-import org.einnovator.sso.client.modelx.UserOptions;
 import org.einnovator.util.MappingUtils;
 import org.einnovator.util.security.SecurityUtil;
 import org.einnovator.util.web.RequestOptions;
@@ -49,9 +48,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	private UserManager userManager;
 
 	@Autowired
-	private GroupManager groupManager;
-
-	@Autowired
 	private SsoClient client;
 
 	@Autowired
@@ -64,9 +60,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 	
 
-	public RoleManagerImpl(UserManager userManager, GroupManager groupManager, SsoClient client) {
+	public RoleManagerImpl(UserManager userManager, SsoClient client) {
 		this.userManager = userManager;
-		this.groupManager = groupManager;
 		this.client = client;
 	}
 
@@ -144,23 +139,6 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 		}
 		return false;
 	}
-
-
-	@Override
-	public boolean isMember(String userId,  UserOptions options, SsoClientContext context, String... groups) {
-		if (groups != null) {
-			for (String groupId : groups) {
-				if (groupId==null || groupId.isEmpty()) {
-					continue;
-				}
-				if (groupManager.isMember(userId, groupId, options, context)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 
 	protected String[] getAdmin() {
 		return new String[] { Role.ROLE_ADMIN };
@@ -266,15 +244,16 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void updateRole(Role role, RequestOptions options, SsoClientContext context) {
+	public Role updateRole(Role role, RequestOptions options, SsoClientContext context) {
 		try {
 			client.updateRole(role, options, context);
 			if (role == null) {
 				logger.error("updateRole: " + role);
 			}
+			return role;
 		} catch (RuntimeException e) {
 			logger.error("updateRole: " + role + "  " + e);
-			return;
+			return null;
 		}
 	}
 
@@ -293,14 +272,16 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void deleteRole(String roleId, RequestOptions options, SsoClientContext context) {
+	public boolean deleteRole(String roleId, RequestOptions options, SsoClientContext context) {
 		try {
 			client.deleteRole(roleId, options, context);
 			if (roleId == null) {
 				logger.error("deleteRole: " + roleId);
 			}
+			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteRole: " + roleId);
+			return false;
 		}
 	}
 
@@ -330,26 +311,30 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public void assignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
+	public boolean assignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
 		try {
 			if (roleId == null) {
 				logger.error("assignRole: " + userId + " " + roleId);
 			}
 			client.assignRole(userId, roleId, options, context);
+			return true;
 		} catch (RuntimeException e) {
 			logger.error("assignRole: " + userId + " " + roleId + " " + e);
+			return false;
 		}
 	}
 
 	@Override
-	public void unassignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
+	public boolean unassignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
 		try {
 			client.unassignRole(userId, roleId, options, context);
 			if (roleId == null) {
 				logger.error("removeFromRole: " + userId + " " + roleId);
 			}
+			return true;
 		} catch (RuntimeException e) {
 			logger.error("removeFromRole: " + userId + " " + roleId + " " + e);
+			return false;
 		}
 	}
 

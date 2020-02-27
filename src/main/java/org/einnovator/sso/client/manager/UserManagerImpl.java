@@ -48,25 +48,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 
 	@Override
 	public User getUser(String id, SsoClientContext context) {
-		if (id==null) {
-			return null;
-		}
-		try {
-			User user = getCacheValue(User.class, getUserCache(), id, context);
-			if (user!=null) {
-				return user;
-			}
-			user = ssoClient.getUser(id, context);	
-			return putCacheValue(user, getUserCache(), id);
-		} catch (HttpStatusCodeException e) {
-			if (e.getStatusCode()!=HttpStatus.NOT_FOUND) {
-				logger.error("getUser:" + id + "  " + e);				
-			}
-			return null;
-		} catch (RuntimeException e) {
-			logger.error("getUser:" + id + "  " + e);
-			return null;
-		}
+		return getUser(id, UserOptions.DEFAULT, context);
 	}
 
 	@Override
@@ -232,19 +214,6 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		}
 	}
 
-	@Override
-	public Page<User> listUsersWithPermissionsInGroups(List<String> groups, List<String> permissions, Pageable pageable, SsoClientContext context) {
-		UserFilter filter = new UserFilter();
-		filter.setGroups(groups);
-		filter.setPermissions(permissions);
-		try {
-			return ssoClient.listUsers(filter, pageable, context);
-		} catch (RuntimeException e) {
-			logger.error("listUsers:" + e);
-			return null;
-		}
-	}
-	
 	@Override
 	public List<String> getGroupsUuidForUser(String username, SsoClientContext context) {
 		if (username==null) {

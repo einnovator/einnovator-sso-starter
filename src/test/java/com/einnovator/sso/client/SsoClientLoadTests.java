@@ -88,7 +88,7 @@ public class SsoClientLoadTests {
 		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user, null, null));
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
-		User user2 = run("SsoClientTests:createUserTest:getUser", () -> client.getUser(id, null));
+		User user2 = run("SsoClientTests:createUserTest:getUser", () -> client.getUser(id, null, null));
 		assertNotNull(user2);
 		System.out.println(user2);
 	}
@@ -105,7 +105,7 @@ public class SsoClientLoadTests {
 			URI uri = run("SsoClientTests:" + name + ":createUser", () -> client.createUser(user, null, null));
 			assertNotNull(uri);
 			String id = UriUtils.extractId(uri);
-			User user2 = run("SsoClientTests:" + name + ":getUser", () -> client.getUser(id, null));
+			User user2 = run("SsoClientTests:" + name + ":getUser", () -> client.getUser(id, null, null));
 			assertNotNull(user2);
 			System.out.println(user2);			
 		} catch (RuntimeException e) {
@@ -160,7 +160,7 @@ public class SsoClientLoadTests {
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);
 		assertFalse(id.isEmpty());
-		User user2 = client.getUser(id, null);
+		User user2 = client.getUser(id, null, null);
 		assertNotNull(user2);
 		assertEquals(id, user2.getId());
 		assertEquals(user.getUsername(), user2.getUsername());

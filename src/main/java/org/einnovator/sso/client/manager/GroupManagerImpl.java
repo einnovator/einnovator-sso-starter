@@ -138,14 +138,16 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@CacheEvict(value = CACHE_GROUP, key = "#groupId")
-	public void deleteGroup(String groupId, RequestOptions options, SsoClientContext context) {
+	public boolean deleteGroup(String groupId, RequestOptions options, SsoClientContext context) {
 		try {
 			client.deleteGroup(groupId, options, context);
 			if (groupId == null) {
 				logger.error("deleteGroup: " + groupId);
 			}
+			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteGroup: " + groupId);
+			return false;
 		}
 	}
 
@@ -225,17 +227,19 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@CacheEvict(value = CACHE_GROUP_MEMBERS, key = "#groupId + #userId")
-	public void removeMember(String userId, String groupId, RequestOptions options, SsoClientContext context) {
+	public boolean removeMember(String userId, String groupId, RequestOptions options, SsoClientContext context) {
 		if (groupId == null) {
 			logger.error("removeFromGroup: " + userId + " " + groupId);
-			return;
+			return false;
 		}
 		try {
 			client.removeMemberFromGroup(userId, groupId, options, context);
 			evictCaches(groupId);
 			userManager.evictCaches(userId);
+			return true;
 		} catch (RuntimeException e) {
 			logger.error("removeFromGroup: " + userId + " " + groupId);
+			return false;
 		}
 	}
 
@@ -308,6 +312,21 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 			e.printStackTrace();
 			logger.error("onGroupUpdate: " + e);
 		}
+	}
+
+	@Override
+	public boolean isMember(String userId,  UserOptions options, SsoClientContext context, String... groups) {
+		if (groups != null) {
+			for (String groupId : groups) {
+				if (groupId==null || groupId.isEmpty()) {
+					continue;
+				}
+				if (isMember(userId, groupId, options, context)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

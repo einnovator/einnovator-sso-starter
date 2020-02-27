@@ -65,7 +65,7 @@ public class SsoClientTokenTests {
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);
 		assertFalse(id.isEmpty());
-		User user2 = client.getUser(id, null);
+		User user2 = client.getUser(id, null, null);
 		assertNotNull(user2);
 		assertEquals(id, user2.getId());
 		assertEquals(user.getUsername(), user2.getUsername());

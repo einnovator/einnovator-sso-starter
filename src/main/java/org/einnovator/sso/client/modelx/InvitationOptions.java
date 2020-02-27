@@ -67,6 +67,7 @@ public class InvitationOptions extends EntityOptions<Invitation> {
 	 * Set the value of property {@code sendMail}.
 	 *
 	 * @param sendMail the value of property sendMail
+	 * @return this {@code InvitationOptions}
 	 */
 	public InvitationOptions withSendMail(Boolean sendMail) {
 		this.sendMail = sendMail;
@@ -77,11 +78,13 @@ public class InvitationOptions extends EntityOptions<Invitation> {
 	 * Set the value of property {@code sendSms}.
 	 *
 	 * @param sendSms the value of property sendSms
+	 * @return this {@code InvitationOptions}
 	 */
 	public InvitationOptions withSendSms(Boolean sendSms) {
 		this.sendSms = sendSms;
 		return this;
 	}
+	
 	@Override
 	public ToStringCreator toString1(ToStringCreator creator) {
 		return super.toString1(creator)

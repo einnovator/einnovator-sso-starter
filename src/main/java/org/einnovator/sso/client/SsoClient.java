@@ -8,7 +8,6 @@ import static org.einnovator.util.UriUtils.makeURI;
 import java.net.URI;
 import java.security.Principal;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -20,7 +19,6 @@ import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.config.SsoEndpoints;
 import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.model.Group;
-import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.model.Member;
@@ -49,7 +47,6 @@ import org.einnovator.util.web.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -336,7 +333,7 @@ public class SsoClient {
 	/**
 	 * Register client application data.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client or Admin (global ROLE_ADMIN).
+	 * <p><b>Required Security Credentials</b>: Client or Admin (global role ADMIN).
 	 * 
 	 * @param registration the {@code SsoRegistration}
 	 * @param restTemplate the {@code OAuth2RestTemplate} used to connect to server
@@ -351,23 +348,6 @@ public class SsoClient {
 	// User
 	//
 	
-	/**
-	 * Get {@code User} with specified identifier.
-	 * 
-	 * Identifier {@code id} is the value of a property with unique constraints, that is:
-	 * UUID, username, email.
-	 * 
-	 * <p><b>Required Security Credentials</b>: Any, but results depend on each {@code User} privacy settings.
-	 * 
-	 * @param id the {@code User} uuid or username
-	 * @param context optional {@code SsoClientContext}
-	 * @throws RestClientException if request fails
-	 * @return the {@code User} if found, null otherwise.
-	 */
-	public User getUser(String id, SsoClientContext context) {
-		return getUser(id, UserOptions.DEFAULT, context);
-	}
-
 	/**
 	 * Get {@code User} with specified identifier.
 	 * 
@@ -416,7 +396,7 @@ public class SsoClient {
 	 * Create a new {@code User}
 	 * 
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client or Admin (global ROLE_ADMIN).
+	 * <p><b>Required Security Credentials</b>: Client or Admin (global role ADMIN).
 	 * 
 	 * @param user the {@code User}
 	 * @param options optional {@code RequestOptions}
@@ -435,7 +415,7 @@ public class SsoClient {
 	/**
 	 * Update existing {@code User}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), or owner.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
 	 * @param user the {@code User}
 	 * @param options optional {@code RequestOptions}
@@ -455,7 +435,7 @@ public class SsoClient {
 	 * Identifier {@code id} is the value of a property with unique constraints, that is:
 	 * UUID, username, email.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), or owner.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
 	 * @param id the {@code User} identifier
 	 * @param options optional {@code RequestOptions}
@@ -478,7 +458,7 @@ public class SsoClient {
 	/**
 	 * Change a {@code User} password.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), owner {@code User}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner {@code User}.
 	 * 
 	 * @param password the password
 	 * @param options optional {@code RequestOptions}
@@ -497,41 +477,25 @@ public class SsoClient {
 	// Group
 	//
 	
+	
 	/**
-	 * Create a new {@code Group}
-	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), any for root {@code Group}s. 
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * 
-	 * @param group the {@code Group}
-	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
-	 * @return the location {@code URI} for the created {@code User}
-	 * @throws RestClientException if request fails
-	 */
-	public URI createGroup(Group group, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.groups(config));
-		uri = processURI(uri, options);
-		RequestEntity<Group> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(group);
-		ResponseEntity<Group> result = exchange(request, Group.class, context);
-		return result.getHeaders().getLocation();
-	}
-
-	/**
-	 * Get {@code Group} with specified identifier.
-	 * 
-	 * Identifier {@code id} is the value of a property with unique constraints, that is:
-	 * UUID, name for root {@code Groups} if server is configured to required unique names for root {@code Group}s .
+	 * List {@code Group}s.
 	 * 
 	 * <p><b>Required Security Credentials</b>: any, but results depend on each {@code Group}, parent and root {@code Group} privacy settings.
 	 * 
-	 * @param id the identifier
+	 * @param filter a {@code GroupFilter}
+	 * @param pageable a {@code Pageable} (optional)
 	 * @param context optional {@code SsoClientContext}
-	 * @return the {@code Group}
+	 * @return a {@code Page} with {@code Group}s
 	 * @throws RestClientException if request fails
 	 */
-	public Group getGroup(String id, SsoClientContext context) {
-		return getGroup(id, null, context);
+	public Page<Group> listGroups(GroupFilter filter, Pageable pageable, SsoClientContext context) {
+		URI uri = makeURI(SsoEndpoints.groups(config));
+		uri = processURI(uri, filter, pageable);
+		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
+		@SuppressWarnings("rawtypes")
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
+		return PageUtil.create2(result.getBody(), Group.class);
 	}
 
 	/**
@@ -558,11 +522,31 @@ public class SsoClient {
 	}
 	
 	/**
+	 * Create a new {@code Group}
+	 * 
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), any for root {@code Group}s. 
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * 
+	 * @param group the {@code Group}
+	 * @param options optional {@code RequestOptions}
+	 * @param context optional {@code SsoClientContext}
+	 * @return the location {@code URI} for the created {@code User}
+	 * @throws RestClientException if request fails
+	 */
+	public URI createGroup(Group group, RequestOptions options, SsoClientContext context) {
+		URI uri = makeURI(SsoEndpoints.groups(config));
+		uri = processURI(uri, options);
+		RequestEntity<Group> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(group);
+		ResponseEntity<Group> result = exchange(request, Group.class, context);
+		return result.getHeaders().getLocation();
+	}
+
+	/**
 	 * Update existing {@code Group}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN).
-	 * <p>For root {@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}, owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN).
+	 * <p>For root {@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param group the {@code Group}
 	 * @param options optional {@code RequestOptions}
@@ -575,33 +559,13 @@ public class SsoClient {
 		RequestEntity<Group> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(group);		
 		exchange(request, Group.class, context);
 	}
-	
-	/**
-	 * List {@code Group}s.
-	 * 
-	 * <p><b>Required Security Credentials</b>: any, but results depend on each {@code Group}, parent and root {@code Group} privacy settings.
-	 * 
-	 * @param filter a {@code GroupFilter}
-	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
-	 * @return a {@code Page} with {@code Group}s
-	 * @throws RestClientException if request fails
-	 */	
-	public Page<Group> listGroups(GroupFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.groups(config));
-		uri = processURI(uri, filter, pageable);
-		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
-		return PageUtil.create2(result.getBody(), Group.class);
-	}
-	
+
 	/**
 	 * Delete existing {@code Group}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN).
-	 * <p>For root {@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}, owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN).
+	 * <p>For root {@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param id the {@code Group} identifier
 	 * @param options optional {@code RequestOptions}
@@ -653,7 +617,7 @@ public class SsoClient {
 	 * 
 	 * @param filter a {@code GroupFilter}
 	 * @param context optional {@code SsoClientContext}
-	 * @return a {@code Page} with {@code Group}s
+	 * @return the count of {@code Group}s
 	 * @throws RestClientException if request fails
 	 */	
 	public Integer countGroups(GroupFilter filter, SsoClientContext context) {
@@ -689,7 +653,7 @@ public class SsoClient {
 	}
 
 	//
-	// Group Membership
+	// Group Members
 	//
 	
 	/**
@@ -698,16 +662,16 @@ public class SsoClient {
 	 * <p><b>Required Security Credentials</b>: any, but results depend on each {@code Group}, parent and root {@code Group} privacy settings,
 	 * and each {@code User} privacy settings.
 	 * 
-	 * @param id the {@code id} identifier (UUID, or name of root group if supported)
+	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
 	 * @param filter a {@code MemberFilter}
 	 * @param pageable a {@code Pageable} (optional)
 	 * @param context optional {@code SsoClientContext}
 	 * @return a {@code Page} with {@code Member}s
 	 * @throws RestClientException if request fails
 	 */	
-	public Page<Member> listGroupMembers(String id, MemberFilter filter, Pageable pageable, SsoClientContext context) {
-		id = encode(id);
-		URI uri = makeURI(SsoEndpoints.groupMembers(id, config));
+	public Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable, SsoClientContext context) {
+		groupId = encode(groupId);
+		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
@@ -745,13 +709,11 @@ public class SsoClient {
 	 * <p><b>Required Security Credentials</b>: any, but results depend on each {@code Group}, parent and root {@code Group} privacy settings,
 	 * and each {@code User} privacy settings.
 	 * 
-	 * Request is ignored if {@code User} is already member of {@code Group}.
-	 *
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param options optional {@code UserOptions}
 	 * @param context optional {@code SsoClientContext}
-	 * @return the {@code Group}
+	 * @return the {@code Member}
 	 * @throws RestClientException if request fails
 	 */
 	public Member getGroupMember(String groupId, String userId, UserOptions options, SsoClientContext context) {
@@ -774,8 +736,8 @@ public class SsoClient {
 	/**
 	 * Add user a new {@code Group}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), any for root {@code Group}s. 
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), any for root {@code Group}s. 
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
@@ -797,8 +759,8 @@ public class SsoClient {
 	/**
 	 * Add user a new {@code Group}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), any for root {@code Group}s. 
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), any for root {@code Group}s. 
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param member the {@code Member} to add to Group
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
@@ -819,9 +781,9 @@ public class SsoClient {
 	/**
 	 * Remove {@code User} from a {@code Group}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), owner {@code User}.
-	 * <p>For root {@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}, owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner {@code User}.
+	 * <p>For root {@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
@@ -864,25 +826,6 @@ public class SsoClient {
 	//
 	
 	/**
-	 * Create a new {@code Invitation}.
-	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), any. 
-	 * 
-	 * @param invitation the {@code Invitation}
-	 * @param options the {@code InvitationOptions}
-	 * @param context optional {@code SsoClientContext}
-	 * @return the location {@code URI} for the created {@code Invitation}
-	 * @throws RestClientException if request fails
-	 */
-	public URI invite(Invitation invitation, InvitationOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invite(config));
-		uri = processURI(uri, options);
-		RequestEntity<Invitation> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(invitation);		
-		ResponseEntity<Void> result = exchange(request, Void.class, context);
-		return result.getHeaders().getLocation();
-	}
-	
-	/**
 	 * List {@code Invitation}s.
 	 * 
 	 * 
@@ -907,7 +850,7 @@ public class SsoClient {
 	 * Get {@code Invitation} with specified identifier.
 	 * 
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), owner.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner.
 	 *
 	 * @param id the identifier (UUID)
 	 * @param options optional  {@code InvitationOptions}
@@ -924,9 +867,28 @@ public class SsoClient {
 	}
 
 	/**
+	 * Create a new {@code Invitation}.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), any. 
+	 * 
+	 * @param invitation the {@code Invitation}
+	 * @param options the {@code InvitationOptions}
+	 * @param context optional {@code SsoClientContext}
+	 * @return the location {@code URI} for the created {@code Invitation}
+	 * @throws RestClientException if request fails
+	 */
+	public URI invite(Invitation invitation, InvitationOptions options, SsoClientContext context) {
+		URI uri = makeURI(SsoEndpoints.invite(config));
+		uri = processURI(uri, options);
+		RequestEntity<Invitation> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(invitation);		
+		ResponseEntity<Void> result = exchange(request, Void.class, context);
+		return result.getHeaders().getLocation();
+	}
+	
+	/**
 	 * Update existing {@code Invitation}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), or owner.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
 	 * @param invitation the {@code Invitation}
 	 * @param options optional  {@code InvitationOptions}
@@ -944,7 +906,7 @@ public class SsoClient {
 	/**
 	 * Get {@code InvitationStats} with {@code Invitation} statistics.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN).
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN).
 	 *
 	 * @param options optional  {@code InvitationOptions}
 	 * @param context optional {@code SsoClientContext}
@@ -962,7 +924,7 @@ public class SsoClient {
 	 * Get invitation {@code URI} with token for specified {@code Invitation}.
 	 * 
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), owner.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner.
 	 *
 	 * @param id the identifier of the {@code Invitation} (UUID)
 	 * @param options optional  {@code InvitationOptions}
@@ -981,7 +943,7 @@ public class SsoClient {
 	/**
 	 * Delete existing {@code Invitation}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), or owner.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
 	 * @param id the identifier (UUID)
 	 * @param options optional {@code RequestOptions}
@@ -999,35 +961,14 @@ public class SsoClient {
 	// Role
 	// 
 	
-	/**
-	 * Create a new {@code Role}
-	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN) for global Roles and group Roles prototypes. 
-	 * <p>For root {@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * For sub{@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b>, owner or <b>ROLE_PERMISSION_MANAGER</b> in parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * 
-	 * @param role the {@code Role}
-	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
-	 * @return the location {@code URI} for the created {@code Role}
-	 * @throws RestClientException if request fails
-	 */
-	public URI createRole(Role role, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roles(config));
-		uri = processURI(uri, options);
-		RequestEntity<Role> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(role);
-		ResponseEntity<Role> result = exchange(request, Role.class, context);
-		return result.getHeaders().getLocation();
-	}
-	
-	
+
 	/**
 	 * Get {@code Role} with specified identifier.
 	 * 
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN) for global Roles and group Roles prototypes. 
-	 * <p>For root {@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * For sub{@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b>, owner or <b>ROLE_PERMISSION_MANAGER</b> in parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 *
 	 * @param id the {@code Role} identifier (UUID)
 	 * @param options the {@code RoleOptions} (options)
@@ -1044,11 +985,55 @@ public class SsoClient {
 	}
 	
 	/**
+	 * List {@code Role}s.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * 
+	 * @param filter a {@code RoleFilter}
+	 * @param pageable a {@code Pageable} (optional)
+	 * @param context optional {@code SsoClientContext}
+	 * @return a {@code Page} with {@code Role}s
+	 * @throws RestClientException if request fails
+	 */	
+	public Page<Role> listRoles(RoleFilter filter, Pageable pageable, SsoClientContext context) {
+		URI uri = makeURI(SsoEndpoints.roles(config));
+		uri = processURI(uri, filter, pageable);
+		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
+		@SuppressWarnings("rawtypes")
+		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
+		return PageUtil.create2(result.getBody(), Role.class);
+	}
+	
+	
+	/**
+	 * Create a new {@code Role}
+	 * 
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * 
+	 * @param role the {@code Role}
+	 * @param options optional {@code RequestOptions}
+	 * @param context optional {@code SsoClientContext}
+	 * @return the location {@code URI} for the created {@code Role}
+	 * @throws RestClientException if request fails
+	 */
+	public URI createRole(Role role, RequestOptions options, SsoClientContext context) {
+		URI uri = makeURI(SsoEndpoints.roles(config));
+		uri = processURI(uri, options);
+		RequestEntity<Role> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(role);
+		ResponseEntity<Role> result = exchange(request, Role.class, context);
+		return result.getHeaders().getLocation();
+	}
+	
+	/**
 	 * Update existing {@code Role}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN) for global Roles and group Roles prototypes. 
-	 * <p>For root {@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * For sub{@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b>, owner or <b>ROLE_PERMISSION_MANAGER</b> in parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param role the {@code Role}
 	 * @param options optional {@code RequestOptions}
@@ -1062,34 +1047,14 @@ public class SsoClient {
 		exchange(request, Role.class, context);
 	}
 	
-	/**
-	 * List {@code Role}s.
-	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN) for global Roles and group Roles prototypes. 
-	 * <p>For root {@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * For sub{@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b>, owner or <b>ROLE_PERMISSION_MANAGER</b> in parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * 
-	 * @param filter a {@code RoleFilter}
-	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
-	 * @return a {@code Page} with {@code Invitation}s
-	 * @throws RestClientException if request fails
-	 */	
-	public Page<Role> listRoles(RoleFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roles(config));
-		uri = processURI(uri, filter, pageable);
-		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		@SuppressWarnings("rawtypes")
-		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
-		return PageUtil.create2(result.getBody(), Role.class);
-	}
+	
 	
 	/**
 	 * Delete existing {@code Role}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN) for global Roles and group Roles prototypes. 
-	 * <p>For root {@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * For sub{@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b>, owner or <b>ROLE_PERMISSION_MANAGER</b> in parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param id the {@code Role} identifier (UUID)
 	 * @param options optional {@code RequestOptions}
@@ -1104,15 +1069,15 @@ public class SsoClient {
 	}
 	
 	//
-	// Role Assignments
+	// Role Bindings/Assignments
 	//
 	
 	/**
 	 * List {@code User}s assigned a {@code Role} .
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN) for global Roles and group Roles prototypes. 
-	 * <p>For root {@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * For sub{@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b>, owner or <b>ROLE_PERMISSION_MANAGER</b> in parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param roleId the {@code Role} identifier (UUID)
 	 * @param filter a {@code UserFilter} (optional)
@@ -1133,9 +1098,9 @@ public class SsoClient {
 	/**
 	 * Get count of {@code User}s assigned a {@code Role} .
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN) for global Roles and group Roles prototypes. 
-	 * <p>For root {@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
-	 * For sub{@code Group}s: owner or <b>ROLE_PERMISSION_MANAGER</b>, owner or <b>ROLE_PERMISSION_MANAGER</b> in parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param roleId the {@code Role} identifier (UUID)
 	 * @param filter a {@code UserFilter} (optional)
@@ -1156,8 +1121,8 @@ public class SsoClient {
 	 * 
 	 * Request ignored if {@code User} is already assigned the {@code Role}.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), any for root {@code Group}s. 
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), any for root {@code Group}s. 
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param roleId the {@code Role} identifier (UUID)
@@ -1176,9 +1141,9 @@ public class SsoClient {
 	/**
 	 * Unassign {@code Role} from {@code User}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), owner {@code User}.
-	 * <p>For root {@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}, owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner {@code User}.
+	 * <p>For root {@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param roleId the {@code Role} identifier (UUID)
@@ -1198,13 +1163,13 @@ public class SsoClient {
 	/**
 	 * List global {@code Role}s a {@code User} is assigned to.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), owner {@code User}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner {@code User}.
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param filter a {@code RoleFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
 	 * @param context optional {@code SsoClientContext}
-	 * @return a {@code Page} with {@code Group}s
+	 * @return a {@code Page} with {@code Role}s
 	 * @throws RestClientException if request fails
 	 */	
 	public Page<Role> listRolesForUser(String userId, RoleFilter filter, Pageable pageable, SsoClientContext context) {
@@ -1220,16 +1185,16 @@ public class SsoClient {
 	/**
 	 * List {@code Role}s a {@code User} is assigned to in a {@code Group}.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global ROLE_ADMIN), owner {@code User}.
-	 * <p>For root {@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}
-	 * <p>For sub-{@code Group}s: owner or <b>ROLE_GROUP_MANAGER</b> in {@code Group}, owner or <b>ROLE_GROUP_MANAGER</b> of parent {@code Group}, or owner or <b>ROLE_GROUP_MANAGER</b> of tree root {@code Group}.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner {@code User}.
+	 * <p>For root {@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param groupId the identifier of a {@code Group} (UUID)
 	 * @param filter a {@code RoleFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
 	 * @param context optional {@code SsoClientContext}
-	 * @return a {@code Page} with {@code Group}s
+	 * @return a {@code Page} with {@code Role}s
 	 * @throws RestClientException if request fails
 	 */	
 	public Page<Role> listRolesForUserInGroup(String userId, String groupId, RoleFilter filter, Pageable pageable, SsoClientContext context) {
@@ -1250,7 +1215,7 @@ public class SsoClient {
 	/**
 	 * Get {@code Client} with specified identifier.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Admin (global ROLE_ADMIN).
+	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param id the identifier (UUID)
 	 * @param options {@code ClientOptions} options (optional)
@@ -1290,7 +1255,7 @@ public class SsoClient {
 	/**
 	 * Create a new {@code Client}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Admin (global ROLE_ADMIN).
+	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param client the {@code Client}
 	 * @param options optional {@code RequestOptions}
@@ -1309,7 +1274,7 @@ public class SsoClient {
 	/**
 	 * Update existing {@code Client}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Admin (global ROLE_ADMIN).
+	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param client the {@code Client}
 	 * @param options optional {@code RequestOptions}
@@ -1326,7 +1291,7 @@ public class SsoClient {
 	/**
 	 * Delete existing {@code Client}
 	 * 
-	 * <p><b>Required Security Credentials</b>: Admin (global ROLE_ADMIN).
+	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param clientId the {@code Client}
 	 * @param options optional {@code RequestOptions}

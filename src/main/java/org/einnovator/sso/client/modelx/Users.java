@@ -51,23 +51,26 @@ public class Users extends ObjectBase {
 		this.users = users;
 	}
 
+	
 	/**
-	 * Get the value of property {@code members}.
+	 * Get the value of property {@code member}.
 	 *
-	 * @return the members
+	 * @return the member
 	 */
 	public Boolean getMember() {
 		return member;
 	}
 
+
 	/**
-	 * Set the value of property {@code members}.
+	 * Set the value of property {@code member}.
 	 *
-	 * @param members the members to set
+	 * @param member the value of property member
 	 */
-	public void setMembers(Boolean member) {
+	public void setMember(Boolean member) {
 		this.member = member;
 	}
+
 
 	@Override
 	public ToStringCreator toString(ToStringCreator creator) {

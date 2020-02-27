@@ -31,8 +31,6 @@ public class UserFilter extends UserOptions {
 
 	private List<String> roles;
 
-	private List<String> permissions;
-
 	private GenderType gender;
 	
 	private Date startBirthdate;
@@ -60,108 +58,45 @@ public class UserFilter extends UserOptions {
 	public UserFilter() {
 	}
 
+	//
+	// Getters/Setters
+	//
+
+
+	/**
+	 * Get the value of property {@code q}.
+	 *
+	 * @return the q
+	 */
 	public String getQ() {
 		return q;
 	}
 
+	/**
+	 * Set the value of property {@code q}.
+	 *
+	 * @param q the value of property q
+	 */
 	public void setQ(String q) {
 		this.q = q;
 	}
-	
+
+	/**
+	 * Get the value of property {@code groupId}.
+	 *
+	 * @return the groupId
+	 */
 	public String getGroupId() {
 		return groupId;
 	}
 
+	/**
+	 * Set the value of property {@code groupId}.
+	 *
+	 * @param groupId the value of property groupId
+	 */
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
-	}
-
-	public String getOrgId() {
-		return groupId;
-	}
-
-	public void setOrgId(String orgId) {
-		this.groupId = orgId;
-	}
-
-	public GenderType getGender() {
-		return gender;
-	}
-
-	public void setGender(GenderType gender) {
-		this.gender = gender;
-	}
-
-	public Date getStartBirthdate() {
-		return startBirthdate;
-	}
-
-	public void setStartBirthdate(Date startBirthdate) {
-		this.startBirthdate = startBirthdate;
-	}
-
-	public Date getEndBirthdate() {
-		return endBirthdate;
-	}
-
-	public void setEndBirthdate(Date endBirthdate) {
-		this.endBirthdate = endBirthdate;
-	}
-
-	public Integer getMinAge() {
-		return minAge;
-	}
-
-	public void setMinAge(Integer minAge) {
-		this.minAge = minAge;
-	}
-
-	public Integer getMaxAge() {
-		return maxAge;
-	}
-
-	public void setMaxAge(Integer maxAge) {
-		this.maxAge = maxAge;
-	}
-
-	public String[] getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String[] language) {
-		this.language = language;
-	}
-
-	public String[] getEthnic() {
-		return ethnic;
-	}
-
-	public void setEthnic(String[] ethnic) {
-		this.ethnic = ethnic;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public Boolean getEmail() {
-		return email;
-	}
-
-	public void setEmail(Boolean email) {
-		this.email = email;
-	}
-
-	public Boolean getQaddress() {
-		return qaddress;
-	}
-
-	public void setQaddress(Boolean qaddress) {
-		this.qaddress = qaddress;
 	}
 
 	/**
@@ -176,7 +111,7 @@ public class UserFilter extends UserOptions {
 	/**
 	 * Set the value of property {@code groups}.
 	 *
-	 * @param groups the groups to set
+	 * @param groups the value of property groups
 	 */
 	public void setGroups(List<String> groups) {
 		this.groups = groups;
@@ -194,28 +129,136 @@ public class UserFilter extends UserOptions {
 	/**
 	 * Set the value of property {@code roles}.
 	 *
-	 * @param roles the roles to set
+	 * @param roles the value of property roles
 	 */
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
 
 	/**
-	 * Get the value of property {@code permissions}.
+	 * Get the value of property {@code gender}.
 	 *
-	 * @return the permissions
+	 * @return the gender
 	 */
-	public List<String> getPermissions() {
-		return permissions;
+	public GenderType getGender() {
+		return gender;
 	}
 
 	/**
-	 * Set the value of property {@code permissions}.
+	 * Set the value of property {@code gender}.
 	 *
-	 * @param permissions the permissions to set
+	 * @param gender the value of property gender
 	 */
-	public void setPermissions(List<String> permissions) {
-		this.permissions = permissions;
+	public void setGender(GenderType gender) {
+		this.gender = gender;
+	}
+
+	/**
+	 * Get the value of property {@code startBirthdate}.
+	 *
+	 * @return the startBirthdate
+	 */
+	public Date getStartBirthdate() {
+		return startBirthdate;
+	}
+
+	/**
+	 * Set the value of property {@code startBirthdate}.
+	 *
+	 * @param startBirthdate the value of property startBirthdate
+	 */
+	public void setStartBirthdate(Date startBirthdate) {
+		this.startBirthdate = startBirthdate;
+	}
+
+	/**
+	 * Get the value of property {@code endBirthdate}.
+	 *
+	 * @return the endBirthdate
+	 */
+	public Date getEndBirthdate() {
+		return endBirthdate;
+	}
+
+	/**
+	 * Set the value of property {@code endBirthdate}.
+	 *
+	 * @param endBirthdate the value of property endBirthdate
+	 */
+	public void setEndBirthdate(Date endBirthdate) {
+		this.endBirthdate = endBirthdate;
+	}
+
+	/**
+	 * Get the value of property {@code minAge}.
+	 *
+	 * @return the minAge
+	 */
+	public Integer getMinAge() {
+		return minAge;
+	}
+
+	/**
+	 * Set the value of property {@code minAge}.
+	 *
+	 * @param minAge the value of property minAge
+	 */
+	public void setMinAge(Integer minAge) {
+		this.minAge = minAge;
+	}
+
+	/**
+	 * Get the value of property {@code maxAge}.
+	 *
+	 * @return the maxAge
+	 */
+	public Integer getMaxAge() {
+		return maxAge;
+	}
+
+	/**
+	 * Set the value of property {@code maxAge}.
+	 *
+	 * @param maxAge the value of property maxAge
+	 */
+	public void setMaxAge(Integer maxAge) {
+		this.maxAge = maxAge;
+	}
+
+	/**
+	 * Get the value of property {@code language}.
+	 *
+	 * @return the language
+	 */
+	public String[] getLanguage() {
+		return language;
+	}
+
+	/**
+	 * Set the value of property {@code language}.
+	 *
+	 * @param language the value of property language
+	 */
+	public void setLanguage(String[] language) {
+		this.language = language;
+	}
+
+	/**
+	 * Get the value of property {@code ethnic}.
+	 *
+	 * @return the ethnic
+	 */
+	public String[] getEthnic() {
+		return ethnic;
+	}
+
+	/**
+	 * Set the value of property {@code ethnic}.
+	 *
+	 * @param ethnic the value of property ethnic
+	 */
+	public void setEthnic(String[] ethnic) {
+		this.ethnic = ethnic;
 	}
 
 	/**
@@ -230,10 +273,64 @@ public class UserFilter extends UserOptions {
 	/**
 	 * Set the value of property {@code phone}.
 	 *
-	 * @param phone the phone to set
+	 * @param phone the value of property phone
 	 */
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	/**
+	 * Get the value of property {@code address}.
+	 *
+	 * @return the address
+	 */
+	public Address getAddress() {
+		return address;
+	}
+
+	/**
+	 * Set the value of property {@code address}.
+	 *
+	 * @param address the value of property address
+	 */
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	/**
+	 * Get the value of property {@code email}.
+	 *
+	 * @return the email
+	 */
+	public Boolean getEmail() {
+		return email;
+	}
+
+	/**
+	 * Set the value of property {@code email}.
+	 *
+	 * @param email the value of property email
+	 */
+	public void setEmail(Boolean email) {
+		this.email = email;
+	}
+
+	/**
+	 * Get the value of property {@code qaddress}.
+	 *
+	 * @return the qaddress
+	 */
+	public Boolean getQaddress() {
+		return qaddress;
+	}
+
+	/**
+	 * Set the value of property {@code qaddress}.
+	 *
+	 * @param qaddress the value of property qaddress
+	 */
+	public void setQaddress(Boolean qaddress) {
+		this.qaddress = qaddress;
 	}
 
 	/**
@@ -248,12 +345,190 @@ public class UserFilter extends UserOptions {
 	/**
 	 * Set the value of property {@code enabled}.
 	 *
-	 * @param enabled the enabled to set
+	 * @param enabled the value of property enabled
 	 */
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
+	
+	//
+	// Where
 
+	/**
+	 * Set the value of property {@code q}.
+	 *
+	 * @param q the value of property groupId
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withQ(String q) {
+		this.q = q;
+		return this;
+	}
+	
+	/**
+	 * Set the value of property {@code groupId}.
+	 *
+	 * @param groupId the value of property groupId
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withGroupId(String groupId) {
+		this.groupId = groupId;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code groups}.
+	 *
+	 * @param groups the value of property groups
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withGroups(List<String> groups) {
+		this.groups = groups;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code roles}.
+	 *
+	 * @param roles the value of property roles
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withRoles(List<String> roles) {
+		this.roles = roles;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code gender}.
+	 *
+	 * @param gender the value of property gender
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withGender(GenderType gender) {
+		this.gender = gender;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code startBirthdate}.
+	 *
+	 * @param startBirthdate the value of property startBirthdate
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withStartBirthdate(Date startBirthdate) {
+		this.startBirthdate = startBirthdate;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code endBirthdate}.
+	 *
+	 * @param endBirthdate the value of property endBirthdate
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withEndBirthdate(Date endBirthdate) {
+		this.endBirthdate = endBirthdate;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code minAge}.
+	 *
+	 * @param minAge the value of property minAge
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withMinAge(Integer minAge) {
+		this.minAge = minAge;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code maxAge}.
+	 *
+	 * @param maxAge the value of property maxAge
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withMaxAge(Integer maxAge) {
+		this.maxAge = maxAge;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code language}.
+	 *
+	 * @param language the value of property language
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withLanguage(String[] language) {
+		this.language = language;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code ethnic}.
+	 *
+	 * @param ethnic the value of property ethnic
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withEthnic(String[] ethnic) {
+		this.ethnic = ethnic;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code phone}.
+	 *
+	 * @param phone the value of property phone
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withPhone(String phone) {
+		this.phone = phone;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code address}.
+	 *
+	 * @param address the value of property address
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withAddress(Address address) {
+		this.address = address;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code email}.
+	 *
+	 * @param email the value of property email
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withEmail(Boolean email) {
+		this.email = email;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code qaddress}.
+	 *
+	 * @param qaddress the value of property qaddress
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withQaddress(Boolean qaddress) {
+		this.qaddress = qaddress;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code enabled}.
+	 *
+	 * @param enabled the value of property enabled
+	 * @return this {@code UserFilter}
+	 */
+	public UserFilter withEnabled(Boolean enabled) {
+		this.enabled = enabled;
+		return this;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.einnovator.sso.modelx.UserOptions#toString(org.einnovator.util.model.ToStringCreator)
@@ -273,7 +548,6 @@ public class UserFilter extends UserOptions {
 				.append("email", email)
 				.append("phone", phone)
 				.append("enabled", enabled)
-				.append("permissions", permissions)
 				.append("address", address)
 				.append("qaddress", qaddress)
 				);
@@ -297,7 +571,6 @@ public class UserFilter extends UserOptions {
 		result = prime * result + Arrays.hashCode(language);
 		result = prime * result + ((maxAge == null) ? 0 : maxAge.hashCode());
 		result = prime * result + ((minAge == null) ? 0 : minAge.hashCode());
-		result = prime * result + ((permissions == null) ? 0 : permissions.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + ((q == null) ? 0 : q.hashCode());
 		result = prime * result + ((qaddress == null) ? 0 : qaddress.hashCode());
@@ -363,11 +636,6 @@ public class UserFilter extends UserOptions {
 			if (other.minAge != null)
 				return false;
 		} else if (!minAge.equals(other.minAge))
-			return false;
-		if (permissions == null) {
-			if (other.permissions != null)
-				return false;
-		} else if (!permissions.equals(other.permissions))
 			return false;
 		if (phone == null) {
 			if (other.phone != null)
