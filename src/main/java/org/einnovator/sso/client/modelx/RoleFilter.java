@@ -3,17 +3,34 @@ package org.einnovator.sso.client.modelx;
 import org.einnovator.sso.client.model.RoleType;
 import org.einnovator.util.model.ToStringCreator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+/**
+ * A filter for {@code Role}s.
+ * 
+ * @see org.einnovator.sso.client.manager.RoleManager
+ * @see org.einnovator.sso.client.model.Role
+ * @author support@einnovator.org
+ *
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoleFilter extends RoleOptions {
 
 	private String q;
 	
 	private String name;
+
+	private RoleType type;
 	
 	private String group;
-	
-	private String user;
-	
-	private RoleType type;
+		
+	private Boolean manage;
+
+	private String category;
+
+	private String app;
 
 	/**
 	 * Create instance of {@code RoleFilter}.
@@ -61,44 +78,6 @@ public class RoleFilter extends RoleOptions {
 
 
 	/**
-	 * Get the value of property {@code group}.
-	 *
-	 * @return the group
-	 */
-	public String getGroup() {
-		return group;
-	}
-
-	/**
-	 * Set the value of property {@code group}.
-	 *
-	 * @param group the group to set
-	 */
-	public void setGroup(String group) {
-		this.group = group;
-	}
-
-	/**
-	 * Get the value of property {@code user}.
-	 *
-	 * @return the user
-	 */
-	public String getUser() {
-		return user;
-	}
-
-
-	/**
-	 * Set the value of property {@code user}.
-	 *
-	 * @param user the user to set
-	 */
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-
-	/**
 	 * Get the value of property {@code type}.
 	 *
 	 * @return the type
@@ -117,8 +96,83 @@ public class RoleFilter extends RoleOptions {
 		this.type = type;
 	}
 
-	//
+	/**
+	 * Get the value of property {@code group}.
+	 *
+	 * @return the group
+	 */
+	public String getGroup() {
+		return group;
+	}
+
+	/**
+	 * Set the value of property {@code group}.
+	 *
+	 * @param group the group to set
+	 */
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	/**
+	 * Get the value of property {@code manage}.
+	 *
+	 * @return the manage
+	 */
+	public Boolean getManage() {
+		return manage;
+	}
+
+	/**
+	 * Set the value of property {@code manage}.
+	 *
+	 * @param manage the value of property manage
+	 */
+	public void setManage(Boolean manage) {
+		this.manage = manage;
+	}
+
+	/**
+	 * Get the value of property {@code category}.
+	 *
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * Set the value of property {@code category}.
+	 *
+	 * @param category the value of property category
+	 */
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	/**
+	 * Get the value of property {@code app}.
+	 *
+	 * @return the app
+	 */
+	public String getApp() {
+		return app;
+	}
+
+	/**
+	 * Set the value of property {@code app}.
+	 *
+	 * @param app the value of property app
+	 */
+	public void setApp(String app) {
+		this.app = app;
+	}
 	
+
+	//
+	// With
+	//
+
 
 	/**
 	 * Set the value of property {@code q}.
@@ -153,17 +207,6 @@ public class RoleFilter extends RoleOptions {
 		return this;
 	}
 
-	/**
-	 * Set the value of property {@code user}.
-	 *
-	 * @param user the user to with
-	 * @return this
-	 */
-	public RoleFilter withUser(String user) {
-		this.user = user;
-		return this;
-	}
-
 
 	/**
 	 * Set the value of property {@code type}.
@@ -176,16 +219,38 @@ public class RoleFilter extends RoleOptions {
 		return this;
 	}
 
+	/**
+	 * Set the value of property {@code app}.
+	 *
+	 * @param app the value of property app
+	 * @return this {@code RoleFilter}
+	 */
+	public RoleFilter withApp(String app) {
+		this.app = app;
+		return this;
+	}
 
+	/**
+	 * Set the value of property {@code category}.
+	 *
+	 * @param category the value of property category
+	 * @return this
+	 */
+	public RoleFilter withCategory(String category) {
+		this.category = category;
+		return this;
+	}
 
 	@Override
 	public ToStringCreator toString1(ToStringCreator creator) {
 		return super.toString1(creator)
 				.append("q", q)
-				.append("group", group)
 				.append("name", name)
-				.append("user", user)
 				.append("type", type)
+				.append("group", group)
+				.append("manage", manage)
+				.append("category", category)
+				.append("app", app)
 			;
 	}
 	

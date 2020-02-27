@@ -8,6 +8,14 @@ import org.einnovator.util.model.ToStringCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * A filter for {@code Client}s.
+ * 
+ * @see org.einnovator.sso.client.manager.ClientManager
+ * @see org.einnovator.sso.client.model.Client
+ * @author support@einnovator.org
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientFilter extends ClientOptions {

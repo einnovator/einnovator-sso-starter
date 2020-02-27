@@ -11,6 +11,14 @@ import org.einnovator.util.model.ToStringCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * A filter for {@code Users}s.
+ * 
+ * @see org.einnovator.sso.client.manager.UserManager
+ * @see org.einnovator.sso.client.model.User
+ * @author support@einnovator.org
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserFilter extends UserOptions {

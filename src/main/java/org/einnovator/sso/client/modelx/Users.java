@@ -5,17 +5,33 @@ import java.util.List;
 import org.einnovator.util.model.ObjectBase;
 import org.einnovator.util.model.ToStringCreator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+/**
+ * Utility collection of {@code Users}s.
+ * 
+ * @see org.einnovator.sso.client.manager.InvitationManager
+ * @see org.einnovator.sso.client.model.User
+ * @author support@einnovator.org
+ *
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Users extends ObjectBase {
 
-	private List<String> users;
+	protected List<String> users;
 
-	private Boolean member;
+	protected Boolean member;
 
+	/**
+	 * Create instance of {@code Users}.
+	 *
+	 */
 	public Users() {
 	}
 
 	
-
 	/**
 	 * Get the value of property {@code users}.
 	 *
@@ -35,23 +51,21 @@ public class Users extends ObjectBase {
 		this.users = users;
 	}
 
-
 	/**
 	 * Get the value of property {@code members}.
 	 *
-	 * @return the value of member
+	 * @return the members
 	 */
 	public Boolean getMember() {
 		return member;
 	}
 
-
 	/**
 	 * Set the value of property {@code members}.
 	 *
-	 * @param member the value of member
+	 * @param members the members to set
 	 */
-	public void setMember(Boolean member) {
+	public void setMembers(Boolean member) {
 		this.member = member;
 	}
 

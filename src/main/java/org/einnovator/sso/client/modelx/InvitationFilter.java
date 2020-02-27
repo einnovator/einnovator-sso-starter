@@ -9,6 +9,14 @@ import org.einnovator.util.model.ToStringCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * A filter for {@code Invitation}s.
+ * 
+ * @see org.einnovator.sso.client.manager.InvitationManager
+ * @see org.einnovator.sso.client.model.Invitation
+ * @author support@einnovator.org
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InvitationFilter extends InvitationOptions {

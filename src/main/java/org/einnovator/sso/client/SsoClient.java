@@ -1212,7 +1212,7 @@ public class SsoClient {
 			filter = new RoleFilter();
 		}
 		userId = encodeId(userId);
-		filter.setUser(userId);
+		filter.setRunAs(userId);
 		return listRoles(filter, pageable, context);
 	}
 
@@ -1237,7 +1237,7 @@ public class SsoClient {
 			filter = new RoleFilter();
 		}
 		userId = encodeId(userId);
-		filter.setUser(userId);
+		filter.setRunAs(userId);
 		filter.setGroup(groupId);
 		return listRoles(filter, pageable, context);
 	}
