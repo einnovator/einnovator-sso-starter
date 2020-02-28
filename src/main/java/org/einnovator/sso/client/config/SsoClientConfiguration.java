@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 
 /**
- * SSO configuration properties.
+ * SSO Client configuration properties.
  * 
  */
 @ConfigurationProperties("sso")

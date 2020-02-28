@@ -41,6 +41,7 @@ import org.einnovator.util.PageResult;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.model.Application;
 import org.einnovator.util.security.SecurityUtil;
+import org.einnovator.util.web.ClientContext;
 import org.einnovator.util.web.RequestOptions;
 import org.einnovator.util.web.Result;
 import org.einnovator.util.web.WebUtil;
@@ -48,7 +49,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -67,7 +67,6 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -153,9 +152,7 @@ public class SsoClient {
 	 * @param web true if auto-detect web-environment 
 	 */
 	public SsoClient(OAuth2RestTemplate restTemplate, SsoClientConfiguration config, boolean web) {
-		this.config = config;
-		this.restTemplate = restTemplate;
-		this.oauth2ClientContext = restTemplate.getOAuth2ClientContext();
+		this(restTemplate, config);
 		this.web = web;
 	}
 
@@ -364,7 +361,7 @@ public class SsoClient {
 	 */
 	public User getUser(String id, UserOptions options, SsoClientContext context) {
 		id = encodeId(id);
-		URI uri = makeURI(SsoEndpoints.user(id, config));
+		URI uri = makeURI(SsoEndpoints.user(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<User> result = exchange(request, User.class, context);
@@ -384,7 +381,7 @@ public class SsoClient {
 	 * @return a {@code Page} with {@code User}s
 	 */
 	public Page<User> listUsers(UserFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.users(config));
+		URI uri = makeURI(SsoEndpoints.users(config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
@@ -392,8 +389,9 @@ public class SsoClient {
 		return PageUtil.create2(result.getBody(), User.class);
 	}
 
+
 	/**
-	 * Create a new {@code User}
+	 * Create a new {@code User}.
 	 * 
 	 * 
 	 * <p><b>Required Security Credentials</b>: Client or Admin (global role ADMIN).
@@ -405,7 +403,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public URI createUser(User user, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.users(config));
+		URI uri = makeURI(SsoEndpoints.users(config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<User> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(user);
 		ResponseEntity<Void> result = exchange(request, Void.class, context);
@@ -423,7 +421,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void updateUser(User user, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.user(user.getId(), config));
+		URI uri = makeURI(SsoEndpoints.user(user.getId(), config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<User> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(user);
 		exchange(request, User.class, context);
@@ -444,7 +442,7 @@ public class SsoClient {
 	 */
 	public void deleteUser(String id, RequestOptions options, SsoClientContext context) {
 		id = encodeId(id);
-		URI uri = makeURI(SsoEndpoints.user(id, config));
+		URI uri = makeURI(SsoEndpoints.user(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -466,7 +464,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void changePassword(String password, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.password(config) + "?password=" + password);
+		URI uri = makeURI(SsoEndpoints.password(config, isAdminRequest(options, context)) + "?password=" + password);
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -477,6 +475,29 @@ public class SsoClient {
 	// Group
 	//
 	
+
+	/**
+	 * Get {@code Group} with specified identifier.
+	 * 
+	 * Identifier {@code id} is the value of a property with unique constraints, that is:
+	 * UUID, name for root {@code Groups} if server is configured to required unique names for root {@code Group}s .
+	 * 
+	 * <p><b>Required Security Credentials</b>: any for root {@code Group}, but results depend on each {@code User} privacy settings.
+	 *
+	 * @param groupId the identifier
+	 * @param filter (optional) the {@code GroupOptions} that tailor which fields are returned (projection) and {@code GroupFilter} for sub-groups
+	 * @param context optional {@code SsoClientContext}
+	 * @return the {@code Group}
+	 * @throws RestClientException if request fails
+	 */
+	public Group getGroup(String groupId, GroupFilter filter, SsoClientContext context) {
+		groupId = encode(groupId);
+		URI uri = makeURI(SsoEndpoints.group(groupId, config, isAdminRequest(filter, context)));
+		uri = processURI(uri, filter);
+		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
+		ResponseEntity<Group> result = exchange(request, Group.class, context);
+		return result.getBody();
+	}
 	
 	/**
 	 * List {@code Group}s.
@@ -490,35 +511,12 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public Page<Group> listGroups(GroupFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.groups(config));
+		URI uri = makeURI(SsoEndpoints.groups(config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
 		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
 		return PageUtil.create2(result.getBody(), Group.class);
-	}
-
-	/**
-	 * Get {@code Group} with specified identifier.
-	 * 
-	 * Identifier {@code id} is the value of a property with unique constraints, that is:
-	 * UUID, name for root {@code Groups} if server is configured to required unique names for root {@code Group}s .
-	 * 
-	 * <p><b>Required Security Credentials</b>: any for root {@code Group}, but results depend on each {@code User} privacy settings.
-	 *
-	 * @param id the identifier
-	 * @param filter (optional) the {@code GroupOptions} that tailor which fields are returned (projection) and {@code GroupFilter} for sub-groups
-	 * @param context optional {@code SsoClientContext}
-	 * @return the {@code Group}
-	 * @throws RestClientException if request fails
-	 */
-	public Group getGroup(String id, GroupFilter filter, SsoClientContext context) {
-		id = encode(id);
-		URI uri = makeURI(SsoEndpoints.group(id, config));
-		uri = processURI(uri, filter);
-		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
-		ResponseEntity<Group> result = exchange(request, Group.class, context);
-		return result.getBody();
 	}
 	
 	/**
@@ -534,7 +532,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public URI createGroup(Group group, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.groups(config));
+		URI uri = makeURI(SsoEndpoints.groups(config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Group> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(group);
 		ResponseEntity<Group> result = exchange(request, Group.class, context);
@@ -554,7 +552,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void updateGroup(Group group, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.group(encode(group.getId()), config));
+		URI uri = makeURI(SsoEndpoints.group(encode(group.getId()), config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Group> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(group);		
 		exchange(request, Group.class, context);
@@ -574,7 +572,7 @@ public class SsoClient {
 	 */
 	public void deleteGroup(String id, RequestOptions options, SsoClientContext context) {
 		id = encode(id);
-		URI uri = makeURI(SsoEndpoints.group(id, config));
+		URI uri = makeURI(SsoEndpoints.group(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -621,7 +619,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */	
 	public Integer countGroups(GroupFilter filter, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.countGroups(config));
+		URI uri = makeURI(SsoEndpoints.countGroups(config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Integer> result = exchange(request, Integer.class, context);
@@ -671,7 +669,7 @@ public class SsoClient {
 	 */	
 	public Page<Member> listGroupMembers(String groupId, MemberFilter filter, Pageable pageable, SsoClientContext context) {
 		groupId = encode(groupId);
-		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config));
+		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
@@ -693,7 +691,7 @@ public class SsoClient {
 	 */	
 	public Integer countGroupMembers(String id, MemberFilter filter, SsoClientContext context) {
 		id = encode(id);
-		URI uri = makeURI(SsoEndpoints.countMembers(id, config));
+		URI uri = makeURI(SsoEndpoints.countMembers(id, config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Integer> result = exchange(request, Integer.class, context);
@@ -719,18 +717,11 @@ public class SsoClient {
 	public Member getGroupMember(String groupId, String userId, UserOptions options, SsoClientContext context) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.member(groupId, userId, config));
+		URI uri = makeURI(SsoEndpoints.member(groupId, userId, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Member> result = exchange(request, Member.class, context);
-		try {
-			return result.getBody();			
-		} catch (HttpClientErrorException e) {
-			if (e.getStatusCode()==HttpStatus.NOT_FOUND) {
-				return null;
-			}
-			throw e;
-		}
+		return result.getBody();			
 	}
 
 	/**
@@ -749,7 +740,7 @@ public class SsoClient {
 	public URI addMemberToGroup(String userId, String groupId, RequestOptions options, SsoClientContext context) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options, context)) + "?username=" + userId);
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();		
 		ResponseEntity<Void> result = exchange(request, Void.class, context);
@@ -771,7 +762,7 @@ public class SsoClient {
 	 */
 	public URI addMemberToGroup(Member member, String groupId, RequestOptions options, SsoClientContext context) {
 		groupId = encode(groupId);
-		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config));
+		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Member> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(member);		
 		ResponseEntity<Void> result = exchange(request, Void.class, context);
@@ -794,7 +785,7 @@ public class SsoClient {
 	public void removeMemberFromGroup(String userId, String groupId, RequestOptions options, SsoClientContext context) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options, context)) + "?username=" + userId);
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -838,7 +829,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */	
 	public Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invitations(config));
+		URI uri = makeURI(SsoEndpoints.invitations(config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
@@ -859,7 +850,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public Invitation getInvitation(String id, InvitationOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invitation(id, config));
+		URI uri = makeURI(SsoEndpoints.invitation(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Invitation> result = exchange(request, Invitation.class, context);
@@ -878,7 +869,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public URI invite(Invitation invitation, InvitationOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invite(config));
+		URI uri = makeURI(SsoEndpoints.invite(config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Invitation> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(invitation);		
 		ResponseEntity<Void> result = exchange(request, Void.class, context);
@@ -896,7 +887,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void updateInvitation(Invitation invitation, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invitation(invitation.getUuid(), config));
+		URI uri = makeURI(SsoEndpoints.invitation(invitation.getUuid(), config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Invitation> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(invitation);
 		exchange(request, Invitation.class, context);
@@ -914,7 +905,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public InvitationStats getInvitationStats(RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invitationStats(config));
+		URI uri = makeURI(SsoEndpoints.invitationStats(config, isAdminRequest(options, context)));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<InvitationStats> result = exchange(request, InvitationStats.class, context);
 		return result.getBody();
@@ -933,7 +924,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public URI getInvitationToken(String id, InvitationOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invitationToken(id, config));
+		URI uri = makeURI(SsoEndpoints.invitationToken(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();		
 		ResponseEntity<Void> result = exchange(request, Void.class, context);
@@ -951,7 +942,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void deleteInvitation(String id, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.invitation(id, config));
+		URI uri = makeURI(SsoEndpoints.invitation(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -977,7 +968,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public Role getRole(String id, RoleOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.role(id, config));
+		URI uri = makeURI(SsoEndpoints.role(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Role> result = exchange(request, Role.class, context);
@@ -998,7 +989,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */	
 	public Page<Role> listRoles(RoleFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roles(config));
+		URI uri = makeURI(SsoEndpoints.roles(config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
@@ -1021,7 +1012,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public URI createRole(Role role, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roles(config));
+		URI uri = makeURI(SsoEndpoints.roles(config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Role> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(role);
 		ResponseEntity<Role> result = exchange(request, Role.class, context);
@@ -1041,7 +1032,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void updateRole(Role role, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.role(role.getId(), config));
+		URI uri = makeURI(SsoEndpoints.role(role.getId(), config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Role> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(role);
 		exchange(request, Role.class, context);
@@ -1062,7 +1053,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void deleteRole(String id, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.role(id, config));
+		URI uri = makeURI(SsoEndpoints.role(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -1087,7 +1078,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */	
 	public Page<User> listRoleMembers(String roleId, UserFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config));
+		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
@@ -1109,7 +1100,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */	
 	public Integer countRoleMembers(String roleId, UserFilter filter, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.countRoleMembers(roleId, config));
+		URI uri = makeURI(SsoEndpoints.countRoleMembers(roleId, config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Integer> result = exchange(request, Integer.class, context);
@@ -1131,7 +1122,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void assignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config, isAdminRequest(options, context)) + "?username=" + userId);
 		userId = encodeId(userId);
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
@@ -1153,7 +1144,7 @@ public class SsoClient {
 	 */
 	public void unassignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config, isAdminRequest(options, context)) + "?username=" + userId);
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -1225,7 +1216,7 @@ public class SsoClient {
 	 */
 	public Client getClient(String id, ClientOptions options, SsoClientContext context) {
 		id = encodeId(id);
-		URI uri = makeURI(SsoEndpoints.client(id, config));
+		URI uri = makeURI(SsoEndpoints.client(id, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Client> result = exchange(request, Client.class, context);
@@ -1244,7 +1235,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */	
 	public Page<Client> listClients(ClientFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.clients(config));
+		URI uri = makeURI(SsoEndpoints.clients(config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
@@ -1264,7 +1255,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public URI createClient(Client client, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.clients(config));
+		URI uri = makeURI(SsoEndpoints.clients(config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Client> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(client);
 		ResponseEntity<Void> result = exchange(request, Void.class, context);
@@ -1282,7 +1273,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void updateClient(Client client, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.client(client.getId(), config));
+		URI uri = makeURI(SsoEndpoints.client(client.getId(), config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Client> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(client);
 		exchange(request, Client.class, context);
@@ -1300,7 +1291,7 @@ public class SsoClient {
 	 */
 	public void deleteClient(String clientId, RequestOptions options, SsoClientContext context) {
 		clientId = encodeId(clientId);
-		URI uri = makeURI(SsoEndpoints.client(clientId, config));
+		URI uri = makeURI(SsoEndpoints.client(clientId, config, isAdminRequest(options, context)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -1326,6 +1317,29 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType, SsoClientContext context) throws RestClientException {
+		OAuth2RestTemplate restTemplate = getRequiredRestTemplate(context);
+		try {
+			return exchange(restTemplate, request, responseType);			
+		} catch (RuntimeException e) {
+			if (context!=null && !context.isSingleton()) {
+				context.setResult(new Result<Object>(e));
+			}
+			throw e;
+		}
+	}
+	
+	/**
+	 * Get the {@code OAuth2RestTemplate} to use to perform a request.
+	 * 
+	 * If the context is not null, returns the {@code OAuth2RestTemplate} specified by the context (if any).
+	 * Otherwise, return the configured {@code OAuth2RestTemplate} in property {@link #restTemplate}.
+	 * If property {@link web} is true, check if current thread is bound to a web request with a session-scope. If not, fallback
+	 * to client credential {@code OAuth2RestTemplate} in property {@link #restTemplate2} or create one if needed.
+	 * 
+	 * @param context optional {@code SsoClientContext}
+	 * @return the {@code OAuth2RestTemplate}
+	 */
+	protected OAuth2RestTemplate getRequiredRestTemplate(SsoClientContext context) {
 		OAuth2RestTemplate restTemplate = this.restTemplate;
 		if (context!=null && context.getRestTemplate()!=null) {
 			restTemplate = context.getRestTemplate();
@@ -1337,14 +1351,7 @@ public class SsoClient {
 				restTemplate = this.restTemplate0;
 			}			
 		}
-		try {
-			return exchange(restTemplate, request, responseType);			
-		} catch (RuntimeException e) {
-			if (context!=null && !context.isSingleton()) {
-				context.setResult(new Result<Object>(e));
-			}
-			throw e;
-		}
+		return restTemplate;
 	}
 
 	/**
@@ -1801,8 +1808,7 @@ public class SsoClient {
 	 */
 	public static SsoClient makeSsoClient(String username, String password, SsoClientConfiguration config) {
 		OAuth2ClientContext context = new DefaultOAuth2ClientContext();
-		OAuth2ProtectedResourceDetails resource = SsoClient.makeResourceOwnerPasswordResourceDetails(username, password,
-				config);
+		OAuth2ProtectedResourceDetails resource = SsoClient.makeResourceOwnerPasswordResourceDetails(username, password, config);
 		OAuth2RestTemplate template = new OAuth2RestTemplate(resource, context);
 		SsoClient ssoClient = new SsoClient(template, config);
 		return ssoClient;
@@ -1852,7 +1858,7 @@ public class SsoClient {
 	 * @param authentication the {@code Authentication}
 	 * @param context optional {@code SsoClientContext}
 	 */
-	public void doLogout(Authentication authentication, SsoClientContext context) {
+	public void doLogout(Authentication authentication) {
 		if (authentication == null) {
 			return;
 		}
@@ -1860,9 +1866,6 @@ public class SsoClient {
 		if (details.getClass().isAssignableFrom(OAuth2AuthenticationDetails.class)) {
 			String accessToken = ((OAuth2AuthenticationDetails) details).getTokenValue();
 			SsoClientConfiguration config = this.config;
-			if (context!=null && context.getConfig()!=null) {
-				config = context.getConfig();
-			}
 			@SuppressWarnings("rawtypes")
 			RequestEntity request2 = RequestEntity.post(makeURI(SsoEndpoints.getTokenRevokeEndpoint(config)))
 					.accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
@@ -1895,8 +1898,19 @@ public class SsoClient {
 			SecurityContextHolder.clearContext();
 		}
 	}
+	
+	//
+	// Other
+	//
 
-	private URI processURI(URI uri, Object... objs) {
+	/**
+	 * Process URI by adding parameters from properties of specified objectes.
+	 * 
+	 * @param uri the {@code URI}
+	 * @param objs a variadic array of objects
+	 * @return the processed {@code URI}
+	 */
+	public static URI processURI(URI uri, Object... objs) {
 		if (objs!=null && objs.length>0) {
 			Map<String, String> params = new LinkedHashMap<>();
 			for (Object obj: objs) {
@@ -1913,4 +1927,22 @@ public class SsoClient {
 		return uri;
 	}
 	
+	
+	/**
+	 * Check if request is for admin endpoint.
+	 * 
+	 * @param options optional {@code RequestOptions}
+	 * @param context options {@code SsoClientContext}
+	 * @return true if reques is for an admin endpoint, false otherwise
+	 */
+	public static boolean isAdminRequest(RequestOptions options, ClientContext context) {
+		if (options!=null && options.getAdmin()!=null) {
+			return Boolean.TRUE.equals(options.getAdmin());
+		}
+		if (context!=null && context.isAdmin()) {
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -49,6 +49,12 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 
 
+/**
+ * Spring Security Configurer for SSO Client.
+ * 
+ * @author support@einnovator.org
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(value=SsoClientConfiguration.class)
