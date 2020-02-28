@@ -136,7 +136,7 @@ public class SsoEndpoints {
 	}
 	
 	public static String api(SsoClientConfiguration config, boolean admin) {
-		String s = api(config, admin) + "";
+		String s = config.getServer() + "/api";
 		if (admin) {
 			s += "/admin";
 		}
