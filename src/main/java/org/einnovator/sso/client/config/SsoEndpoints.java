@@ -99,15 +99,15 @@ public class SsoEndpoints {
 		return api(config, admin) + "/r/role";
 	}
 
-	public static String roleMembers(String roleId, SsoClientConfiguration config, boolean admin) {
-		return role(roleId, config, admin) + "/member";
+	public static String roleBindings(String roleId, SsoClientConfiguration config, boolean admin) {
+		return role(roleId, config, admin) + "/binding";
 	}
-	public static String roleMembersFlux(String roleId, SsoClientConfiguration config, boolean admin) {
-		return roleFlux(roleId, config, admin) + "/member";
+	public static String roleBindingsFlux(String roleId, SsoClientConfiguration config, boolean admin) {
+		return roleFlux(roleId, config, admin) + "/binding";
 	}
 
-	public static String countRoleMembers(String roleId, SsoClientConfiguration config, boolean admin) {
-		return roleMembers(roleId, config, admin) + "?count=true";
+	public static String countRoleBindings(String roleId, SsoClientConfiguration config, boolean admin) {
+		return roleBindings(roleId, config, admin) + "?count=true";
 	}
 
 	public static String getLoginEndpoint(SsoClientConfiguration config) {

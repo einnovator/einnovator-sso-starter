@@ -1,6 +1,15 @@
 package org.einnovator.sso.client.model;
 
 
+/**
+ * Enum for type of{@code Role}.
+ *
+ * <p>GLOBAL roles are platform wide roles.
+ * <p>GROUP roles are scoped to individual {@code Groups}.
+ * 
+ * @author support@einnovator.org
+ *
+ */
 public enum RoleType {
 	GLOBAL("Global"),
 	GROUP("Group")

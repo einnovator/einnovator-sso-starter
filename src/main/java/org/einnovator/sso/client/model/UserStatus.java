@@ -1,5 +1,11 @@
 package org.einnovator.sso.client.model;
 
+/**
+ * Enum for {@code User} status.
+ *
+ * @author support@einnovator.org
+ *
+ */
 public enum UserStatus {
 	UNCONFIRMED("Unconfirmed"), //User has been created but not confirmed
 	CONFIRMED("Confirmed"), // User has been confirmed

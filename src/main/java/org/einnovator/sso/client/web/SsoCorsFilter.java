@@ -5,6 +5,12 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 
+/**
+ * A CORS filter.
+ *
+ * @author support@einnovator.org
+ *
+ */
 public class SsoCorsFilter extends CorsFilter {
 
 	@Autowired

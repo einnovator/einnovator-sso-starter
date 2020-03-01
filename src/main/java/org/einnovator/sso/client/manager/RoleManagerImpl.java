@@ -13,6 +13,7 @@ import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Role;
+import org.einnovator.sso.client.model.RoleBinding;
 import org.einnovator.sso.client.model.RoleType;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.RoleFilter;
@@ -286,26 +287,26 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<User> listRoleMembers(String roleId, UserFilter filter, Pageable pageable, SsoClientContext context) {
+	public Page<RoleBinding> listRoleBindings(String roleId, UserFilter filter, Pageable pageable, SsoClientContext context) {
 		try {
-			Page<User> members = client.listRoleMembers(roleId, filter, pageable, context);
-			if (members == null) {
-				logger.error("listRoleMembers: " + roleId);
+			Page<RoleBinding> bindings = client.listRoleBindings(roleId, filter, pageable, context);
+			if (bindings == null) {
+				logger.error("listRoleBindings: " + roleId);
 			}
-			return members;
+			return bindings;
 		} catch (RuntimeException e) {
-			logger.error("listRoleMembers: " + roleId + "  " + e);
+			logger.error("listRoleBindings: " + roleId + "  " + e);
 			return null;
 		}
 	}
 
 	@Override
-	public Integer countRoleMembers(String roleId, UserFilter filter, SsoClientContext context) {
+	public Integer countRoleBindings(String roleId, UserFilter filter, SsoClientContext context) {
 		try {
-			Integer n = client.countRoleMembers(roleId, filter, context);
+			Integer n = client.countRoleBindings(roleId, filter, context);
 			return n;
 		} catch (RuntimeException e) {
-			logger.error("countRoleMembers: " + roleId + "  " + e);
+			logger.error("countRoleBindings: " + roleId + "  " + e);
 			return null;
 		}
 	}

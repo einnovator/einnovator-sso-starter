@@ -7,7 +7,7 @@ import java.util.List;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Role;
-import org.einnovator.sso.client.model.User;
+import org.einnovator.sso.client.model.RoleBinding;
 import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.RoleOptions;
 import org.einnovator.sso.client.modelx.UserFilter;
@@ -103,7 +103,7 @@ public interface RoleManager {
 	//
 	
 	/**
-	 * List {@code User}s assigned a {@code Role} .
+	 * List {@code RoleBinding}s assigned a {@code Role} .
 	 * 
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
 	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
@@ -115,7 +115,7 @@ public interface RoleManager {
 	 * @param context optional {@code SsoClientContext}
 	 * @return a {@code Page} with {@code User}s, or null if not found or request failed
 	 */		
-	Page<User> listRoleMembers(String roleId, UserFilter filter,  Pageable pageable, SsoClientContext context);
+	Page<RoleBinding> listRoleBindings(String roleId, UserFilter filter,  Pageable pageable, SsoClientContext context);
 
 	/**
 	 * Get count of {@code User}s assigned a {@code Role} .
@@ -129,7 +129,7 @@ public interface RoleManager {
 	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code User} count, or null if not found or request failed
 	 */
-	Integer countRoleMembers(String roleId, UserFilter filter, SsoClientContext context);
+	Integer countRoleBindings(String roleId, UserFilter filter, SsoClientContext context);
 
 	/**
 	 * Assign {@code Role} to {@code User}

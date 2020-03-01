@@ -11,6 +11,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * Descriptor with details for application registration in the SSO Gateway at startup.
+ * 
+ * <p>If property {@link #auto} is true, registration is done automatically.
+ * <p>Property {@link #roles} specifies the set of roles to register.
+ * <p>Example configuration in {@code application.yaml}:
+ * <p>sso:
+ * <p>  server : https://sso.mydomain.com
+ * <p>  client-id: myapp
+ * <p>  client-secret: myapp$secret
+ * <p>  registration:
+ * <p>    auto: true
+ * <p>    roles:
+ * <p>    - name: "CUSTOMER_MANAGER"
+ * <p>      display-name: "Customer Manager"
+ * <p>      type: GLOBAL
+ * <p>      description: "User with this role can manage Customers" 
+ * 
+ * @author support@einnovator.org
+ *
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class SsoRegistration extends ObjectBase {

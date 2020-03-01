@@ -23,6 +23,12 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * A logout handler.
+ *
+ * @author support@einnovator.org
+ *
+ */
 public class SsoClientLogoutHandler extends SimpleUrlLogoutSuccessHandler implements LogoutHandler, LogoutSuccessHandler {
 
 	private final Log logger = LogFactory.getLog(getClass());

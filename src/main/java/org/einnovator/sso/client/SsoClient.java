@@ -23,6 +23,7 @@ import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.Role;
+import org.einnovator.sso.client.model.RoleBinding;
 import org.einnovator.sso.client.model.SsoRegistration;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.ClientFilter;
@@ -135,7 +136,7 @@ public class SsoClient {
 	/**
 	 * Create instance of {@code SsoClient}.
 	 *
-	 * @param restTemplate the {@code OAuth2RestTemplate} used for HTTP transport
+	 * @param restTemplate the {@code OAuth2RestTemplate} to use for HTTP transport
 	 * @param config the {@code SsoClientConfiguration}
 	 */
 	public SsoClient(OAuth2RestTemplate restTemplate, SsoClientConfiguration config) {
@@ -1064,7 +1065,7 @@ public class SsoClient {
 	//
 	
 	/**
-	 * List {@code User}s assigned a {@code Role} .
+	 * List {@code RoleBinding}s assigned a {@code Role} .
 	 * 
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
 	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
@@ -1074,20 +1075,20 @@ public class SsoClient {
 	 * @param filter a {@code UserFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
 	 * @param context optional {@code SsoClientContext}
-	 * @return a {@code Page} with {@code User}s
+	 * @return a {@code Page} with {@code RoleBinding}s
 	 * @throws RestClientException if request fails
 	 */	
-	public Page<User> listRoleMembers(String roleId, UserFilter filter, Pageable pageable, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config, isAdminRequest(filter, context)));
+	public Page<RoleBinding> listRoleBindings(String roleId, UserFilter filter, Pageable pageable, SsoClientContext context) {
+		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter, pageable);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		@SuppressWarnings("rawtypes")
 		ResponseEntity<PageResult> result = exchange(request, PageResult.class, context);
-		return PageUtil.create2(result.getBody(), User.class);
+		return PageUtil.create2(result.getBody(), RoleBinding.class);
 	}
 
 	/**
-	 * Get count of {@code User}s assigned a {@code Role} .
+	 * Get count of {@code RoleBinding}s assigned a {@code Role} .
 	 * 
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
 	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
@@ -1099,8 +1100,8 @@ public class SsoClient {
 	 * @return the {@code User} count
 	 * @throws RestClientException if request fails
 	 */	
-	public Integer countRoleMembers(String roleId, UserFilter filter, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.countRoleMembers(roleId, config, isAdminRequest(filter, context)));
+	public Integer countRoleBindings(String roleId, UserFilter filter, SsoClientContext context) {
+		URI uri = makeURI(SsoEndpoints.countRoleBindings(roleId, config, isAdminRequest(filter, context)));
 		uri = processURI(uri, filter);
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<Integer> result = exchange(request, Integer.class, context);
@@ -1122,7 +1123,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void assignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
-		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config, isAdminRequest(options, context)) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(options, context)) + "?username=" + userId);
 		userId = encodeId(userId);
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
@@ -1144,7 +1145,7 @@ public class SsoClient {
 	 */
 	public void unassignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.roleMembers(roleId, config, isAdminRequest(options, context)) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(options, context)) + "?username=" + userId);
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, context);
@@ -1334,7 +1335,7 @@ public class SsoClient {
 	 * If the context is not null, returns the {@code OAuth2RestTemplate} specified by the context (if any).
 	 * Otherwise, return the configured {@code OAuth2RestTemplate} in property {@link #restTemplate}.
 	 * If property {@link web} is true, check if current thread is bound to a web request with a session-scope. If not, fallback
-	 * to client credential {@code OAuth2RestTemplate} in property {@link #restTemplate2} or create one if needed.
+	 * to client credential {@code OAuth2RestTemplate} in property {@link #restTemplate0} or create one if needed.
 	 * 
 	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code OAuth2RestTemplate}
@@ -1856,7 +1857,6 @@ public class SsoClient {
 	 * Force logout.
 	 * 
 	 * @param authentication the {@code Authentication}
-	 * @param context optional {@code SsoClientContext}
 	 */
 	public void doLogout(Authentication authentication) {
 		if (authentication == null) {

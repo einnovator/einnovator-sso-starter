@@ -1,6 +1,12 @@
 package org.einnovator.sso.client.model;
 
 
+/**
+ * A Enum for the status of {@code Invitation}s.
+ *
+ * @author support@einnovator.org
+ *
+ */
 public enum InvitationStatus {
 	PENDING("Pending"),
 	ACCEPTED("Accepted"),

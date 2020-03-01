@@ -16,6 +16,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Logout filter used to invalidate session and tokens with SSO Gateway.
+ *
+ * @author support@einnovator.org
+ *
+ */
 @Controller
 public class SsoLogoutController {
 

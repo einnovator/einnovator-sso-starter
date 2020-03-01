@@ -1,6 +1,12 @@
 package org.einnovator.sso.client.model;
 
 
+/**
+ * An Enum for type of  {@code Invitation}.
+ *
+ * @author support@einnovator.org
+ *
+ */
 public enum InvitationType {
 	USER("User"),
 	MEMBER("Member"),

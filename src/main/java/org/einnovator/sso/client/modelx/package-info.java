@@ -1,7 +1,6 @@
 /**
+ * Support model objects, including filters and retrieval options.
  * 
- */
-/**
  * @author support@einnovator.org
  *
  */

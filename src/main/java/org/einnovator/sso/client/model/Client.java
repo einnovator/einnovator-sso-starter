@@ -22,6 +22,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 		
 
+/**
+ * A {@code Client} representing an authorized application.
+ * 
+ *
+ * @author support@einnovator.org
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Client extends EntityBase {	
 

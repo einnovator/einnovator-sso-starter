@@ -23,6 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * A Rest Controller to query server resources using the session principal.
+ *
+ * @author support@einnovator.org
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class SsoQueryRestController extends ControllerBase {

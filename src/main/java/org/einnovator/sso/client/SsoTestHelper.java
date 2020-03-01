@@ -1,6 +1,5 @@
-package org.einnovator.sso.client.support;
+package org.einnovator.sso.client;
 
-import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -16,7 +15,40 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 /**
- * Helper class for running tests that need a JWT token to invoke secure services.
+ * Helper class for running tests that need a JWT bearer token to invoke secure services.
+ * 
+ * <p>Example usage:
+ * 
+ * <p>@{code
+ * <p>@RunWith(SpringRunner.class)
+ * <p>@SpringBootTest(classes = { MyAppConfig.class, MyAppTests.TestConfig.class }, webEnvironment = WebEnvironment.NONE)
+ * <p>@TestPropertySource(properties = { "sso.server=http://sso-dev.mydomain.com", "spring.cache.ehcache.config:ehcache-sso-starter.xml" })
+ * <p>public class DocumentsClientTests extends SsoTestHelper {
+ * <p>
+ * <p>  public static final String TEST_USER = "tdd@mydomain.com";
+ * <p>  public static final String TEST_PASSWORD = "may!pass";
+ * <p>		
+ * <p>  private static final String CLIENT_ID = "myapp";
+ * <p>  private static final String CLIENT_SECRET = "myapp$secret";
+ 
+ * <p>  @Autowired private SsoClient ssoClient;
+ * <p>  
+ * <p>  @Configuration
+ * <p>  static class TestConfig extends SsoTestHelper.TestConfig {
+ * <p>  
+ * <p>  public TestConfig(ApplicationContext context) {
+ * <p>  	super(TEST_USER, TEST_PASSWORD, CLIENT_ID, CLIENT_SECRET, context);
+ * <p>  }
+ * <p>  
+ * <p>  @Test
+ * <p>  public void mytest() {
+ * <p>		OAuth2AccessToken token = client.getToken(TEST_USER, TEST_PASSWORD);
+ * <p>		assertNotNull(token);
+ * <p>   	//test something with bearer token in SecurityContext
+ * <p>  	//...
+ * <p>  }
+ * <p>  
+ * <p>}
  * 
  * @author support@einnovator.org
  *

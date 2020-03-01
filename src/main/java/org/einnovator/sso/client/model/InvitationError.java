@@ -1,6 +1,12 @@
 package org.einnovator.sso.client.model;
 
 
+/**
+ * An Enum for invitation error type.
+ *
+ * @author support@einnovator.org
+ *
+ */
 public enum InvitationError {
 	ALREADY_INVITED("invitation.error.already_invited", "Already invited"),
 	USER_EXITS("invitation.error.user_exists", "User already registered"),

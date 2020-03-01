@@ -12,6 +12,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * Options for {@code User} lookup.
+ * 
+ * @see UserFilter
+ * @see org.einnovator.sso.client.manager.UserManager
+ * @see org.einnovator.sso.client.model.User
+ * @author support@einnovator.org
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserOptions extends EntityOptions<User> {

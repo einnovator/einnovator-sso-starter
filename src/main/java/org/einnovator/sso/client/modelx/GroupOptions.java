@@ -10,6 +10,15 @@ import org.einnovator.util.model.ToStringCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * Options for {@code Group} lookup.
+ * 
+ * @see GroupFilter
+ * @see org.einnovator.sso.client.manager.GroupManager
+ * @see org.einnovator.sso.client.model.Group
+ * @author support@einnovator.org
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GroupOptions extends EntityOptions<Group> {

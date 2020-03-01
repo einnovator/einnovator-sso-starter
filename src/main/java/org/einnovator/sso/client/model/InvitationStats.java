@@ -5,6 +5,12 @@ import org.einnovator.util.model.ToStringCreator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * A descriptor with stats of {@code Invitation}s.
+ *
+ * @author support@einnovator.org
+ *
+ */
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class InvitationStats extends ObjectBase {
 
