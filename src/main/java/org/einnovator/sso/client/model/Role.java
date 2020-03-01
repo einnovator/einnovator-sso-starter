@@ -9,6 +9,7 @@ import java.util.Set;
 import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.model.ToStringCreator;
 import org.einnovator.util.security.RoleBinding;
+import org.einnovator.util.security.SecurityUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
@@ -338,10 +339,6 @@ public class Role extends EntityBase {
 		return authority.getAuthority().startsWith(Role.ROLE_PREFIX);
 	}
 
-	public static boolean isPermission(GrantedAuthority authority) {
-		return !isRole(authority);
-	}
-
 
 	public static GrantedAuthority makeGrantedAuthority(Role role) {
 		return makeGrantedAuthority(role.getName(), role.getGroup());
@@ -523,5 +520,15 @@ public class Role extends EntityBase {
 			}
 		}
 		return new ArrayList<>(ids);
+	}
+	
+	public static List<String> getPrincipalGroups() {
+		return getGroups(SecurityUtil.getAuthorities());
+	}
+
+
+	public static boolean isPrincipalMember(String groupId) {
+		List<String> gids = getPrincipalGroups();
+		return gids!=null && gids.contains(groupId);
 	}
 }
