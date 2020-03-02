@@ -1,13 +1,12 @@
 package org.einnovator.sso.client;
 
-import static org.einnovator.util.UriUtils.appendQueryParameters;
 import static org.einnovator.util.UriUtils.encode;
 import static org.einnovator.util.UriUtils.encodeId;
 import static org.einnovator.util.UriUtils.makeURI;
+import static org.einnovator.util.web.RequestOptions.isAdminRequest;
 
 import java.net.URI;
 import java.security.Principal;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -37,12 +36,11 @@ import org.einnovator.sso.client.modelx.RoleOptions;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
 import org.einnovator.util.MappingUtils;
-import org.einnovator.util.PageOptions;
 import org.einnovator.util.PageResult;
 import org.einnovator.util.PageUtil;
+import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Application;
 import org.einnovator.util.security.SecurityUtil;
-import org.einnovator.util.web.ClientContext;
 import org.einnovator.util.web.RequestOptions;
 import org.einnovator.util.web.Result;
 import org.einnovator.util.web.WebUtil;
@@ -87,7 +85,7 @@ import org.springframework.web.client.RestTemplate;
  * <p>Requests use a session-scoped  {@code OAuth2ClientContext} if running in a web-environment.
  * <p>If the invoking thread does not have an associated web session, the default behavior is to fallback to use a {@code OAuth2ClientContext} 
  * with client credentials. This can be disabled by setting property {@link #web} to false.
- * <p>Method {@link #register()} can be used to register custom application roles with server.
+ * <p>Method {@link #register()} can be used to register custom application roles with the server.
  * <p>This is automatically performed by if configuration property {@code sso.registration.roles.auto} is set to true.
  * 
  * @see org.einnovator.sso.client.manager.UserManager
@@ -1910,39 +1908,9 @@ public class SsoClient {
 	 * @param objs a variadic array of objects
 	 * @return the processed {@code URI}
 	 */
-	public static URI processURI(URI uri, Object... objs) {
-		if (objs!=null && objs.length>0) {
-			Map<String, String> params = new LinkedHashMap<>();
-			for (Object obj: objs) {
-				if (obj==null) {
-					continue;
-				}
-				if (obj instanceof Pageable) {
-					obj = new PageOptions((Pageable)obj);
-				}
-				params.putAll(MappingUtils.toMapFormatted(obj));
-			}
-			uri = appendQueryParameters(uri, params);			
-		}
-		return uri;
+	private static URI processURI(URI uri, Object... objs) {
+		return UriUtils.appendQueryParameters(uri, objs);
 	}
 	
-	
-	/**
-	 * Check if request is for admin endpoint.
-	 * 
-	 * @param options optional {@code RequestOptions}
-	 * @param context options {@code SsoClientContext}
-	 * @return true if reques is for an admin endpoint, false otherwise
-	 */
-	public static boolean isAdminRequest(RequestOptions options, ClientContext context) {
-		if (options!=null && options.getAdmin()!=null) {
-			return Boolean.TRUE.equals(options.getAdmin());
-		}
-		if (context!=null && context.isAdmin()) {
-			return true;
-		}
-		return false;
-	}
 
 }

@@ -120,7 +120,7 @@
 					</doctitle>
 					<top>
 					 <![CDATA[
-					 <div style="position:absolute;right:10px;color:white"><a href="http://home.einnovator.org">EInnovator</a></div>
+					 <div style="position:absolute;right:10px;color:white"><span>EInnovator</span></div>
 					 ]]> 
 					</top>
 					<description>
@@ -130,7 +130,7 @@
 					 ]]> 
 					</description>
 					<bottom>
-						 <![CDATA[Copyright 2019, <a href="http://home.einnovator.org">EInnovator, LTD.</a>]]> 
+						 <![CDATA[Copyright 2018-2020, <a href="http://home.einnovator.org">EInnovator, LTD.</a>]]> 
 					</bottom>
 				</configuration>
 				<executions>
