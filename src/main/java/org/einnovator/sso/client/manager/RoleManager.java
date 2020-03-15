@@ -5,7 +5,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.config.SsoClientContext;
+
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleBinding;
 import org.einnovator.sso.client.modelx.RoleFilter;
@@ -35,10 +35,10 @@ public interface RoleManager {
 	 *
 	 * @param id the {@code Role} identifier (UUID)
 	 * @param options the {@code RoleOptions} (options)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the {@code Role} if found, or null if not found or request failed
 	 */
-	Role getRole(String id, RoleOptions options, SsoClientContext context);
+	Role getRole(String id, RoleOptions options);
 
 	
 	/**
@@ -50,10 +50,10 @@ public interface RoleManager {
 	 * 
 	 * @param filter a {@code RoleFilter}
 	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return a {@code Page} with {@code Role}s, or null if not found or request failed
 	 */	
-	Page<Role> listRoles(RoleFilter filter, Pageable pageable, SsoClientContext context);
+	Page<Role> listRoles(RoleFilter filter, Pageable pageable);
 
 	/**
 	 * Create a new {@code Role}
@@ -64,10 +64,10 @@ public interface RoleManager {
 	 * 
 	 * @param role the {@code Role}
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the location {@code URI} for the created {@code Role}, or null if request failed
 	 */
-	URI createRole(Role role, RequestOptions options, SsoClientContext context);
+	URI createRole(Role role, RequestOptions options);
 
 	/**
 	 * Update existing {@code Role}
@@ -78,10 +78,10 @@ public interface RoleManager {
 	 * 
 	 * @param role the {@code Role}
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the same {@code Role}, or null if request failed
 	 */
-	Role updateRole(Role role, RequestOptions options, SsoClientContext context);
+	Role updateRole(Role role, RequestOptions options);
 
 	/**
 	 * Delete existing {@code Role}
@@ -92,10 +92,10 @@ public interface RoleManager {
 	 * 
 	 * @param id the {@code Role} identifier (UUID)
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return true if {@code Role} was deleted, or false if request failed
 	 */
-	boolean deleteRole(String id, RequestOptions options, SsoClientContext context);
+	boolean deleteRole(String id, RequestOptions options);
 
 	
 	//
@@ -112,10 +112,10 @@ public interface RoleManager {
 	 * @param roleId the {@code Role} identifier (UUID)
 	 * @param filter a {@code UserFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return a {@code Page} with {@code User}s, or null if not found or request failed
 	 */		
-	Page<RoleBinding> listRoleBindings(String roleId, UserFilter filter,  Pageable pageable, SsoClientContext context);
+	Page<RoleBinding> listRoleBindings(String roleId, UserFilter filter,  Pageable pageable);
 
 	/**
 	 * Get count of {@code User}s assigned a {@code Role} .
@@ -126,10 +126,10 @@ public interface RoleManager {
 	 * 
 	 * @param roleId the {@code Role} identifier (UUID)
 	 * @param filter a {@code UserFilter} (optional)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the {@code User} count, or null if not found or request failed
 	 */
-	Integer countRoleBindings(String roleId, UserFilter filter, SsoClientContext context);
+	Integer countRoleBindings(String roleId, UserFilter filter);
 
 	/**
 	 * Assign {@code Role} to {@code User}
@@ -142,10 +142,10 @@ public interface RoleManager {
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param roleId the {@code Role} identifier (UUID)
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return true if {@code Role} was assigned, or false if request failed
 	 */
-	boolean assignRole(String userId, String roleId,  RequestOptions options, SsoClientContext context);
+	boolean assignRole(String userId, String roleId,  RequestOptions options);
 
 	/**
 	 * Unassign {@code Role} from {@code User}
@@ -157,10 +157,10 @@ public interface RoleManager {
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param roleId the {@code Role} identifier (UUID)
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return true if {@code Role} was unassigned, or false if request failed
 	 */
-	boolean unassignRole(String userId, String roleId,  RequestOptions options, SsoClientContext context);
+	boolean unassignRole(String userId, String roleId,  RequestOptions options);
 
 	
 	/**
@@ -171,10 +171,10 @@ public interface RoleManager {
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param filter a {@code RoleFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return a {@code Page} with {@code Role}s, or false if request failed
 	 */
-	Page<Role> listRolesForUser(String userId, RoleFilter filter, Pageable pageable, SsoClientContext context);
+	Page<Role> listRolesForUser(String userId, RoleFilter filter, Pageable pageable);
 
 	/**
 	 * List {@code Role}s a {@code User} is assigned to in a {@code Group}.
@@ -187,10 +187,10 @@ public interface RoleManager {
 	 * @param groupId the identifier of a {@code Group} (UUID)
 	 * @param filter a {@code RoleFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return a {@code Page} with {@code Role}s, or false if request failed
 	 */	
-	Page<Role> listRolesForUserInGroup(String userId, String groupId, RoleFilter filter, Pageable pageable, SsoClientContext context);
+	Page<Role> listRolesForUserInGroup(String userId, String groupId, RoleFilter filter, Pageable pageable);
 
 	/**
 	 * List {@code Role}s bound to a {@code Group}.
@@ -200,10 +200,10 @@ public interface RoleManager {
 	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param groupId the identifier of a {@code Group} (UUID)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return a {@code Page} with {@code Role}s, or false if request failed
 	 */	
-	List<Role> listRolesForGroup(String groupId, SsoClientContext context);
+	List<Role> listRolesForGroup(String groupId);
 
 	//
 	// Local Authority Checks
@@ -282,11 +282,11 @@ public interface RoleManager {
 	 * <p>This is a local operation with authorities retrieved from the  {@code SecurityContext}.
 	 *  
 	 * @param username the {@code username}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @param roles a variadic array of roles
 	 * @return true if {@code Principal} has the role, false otherwise.
 	 */
-	boolean hasAnyRoleUser(String username, SsoClientContext context, String... roles);
+	boolean hasAnyRoleUser(String username, String... roles);
 
 	
 	
@@ -303,21 +303,21 @@ public interface RoleManager {
 	 * 
 	 * @param username the {@code username}
 	 * @param groupId the group UUID
-	 * @param context optional {@code SsoClientContext}
+
 	 * @param roles a variadic array of roles
 	 * @return true if {@code Principal} has the role, false otherwise.
 	 */
-	boolean hasAnyRoleUserInGroup(String username, String groupId, SsoClientContext context, String... roles);
+	boolean hasAnyRoleUserInGroup(String username, String groupId, String... roles);
 
 	
 	/**
 	 * Check if specified {@code User} has <b>ADMIN</b> role.
 	 * 
 	 * @param username the username
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return true if admin, false otherwise
 	 */
-	boolean isAdmin(String username, SsoClientContext context);
+	boolean isAdmin(String username);
 
 
 	

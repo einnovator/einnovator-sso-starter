@@ -7,11 +7,12 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.config.SsoClientContext;
+
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
+import org.einnovator.util.security.SecurityUtil;
 import org.einnovator.util.web.RequestOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
@@ -47,12 +48,27 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	@Override
-	public User getUser(String id, SsoClientContext context) {
-		return getUser(id, UserOptions.DEFAULT, context);
+	public User getUser(String id) {
+		return getUser(id, UserOptions.DEFAULT);
 	}
 
 	@Override
-	public User getUser(String id, UserOptions options, SsoClientContext context) {
+	public User getLocalUser(String id, boolean remote) {
+		String principalName = SecurityUtil.getPrincipalName();
+		if (id==null || principalName==null || SecurityUtil.isAnonymous()) {
+			return null;
+		}
+		if (id.equals(principalName)) {
+			return SsoClient.getPrincipalUser();
+		}
+		if (remote) {
+			return getUser(id);								
+		}
+		return null;
+	}
+	
+	@Override
+	public User getUser(String id, UserOptions options) {
 		if (id==null) {
 			return null;
 		}
@@ -63,7 +79,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			}			
 		}
 		try {
-			User user = ssoClient.getUser(id, options, context);	
+			User user = ssoClient.getUser(id, options);	
 			if (cacheable(options)) {
 				return putCacheValue(user, getUserCache(), id, options);				
 			}
@@ -86,9 +102,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	public URI createUser(User user, RequestOptions options, SsoClientContext context) {
+	public URI createUser(User user, RequestOptions options) {
 		try {
-			return ssoClient.createUser(user, options, context);
+			return ssoClient.createUser(user, options);
 		} catch (RuntimeException e) {
 			logger.error("createUser:" + e);
 			return null;
@@ -97,9 +113,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 
 	@Override
-	public User updateUser(User user, RequestOptions options, SsoClientContext context) {
+	public User updateUser(User user, RequestOptions options) {
 		try {
-			ssoClient.updateUser(user, options, context);
+			ssoClient.updateUser(user, options);
 			evictCaches(user.getUuid());
 			return user;
 		} catch (RuntimeException e) {
@@ -111,9 +127,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 	@Override
 	@CacheEvict(value=CACHE_USER, key="#id")
-	public boolean deleteUser(String userId, RequestOptions options, SsoClientContext context) {
+	public boolean deleteUser(String userId, RequestOptions options) {
 		try {
-			ssoClient.deleteUser(userId, options, context);
+			ssoClient.deleteUser(userId, options);
 			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteUser:" + e);
@@ -123,9 +139,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 	
 	@Override
-	public Page<User> listUsers(UserFilter filter, Pageable pageable, SsoClientContext context) {
+	public Page<User> listUsers(UserFilter filter, Pageable pageable) {
 		try {
-			return ssoClient.listUsers(filter, pageable, context);
+			return ssoClient.listUsers(filter, pageable);
 		} catch (RuntimeException e) {
 			logger.error("listUsers:" + e);
 			return null;
@@ -134,7 +150,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 
 
 	@Override
-	public void onUserUpdate(String id, Map<String, Object> details, SsoClientContext context) {
+	public void onUserUpdate(String id, Map<String, Object> details) {
 		if (id==null) {
 			return;
 		}
@@ -215,11 +231,11 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	@Override
-	public List<String> getGroupsUuidForUser(String username, SsoClientContext context) {
+	public List<String> getGroupsUuidForUser(String username) {
 		if (username==null) {
 			return null;
 		}
-		User user = getUser(username, UserOptions.FULL, null);
+		User user = getUser(username, UserOptions.FULL);
 		return user!=null ? user.getGroupsUuid() : null;
 	}
 

@@ -63,14 +63,14 @@ public class UserManagerTests {
 	@Test
 	public void getUserTest() {
 		String username = TEST_USER2;
-		User user = userManager.getUser(username, null, null);
+		User user = userManager.getUser(username, null);
 		assertNotNull(user);
 		System.out.println(user);
 	}
 
 	@Test
 	public void listUsersTest() {
-		Page<User> users = userManager.listUsers(null, null, null);
+		Page<User> users = userManager.listUsers(null, null);
 		assertNotNull(users);
 		assertFalse(users.getNumberOfElements()==0);
 		assertFalse(users.getContent().isEmpty());

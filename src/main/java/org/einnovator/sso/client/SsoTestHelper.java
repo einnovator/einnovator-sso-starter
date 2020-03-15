@@ -17,39 +17,33 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 /**
  * Helper class for running tests that need a JWT bearer token to invoke secure services.
  * 
- * <p>Example usage:
+ * Example usage:<br>
+ * <pre>{@code
+ * &#064;RunWith(SpringRunner.class)
+ * &#064;SpringBootTest(classes = { MyAppConfig.class, MyAppTests.TestConfig.class }, webEnvironment = WebEnvironment.NONE)
+ * &#064;TestPropertySource(properties = { "sso.server=http://sso-dev.mydomain.com", "spring.cache.ehcache.config:ehcache-sso-starter.xml" })
+ * public class DocumentsClientTests extends SsoTestHelper {
  * 
- * <p>@{code
- * <p>@RunWith(SpringRunner.class)
- * <p>@SpringBootTest(classes = { MyAppConfig.class, MyAppTests.TestConfig.class }, webEnvironment = WebEnvironment.NONE)
- * <p>@TestPropertySource(properties = { "sso.server=http://sso-dev.mydomain.com", "spring.cache.ehcache.config:ehcache-sso-starter.xml" })
- * <p>public class DocumentsClientTests extends SsoTestHelper {
- * <p>
- * <p>  public static final String TEST_USER = "tdd@mydomain.com";
- * <p>  public static final String TEST_PASSWORD = "may!pass";
- * <p>		
- * <p>  private static final String CLIENT_ID = "myapp";
- * <p>  private static final String CLIENT_SECRET = "myapp$secret";
- 
- * <p>  @Autowired private SsoClient ssoClient;
- * <p>  
- * <p>  @Configuration
- * <p>  static class TestConfig extends SsoTestHelper.TestConfig {
- * <p>  
- * <p>  public TestConfig(ApplicationContext context) {
- * <p>  	super(TEST_USER, TEST_PASSWORD, CLIENT_ID, CLIENT_SECRET, context);
- * <p>  }
- * <p>  
- * <p>  @Test
- * <p>  public void mytest() {
- * <p>		OAuth2AccessToken token = client.getToken(TEST_USER, TEST_PASSWORD);
- * <p>		assertNotNull(token);
- * <p>   	//test something with bearer token in SecurityContext
- * <p>  	//...
- * <p>  }
- * <p>  
- * <p>}
- * 
+ *   public static final String TEST_USER = "tdd@mydomain.com";
+ *   public static final String TEST_PASSWORD = "may!pass";
+ * 		
+ *   private static final String CLIENT_ID = "myapp";
+ *   private static final String CLIENT_SECRET = "myapp$secret";
+ *   &#064;Autowired private SsoClient ssoClient;
+ *   &#064;Configuration
+ *   static class TestConfig extends SsoTestHelper.TestConfig {
+ *   public TestConfig(ApplicationContext context) {
+ *   	super(TEST_USER, TEST_PASSWORD, CLIENT_ID, CLIENT_SECRET, context);
+ *   }
+ *   &#064;Test
+ *   public void mytest() {
+ * 		OAuth2AccessToken token = client.getToken(TEST_USER, TEST_PASSWORD);
+ * 		assertNotNull(token);
+ *    	//test something with bearer token in SecurityContext
+ *   	//...
+ *   }
+ * }
+ * }</pre>
  * @author support@einnovator.org
  *
  */

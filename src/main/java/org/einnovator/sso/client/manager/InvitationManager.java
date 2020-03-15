@@ -3,7 +3,7 @@ package org.einnovator.sso.client.manager;
 import java.net.URI;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.config.SsoClientContext;
+
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.modelx.InvitationFilter;
@@ -31,10 +31,10 @@ public interface InvitationManager {
 	 * 
 	 * @param filter a {@code InvitationFilter}
 	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return a {@code Page} with {@code Invitation}s, or null if request failed
 	 */	
-	Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable, SsoClientContext context);
+	Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable);
 	
 	/**
 	 * Get {@code Invitation} with specified identifier.
@@ -44,10 +44,10 @@ public interface InvitationManager {
 	 *
 	 * @param id the identifier (UUID)
 	 * @param options optional  {@code InvitationOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the {@code Invitation} if found, or null if not found or request failed
 	 */
-	Invitation getInvitation(String id, InvitationOptions options, SsoClientContext context);
+	Invitation getInvitation(String id, InvitationOptions options);
 
 	/**
 	 * Create a new {@code Invitation}.
@@ -56,10 +56,10 @@ public interface InvitationManager {
 	 * 
 	 * @param invitation the {@code Invitation}
 	 * @param options the {@code InvitationOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the location {@code URI} for the created {@code Invitation}, or null if request failed
 	 */
-	URI invite(Invitation invitation, InvitationOptions options, SsoClientContext context);
+	URI invite(Invitation invitation, InvitationOptions options);
 
 	/**
 	 * Update existing {@code Invitation}
@@ -68,10 +68,10 @@ public interface InvitationManager {
 	 * 
 	 * @param invitation the {@code Invitation}
 	 * @param options optional  {@code InvitationOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the same {@code Invitation}, or null if request failed
 	 */
-	Invitation updateInvitation(Invitation invitation, RequestOptions options, SsoClientContext context);
+	Invitation updateInvitation(Invitation invitation, RequestOptions options);
 
 	/**
 	 * Get {@code InvitationStats} with {@code Invitation} statistics.
@@ -79,10 +79,10 @@ public interface InvitationManager {
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN).
 	 *
 	 * @param options optional  {@code InvitationOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the {@code InvitationStats}, or null if request failed
 	 */
-	InvitationStats getInvitationStats(RequestOptions options, SsoClientContext context);
+	InvitationStats getInvitationStats(RequestOptions options);
 	
 	/**
 	 * Get invitation {@code URI} with token for specified {@code Invitation}.
@@ -92,10 +92,10 @@ public interface InvitationManager {
 	 *
 	 * @param id the identifier of the {@code Invitation} (UUID)
 	 * @param options optional  {@code InvitationOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the invitation token as an {@code URI}, or null if request failed
 	 */
-	URI getInvitationToken(String id, InvitationOptions options, SsoClientContext context);
+	URI getInvitationToken(String id, InvitationOptions options);
 
 	/**
 	 * Delete existing {@code Invitation}
@@ -104,10 +104,10 @@ public interface InvitationManager {
 	 * 
 	 * @param id the identifier (UUID)
 	 * @param options optional  {@code InvitationOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return true if {@code User} was deleted, or false if request failed
 	 */
-	boolean deleteInvitation(String id, RequestOptions options, SsoClientContext context);
+	boolean deleteInvitation(String id, RequestOptions options);
 	
 	
 	//

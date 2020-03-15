@@ -85,10 +85,10 @@ public class SsoClientLoadTests {
 		String username = "tdd-" + UUID.randomUUID().toString();
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes());
-		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user, null, null));
+		URI uri = run("SsoClientTests:createUserTest:createUser", () -> client.createUser(user, null));
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
-		User user2 = run("SsoClientTests:createUserTest:getUser", () -> client.getUser(id, null, null));
+		User user2 = run("SsoClientTests:createUserTest:getUser", () -> client.getUser(id, null));
 		assertNotNull(user2);
 		System.out.println(user2);
 	}
@@ -102,10 +102,10 @@ public class SsoClientLoadTests {
 			String username = "tdd-" + UUID.randomUUID().toString();
 			User user = new User().withUsername(username).withEmail(username + "@test.org")
 					.withPassword(("Pass123!!-" + username).getBytes());
-			URI uri = run("SsoClientTests:" + name + ":createUser", () -> client.createUser(user, null, null));
+			URI uri = run("SsoClientTests:" + name + ":createUser", () -> client.createUser(user, null));
 			assertNotNull(uri);
 			String id = UriUtils.extractId(uri);
-			User user2 = run("SsoClientTests:" + name + ":getUser", () -> client.getUser(id, null, null));
+			User user2 = run("SsoClientTests:" + name + ":getUser", () -> client.getUser(id, null));
 			assertNotNull(user2);
 			System.out.println(user2);			
 		} catch (RuntimeException e) {
@@ -155,12 +155,12 @@ public class SsoClientLoadTests {
 		User user = new User().withUsername(username).withEmail(username + "@test.org")
 				.withPassword(("Pass123!!-" + username).getBytes())
 				.withAddress(new Address().withCountry("USA").withCity("NY").withPostalCode("12345"));
-		URI uri = client.createUser(user, null, null);
+		URI uri = client.createUser(user, null);
 		assertNotNull(uri);
 		String id = UriUtils.extractId(uri);
 		assertNotNull(id);
 		assertFalse(id.isEmpty());
-		User user2 = client.getUser(id, null, null);
+		User user2 = client.getUser(id, null);
 		assertNotNull(user2);
 		assertEquals(id, user2.getId());
 		assertEquals(user.getUsername(), user2.getUsername());

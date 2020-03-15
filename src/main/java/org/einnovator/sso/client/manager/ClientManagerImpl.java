@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.config.SsoClientContext;
+
 import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
@@ -48,12 +48,12 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	}
 	
 	@Override
-	public Client getClient(String id, SsoClientContext context) {
+	public Client getClient(String id) {
 		return getClient(id, null);
 	}
 
 	@Override
-	public Client getClient(String id, ClientOptions options, SsoClientContext context) {
+	public Client getClient(String id, ClientOptions options) {
 		if (id==null) {
 			return null;
 		}
@@ -64,7 +64,7 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 			}			
 		}
 		try {
-			Client client = ssoClient.getClient(id, options, context);	
+			Client client = ssoClient.getClient(id, options);	
 			if (isCacheable(options)) {
 				return putCacheValue(client, getClientCache(), id, options);				
 			}
@@ -86,9 +86,9 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	}
 	
 	@Override
-	public URI createClient(Client client, RequestOptions options, SsoClientContext context) {
+	public URI createClient(Client client, RequestOptions options) {
 		try {
-			return ssoClient.createClient(client, options, context);
+			return ssoClient.createClient(client, options);
 		} catch (RuntimeException e) {
 			logger.error("createClient:" + e);
 			return null;
@@ -97,9 +97,9 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	
 
 	@Override
-	public Client updateClient(Client client, RequestOptions options, SsoClientContext context) {
+	public Client updateClient(Client client, RequestOptions options) {
 		try {
-			ssoClient.updateClient(client, options, context);
+			ssoClient.updateClient(client, options);
 			evictCaches(client.getUuid());
 			return client;
 		} catch (RuntimeException e) {
@@ -109,9 +109,9 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	}
 	
 	@Override
-	public boolean deleteClient(String clientId, RequestOptions options, SsoClientContext context) {
+	public boolean deleteClient(String clientId, RequestOptions options) {
 		try {
-			ssoClient.deleteClient(clientId, options, context);
+			ssoClient.deleteClient(clientId, options);
 			evictCaches(clientId);
 			return true;
 		} catch (RuntimeException e) {
@@ -122,9 +122,9 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	
 	
 	@Override
-	public Page<Client> listClients(ClientFilter filter, Pageable pageable, SsoClientContext context) {
+	public Page<Client> listClients(ClientFilter filter, Pageable pageable) {
 		try {
-			return ssoClient.listClients(filter, pageable, context);
+			return ssoClient.listClients(filter, pageable);
 		} catch (RuntimeException e) {
 			logger.error("listClients:" + e);
 			return null;
@@ -133,7 +133,7 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 
 
 	@Override
-	public void onClientUpdate(String id, Map<String, Object> details, SsoClientContext context) {
+	public void onClientUpdate(String id, Map<String, Object> details) {
 		if (id==null) {
 			return;
 		}

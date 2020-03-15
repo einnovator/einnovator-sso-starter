@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.config.SsoClientContext;
+
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.modelx.InvitationOptions;
@@ -46,9 +46,9 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 	
 	@Override
-	public URI invite(Invitation invitation, InvitationOptions options, SsoClientContext context) {
+	public URI invite(Invitation invitation, InvitationOptions options) {
 		try {
-			URI uri = client.invite(invitation, options, context);
+			URI uri = client.invite(invitation, options);
 			if (uri == null) {
 				logger.error("invite: " + invitation);
 			}
@@ -61,12 +61,12 @@ public class InvitationManagerImpl implements InvitationManager {
 
 
 	@Override
-	public Invitation getInvitation(String id, InvitationOptions options, SsoClientContext context) {
+	public Invitation getInvitation(String id, InvitationOptions options) {
 		if (id == null) {
 			return null;
 		}
 		try {
-			Invitation invitation = client.getInvitation(id, options, context);
+			Invitation invitation = client.getInvitation(id, options);
 			if (invitation == null) {
 				logger.error("getInvitation: " + invitation);
 			}
@@ -85,9 +85,9 @@ public class InvitationManagerImpl implements InvitationManager {
 	
 
 	@Override
-	public Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable, SsoClientContext context) {
+	public Page<Invitation> listInvitations(InvitationFilter filter, Pageable pageable) {
 		try {
-			Page<Invitation> invitations = client.listInvitations(filter, pageable, context);
+			Page<Invitation> invitations = client.listInvitations(filter, pageable);
 			if (invitations == null) {
 				logger.error("listInvitations: " + filter + " " + pageable);
 			}
@@ -100,9 +100,9 @@ public class InvitationManagerImpl implements InvitationManager {
 
 
 	@Override
-	public InvitationStats getInvitationStats(RequestOptions options, SsoClientContext context) {
+	public InvitationStats getInvitationStats(RequestOptions options) {
 		try {
-			InvitationStats stats = client.getInvitationStats(options, context);
+			InvitationStats stats = client.getInvitationStats(options);
 			if (stats == null) {
 				logger.error("getInvitationStats: " + stats);
 			}
@@ -119,12 +119,12 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 
 	@Override
-	public URI getInvitationToken(String id, InvitationOptions options, SsoClientContext context) {
+	public URI getInvitationToken(String id, InvitationOptions options) {
 		if (id == null) {
 			return null;
 		}
 		try {
-			URI token = client.getInvitationToken(id, options, context);
+			URI token = client.getInvitationToken(id, options);
 			if (token == null) {
 				logger.error("getInvitation: " + id + " " + options);
 			}
@@ -141,7 +141,7 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 
 	@Override
-	public Invitation updateInvitation(Invitation invitation, RequestOptions options, SsoClientContext context) {
+	public Invitation updateInvitation(Invitation invitation, RequestOptions options) {
 		try {
 			if (StringUtils.hasText(invitation.getOwner())) {
 				evictCachesForUser(invitation.getOwner());
@@ -149,7 +149,7 @@ public class InvitationManagerImpl implements InvitationManager {
 			if (StringUtils.hasText(invitation.getInvitee())) {
 				evictCachesForUser(invitation.getInvitee());
 			}
-			client.updateInvitation(invitation, options, context);
+			client.updateInvitation(invitation, options);
 			return invitation;
 		} catch (RuntimeException e) {
 			logger.error("updateInvitation: " + e + "  " + invitation);
@@ -159,9 +159,9 @@ public class InvitationManagerImpl implements InvitationManager {
 
 	@Override
 	@CacheEvict(value=CACHE_INVITATION, key="#id")
-	public boolean deleteInvitation(String id, RequestOptions options, SsoClientContext context) {
+	public boolean deleteInvitation(String id, RequestOptions options) {
 		try {
-			client.deleteInvitation(id, options, context);
+			client.deleteInvitation(id, options);
 			return true;
 		} catch (RuntimeException e) {
 			logger.error("deleteInvitation:" + e);

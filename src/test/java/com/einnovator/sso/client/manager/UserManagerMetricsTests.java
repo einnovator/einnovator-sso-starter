@@ -49,7 +49,7 @@ public class UserManagerMetricsTests {
 		for (int i=0; i<n; i++) {
 			userManager.clearCache();
 			long t0 = System.currentTimeMillis();
-			User user = userManager.getUser(TEST_USER2, null, null);
+			User user = userManager.getUser(TEST_USER2, null);
 			long t1 = System.currentTimeMillis();
 			long dt = t1-t0;
 			sdt += dt;
@@ -57,7 +57,7 @@ public class UserManagerMetricsTests {
 			assertNotNull(user);
 
 			t0 = System.currentTimeMillis();
-			user = userManager.getUser(TEST_USER2, null, null);
+			user = userManager.getUser(TEST_USER2, null);
 			t1 = System.currentTimeMillis();
 			long dt2 = t1-t0;
 			System.out.println(i + " (" + dt2 + "ms): " + user);

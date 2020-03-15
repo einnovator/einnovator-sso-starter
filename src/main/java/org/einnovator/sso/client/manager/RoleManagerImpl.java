@@ -11,7 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
-import org.einnovator.sso.client.config.SsoClientContext;
+
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.RoleBinding;
 import org.einnovator.sso.client.model.RoleType;
@@ -106,9 +106,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRolesForUser(String userId, RoleFilter filter, Pageable options, SsoClientContext context) {
+	public Page<Role> listRolesForUser(String userId, RoleFilter filter, Pageable options) {
 		try {
-			return client.listRolesForUser(userId, filter, options, context);
+			return client.listRolesForUser(userId, filter, options);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUser: " + userId + " " + options + " " + e);
 			return null;
@@ -116,9 +116,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRolesForUserInGroup(String userId, String groupId, RoleFilter filter, Pageable options, SsoClientContext context) {
+	public Page<Role> listRolesForUserInGroup(String userId, String groupId, RoleFilter filter, Pageable options) {
 		try {
-			return client.listRolesForUserInGroup(userId, groupId, filter, options, context);
+			return client.listRolesForUserInGroup(userId, groupId, filter, options);
 		} catch (RuntimeException e) {
 			logger.error("listRolesForUserInGroup: " + userId + " " + groupId + " " + options + " " + e);
 			return null;
@@ -161,8 +161,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyRoleUser(String userId, SsoClientContext context, String... roles) {
-		User user = userManager.getUser(userId, context);
+	public boolean hasAnyRoleUser(String userId, String... roles) {
+		User user = userManager.getUser(userId);
 		if (user == null) {
 			return false;
 		}
@@ -181,8 +181,8 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean hasAnyRoleUserInGroup(String userId, String groupId, SsoClientContext context, String... roles) {
-		User user = userManager.getUser(userId, context);
+	public boolean hasAnyRoleUserInGroup(String userId, String groupId, String... roles) {
+		User user = userManager.getUser(userId);
 		if (user == null) {
 			return false;
 		}
@@ -202,9 +202,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean isAdmin(String userId, SsoClientContext context) {
+	public boolean isAdmin(String userId) {
 		String[] admin = getAdmin();
-		if (hasAnyRoleUser(userId, context, admin)) {
+		if (hasAnyRoleUser(userId, admin)) {
 			return true;
 		}
 		return false;
@@ -212,9 +212,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public URI createRole(Role role, RequestOptions options, SsoClientContext context) {
+	public URI createRole(Role role, RequestOptions options) {
 		try {
-			URI uri = client.createRole(role, options, context);
+			URI uri = client.createRole(role, options);
 			if (uri == null) {
 				logger.error("createRole: " + role);
 			}
@@ -226,9 +226,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Role getRole(String roleId, RoleOptions options, SsoClientContext context) {
+	public Role getRole(String roleId, RoleOptions options) {
 		try {
-			Role group = client.getRole(roleId, options, context);
+			Role group = client.getRole(roleId, options);
 			if (group == null) {
 				logger.error("getRole: " + group);
 			}
@@ -245,9 +245,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Role updateRole(Role role, RequestOptions options, SsoClientContext context) {
+	public Role updateRole(Role role, RequestOptions options) {
 		try {
-			client.updateRole(role, options, context);
+			client.updateRole(role, options);
 			if (role == null) {
 				logger.error("updateRole: " + role);
 			}
@@ -259,9 +259,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<Role> listRoles(RoleFilter filter, Pageable options, SsoClientContext context) {
+	public Page<Role> listRoles(RoleFilter filter, Pageable options) {
 		try {
-			Page<Role> groups = client.listRoles(filter, options, context);
+			Page<Role> groups = client.listRoles(filter, options);
 			if (groups == null) {
 				logger.error("listRoles: " + options);
 			}
@@ -273,9 +273,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean deleteRole(String roleId, RequestOptions options, SsoClientContext context) {
+	public boolean deleteRole(String roleId, RequestOptions options) {
 		try {
-			client.deleteRole(roleId, options, context);
+			client.deleteRole(roleId, options);
 			if (roleId == null) {
 				logger.error("deleteRole: " + roleId);
 			}
@@ -287,9 +287,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Page<RoleBinding> listRoleBindings(String roleId, UserFilter filter, Pageable pageable, SsoClientContext context) {
+	public Page<RoleBinding> listRoleBindings(String roleId, UserFilter filter, Pageable pageable) {
 		try {
-			Page<RoleBinding> bindings = client.listRoleBindings(roleId, filter, pageable, context);
+			Page<RoleBinding> bindings = client.listRoleBindings(roleId, filter, pageable);
 			if (bindings == null) {
 				logger.error("listRoleBindings: " + roleId);
 			}
@@ -301,9 +301,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Integer countRoleBindings(String roleId, UserFilter filter, SsoClientContext context) {
+	public Integer countRoleBindings(String roleId, UserFilter filter) {
 		try {
-			Integer n = client.countRoleBindings(roleId, filter, context);
+			Integer n = client.countRoleBindings(roleId, filter);
 			return n;
 		} catch (RuntimeException e) {
 			logger.error("countRoleBindings: " + roleId + "  " + e);
@@ -312,12 +312,12 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean assignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
+	public boolean assignRole(String userId, String roleId, RequestOptions options) {
 		try {
 			if (roleId == null) {
 				logger.error("assignRole: " + userId + " " + roleId);
 			}
-			client.assignRole(userId, roleId, options, context);
+			client.assignRole(userId, roleId, options);
 			return true;
 		} catch (RuntimeException e) {
 			logger.error("assignRole: " + userId + " " + roleId + " " + e);
@@ -326,9 +326,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public boolean unassignRole(String userId, String roleId, RequestOptions options, SsoClientContext context) {
+	public boolean unassignRole(String userId, String roleId, RequestOptions options) {
 		try {
-			client.unassignRole(userId, roleId, options, context);
+			client.unassignRole(userId, roleId, options);
 			if (roleId == null) {
 				logger.error("removeFromRole: " + userId + " " + roleId);
 			}
@@ -341,7 +341,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 
 	@Override
-	public List<Role> listRolesForGroup(String groupId, SsoClientContext context) {
+	public List<Role> listRolesForGroup(String groupId) {
 		String key = groupId != null ? groupId : "";
 		Role[] roles = getCacheValue(Role[].class, getGroupRolesCache(), key);
 		if (roles != null) {
@@ -353,7 +353,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 				filter.setType(RoleType.GLOBAL);
 			}
 			filter.setGroup(groupId);
-			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE), context);
+			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE));
 			if (page == null || page.getContent() == null) {
 				return null;
 			}

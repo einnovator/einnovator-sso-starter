@@ -47,7 +47,7 @@ public class SsoQueryRestController extends ControllerBase {
 	@ResponseBody
 	public Page<User> users(UserFilter filter, PageOptions options, Principal principal) {
 		
-		Page<User> page = userManager.listUsers(filter, options.toPageRequest(), null);
+		Page<User> page = userManager.listUsers(filter, options.toPageRequest());
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug(format("users:", PageUtil.toString(page), filter, options));
@@ -59,7 +59,7 @@ public class SsoQueryRestController extends ControllerBase {
 	@ResponseBody
 	public Page<Member> members(@PathVariable String groupId, MemberFilter filter, PageOptions options, Principal principal) {
 		
-		Page<Member> page =  groupManager.listMembers(groupId, filter,  options.toPageRequest(), null);
+		Page<Member> page =  groupManager.listMembers(groupId, filter,  options.toPageRequest());
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug(format("members:", PageUtil.toString(page), filter, options));
@@ -71,7 +71,7 @@ public class SsoQueryRestController extends ControllerBase {
 	@ResponseBody
 	public Page<Group> groups(Principal principal, GroupFilter filter, PageOptions options) {
 
-		Page<Group> page = groupManager.listGroups(filter, options.toPageRequest(), null);
+		Page<Group> page = groupManager.listGroups(filter, options.toPageRequest());
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug(format("groups:", PageUtil.toString(page), filter, options));

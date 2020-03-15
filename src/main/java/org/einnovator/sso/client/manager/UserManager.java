@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.config.SsoClientContext;
+
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
@@ -28,6 +28,20 @@ import org.springframework.web.client.RestClientException;
 public interface UserManager {
 	
 	/**
+	 * Get {@code User} with specified identifier using local information.
+	 * 
+	 * Identifier {@code id} is the value of a property with unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Any, but results depend on each {@code User} privacy settings.
+	 * 
+	 * @param id the {@code User} uuid or username
+	 * @param remote if true fallback to remote lookup
+	 * @return the {@code User} if found, or null if not found or request failed
+	 */
+	User getLocalUser(String id, boolean remote);
+	
+	/**
 	 * Get {@code User} with specified identifier.
 	 * 
 	 * Identifier {@code id} is the value of a property with unique constraints, that is:
@@ -36,10 +50,10 @@ public interface UserManager {
 	 * <p><b>Required Security Credentials</b>: Any, but results depend on each {@code User} privacy settings.
 	 * 
 	 * @param id the {@code User} uuid or username
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the {@code User} if found, or null if not found or request failed
 	 */
-	User getUser(String id, SsoClientContext context);
+	User getUser(String id);
 	
 	
 	/**
@@ -52,10 +66,10 @@ public interface UserManager {
 	 * 
 	 * @param id the identifier
 	 * @param options (optional) the {@code UserOptions} that tailor which fields are returned (projection)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the {@code User} if found, or null if not found or request failed
 	 */
-	User getUser(String id, UserOptions options, SsoClientContext context);
+	User getUser(String id, UserOptions options);
 	
 	/**
 	 * List {@code User}s.
@@ -64,11 +78,11 @@ public interface UserManager {
 	 * 
 	 * @param filter a {@code UserFilter}
 	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
+
 	 * @throws RestClientException if request fails
 	 * @return a {@code Page} with {@code User}s, or null if request failed
 	 */
-	Page<User> listUsers(UserFilter filter, Pageable pageable, SsoClientContext context);
+	Page<User> listUsers(UserFilter filter, Pageable pageable);
 	
 
 	/**
@@ -79,10 +93,10 @@ public interface UserManager {
 	 * 
 	 * @param user the {@code User}
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the location {@code URI} for the created {@code User}, or null if request failed
 	 */
-	URI createUser(User user, RequestOptions options, SsoClientContext context);
+	URI createUser(User user, RequestOptions options);
 	
 	/**
 	 * Update existing {@code User}
@@ -91,10 +105,10 @@ public interface UserManager {
 	 * 
 	 * @param user the {@code User}
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the same {@code User}, or null if request failed
 	 */
-	User updateUser(User user, RequestOptions options, SsoClientContext context);
+	User updateUser(User user, RequestOptions options);
 
 	/**
 	 * Delete existing {@code User}
@@ -106,10 +120,10 @@ public interface UserManager {
 	 * 
 	 * @param userId the {@code User} identifier
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return true if {@code User} was deleted, or false if request failed
 	 */
-	boolean deleteUser(String userId, RequestOptions options, SsoClientContext context);
+	boolean deleteUser(String userId, RequestOptions options);
 	
 	
 	//
@@ -121,9 +135,9 @@ public interface UserManager {
 	 * 
 	 * @param id the {@code User} uuid or username
 	 * @param details new state of {@code User}
-	 * @param context optional {@code SsoClientContext}
+
 	 */
-	void onUserUpdate(String id, Map<String, Object> details, SsoClientContext context);
+	void onUserUpdate(String id, Map<String, Object> details);
 
 	/**
 	 * Clear the cache for {@code User}s.
@@ -167,6 +181,6 @@ public interface UserManager {
 	 * @param context TODO
 	 * @return the list of UUIDs (or null if error)
 	 */
-	List<String> getGroupsUuidForUser(String id, SsoClientContext context);
+	List<String> getGroupsUuidForUser(String id);
 
 }

@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.Map;
 
 import org.einnovator.sso.client.SsoClient;
-import org.einnovator.sso.client.config.SsoClientContext;
 import org.einnovator.sso.client.model.Client;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
@@ -31,10 +30,9 @@ public interface ClientManager {
 	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param id the identifier (UUID)
-	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code Client}, or null if not found or request fails
 	 */
-	Client getClient(String id, SsoClientContext context);
+	Client getClient(String id);
 	
 	/**
 	 * Get {@code Client} with specified identifier.
@@ -43,10 +41,9 @@ public interface ClientManager {
 	 * 
 	 * @param id the identifier (UUID)
 	 * @param options {@code ClientOptions} options (optional)
-	 * @param context optional {@code SsoClientContext}
 	 * @return the {@code Client}, or null if not found or request fails
 	 */
-	Client getClient(String id, ClientOptions options, SsoClientContext context);
+	Client getClient(String id, ClientOptions options);
 
 	
 	/**
@@ -56,10 +53,9 @@ public interface ClientManager {
 	 * 
 	 * @param filter a {@code ClientFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
-	 * @param context optional {@code SsoClientContext}
 	 * @return a {@code Page} with {@code Client}s, or null id request fails
 	 */
-	Page<Client> listClients(ClientFilter filter, Pageable pageable, SsoClientContext context);
+	Page<Client> listClients(ClientFilter filter, Pageable pageable);
 
 	/**
 	 * Create a new {@code Client}
@@ -68,10 +64,10 @@ public interface ClientManager {
 	 * 
 	 * @param client the {@code Client}
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
+
 	 * @return the location {@code URI} for the created {@code Client}, or null if request failed
 	 */
-	URI createClient(Client client, RequestOptions options, SsoClientContext context);
+	URI createClient(Client client, RequestOptions options);
 	
 	/**
 	 * Update existing {@code Client}
@@ -80,10 +76,9 @@ public interface ClientManager {
 	 * 
 	 * @param client the {@code Client}
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
 	 * @return the same {@code Client}, or null if request failed
 	 */
-	Client updateClient(Client client, RequestOptions options, SsoClientContext context);
+	Client updateClient(Client client, RequestOptions options);
 
 	/**
 	 * Delete existing {@code Client}
@@ -92,10 +87,9 @@ public interface ClientManager {
 	 * 
 	 * @param clientId the {@code Client}
 	 * @param options optional {@code RequestOptions}
-	 * @param context optional {@code SsoClientContext}
 	 * @return true if {@code Client} was deleted, or false if request failed
 	 */
-	boolean deleteClient(String clientId, RequestOptions options, SsoClientContext context);
+	boolean deleteClient(String clientId, RequestOptions options);
 	
 	//
 	// Caching
@@ -106,9 +100,8 @@ public interface ClientManager {
 	 * 
 	 * @param id the {@code Client} UUID
 	 * @param details new state of {@code User}
-	 * @param context optional {@code SsoClientContext}
 	 */
-	void onClientUpdate(String id, Map<String, Object> details, SsoClientContext context);
+	void onClientUpdate(String id, Map<String, Object> details);
 
 	/**
 	 * Clear the cache for {@code Client}s.
