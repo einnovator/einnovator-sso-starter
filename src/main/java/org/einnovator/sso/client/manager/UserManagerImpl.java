@@ -86,11 +86,15 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			return user;
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode()!=HttpStatus.NOT_FOUND) {
-				logger.error("getUser:" + id + "  " + options + e);				
+				if (options==null || !options.isSilent()) {
+					logger.error(String.format("getUser: %s %s %s", e, id, options));
+				}
 			}
 			return null;
 		} catch (RuntimeException e) {
-			logger.error("getUser:" + id + "  " + options + " " + e);				
+			if (options==null || !options.isSilent()) {
+				logger.error(String.format("getUser: %s %s %s", e, id, options));								
+			}
 			return null;
 		}
 
@@ -106,7 +110,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		try {
 			return ssoClient.createUser(user, options);
 		} catch (RuntimeException e) {
-			logger.error("createUser:" + e);
+			if (options==null || !options.isSilent()) {
+				logger.error(String.format("createUser: %s", e));								
+			}
 			return null;
 		}
 	}
@@ -119,7 +125,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			evictCaches(user.getUuid());
 			return user;
 		} catch (RuntimeException e) {
-			logger.error("updateUser:" + e);
+			if (!options.isSilent()) {
+				logger.error(String.format("updateUser: %s", e));								
+			}
 			return null;
 		}
 	}

@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
  * Helper class for running tests that need a JWT bearer token to invoke secure services.
  * 
  * Example usage:<br>
- * <pre>{@code
+ * <pre>
  * &#064;RunWith(SpringRunner.class)
  * &#064;SpringBootTest(classes = { MyAppConfig.class, MyAppTests.TestConfig.class }, webEnvironment = WebEnvironment.NONE)
  * &#064;TestPropertySource(properties = { "sso.server=http://sso-dev.mydomain.com", "spring.cache.ehcache.config:ehcache-sso-starter.xml" })
@@ -43,7 +43,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
  *   	//...
  *   }
  * }
- * }</pre>
+ * </pre>
  * @author support@einnovator.org
  *
  */

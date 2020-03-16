@@ -39,7 +39,7 @@ public interface GroupManager {
 	 * @param remote if true fallback to remote lookup
 	 * @return the {@code User} if found, or null if not found or request failed
 	 */
-	Group getLocalGroup(String id, boolean remote);
+	Group getLocalGroup(String groupId, boolean remote);
 
 
 	/**
@@ -288,9 +288,8 @@ public interface GroupManager {
 	 * <p><b>Required Security Credentials</b>: any, but results depend on each {@code Group}, parent and root {@code Group} privacy settings,
 	 * and each {@code User} privacy settings.
 	 * 
-	 * @param userId the identifier of a {@code User} (UUID, or username)
+	 * @param username the username of a {@code User}
 	 * @param filter a {@code UserFilter} (optional)
-	 * @param pageable a {@code Pageable} (optional)
 	 * @param remote if true fallback to remote lookup
 	 * @return a {@code Page} with {@code Group}s, or false if request failed
 	 */	

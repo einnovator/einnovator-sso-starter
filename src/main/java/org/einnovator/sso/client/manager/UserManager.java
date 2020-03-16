@@ -178,7 +178,6 @@ public interface UserManager {
 	 * Get list of UUIDs of {@code Groups} that the {@code User} with specified identifier is member of.
 	 * 
 	 * @param id the {@code User} identifier
-	 * @param context TODO
 	 * @return the list of UUIDs (or null if error)
 	 */
 	List<String> getGroupsUuidForUser(String id);
