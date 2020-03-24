@@ -1,6 +1,15 @@
 package org.einnovator.sso.client.config;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URI;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
@@ -13,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.einnovator.util.IOUtil;
+import org.einnovator.util.PathUtil;
+import org.einnovator.util.UriUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -129,6 +141,17 @@ public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 		if (tokenKey!=null) {
 			return tokenKey;
 		}
+		tokenKey = readTokenKey();
+		if (tokenKey==null) {
+			tokenKey = getTokenKeyRemote();
+			if (tokenKey!=null) {
+				writeTokenKey(tokenKey);
+			}			
+		}
+		return tokenKey;
+	}
+	
+	private String getTokenKeyRemote() {
 		RestTemplate template = new RestTemplate();
 		try {
 			Map<?,?> result = template.getForObject(config.getServer()+ "/oauth/token_key", Map.class);			
@@ -144,6 +167,49 @@ public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 			logger.error("getTokenKey: Failed to get token key from authentication server:" + config.getServer() + " " + e);
 			return null;
 		}
+	}
+	
+	private void writeTokenKey(String tokenKey) {
+		String path = getTokenKeyPath();
+		try (PrintWriter out = new PrintWriter(new FileOutputStream(path))) {
+			out.println(tokenKey);
+			logger.info(String.format("writeTokenKey: %s %s", path));
+		} catch (FileNotFoundException e) {
+			logger.error(String.format("writeTokenKey: failed write token key: %s %s", path, e));
+		}
+	}
+
+	private String readTokenKey() {
+		String path = getTokenKeyPath();
+		if (!new File(path).exists()) {
+			return null;
+		}
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
+			String key = IOUtil.readFully(in);
+			logger.info(String.format("readTokenKey: %s", path));
+			return key;
+		} catch (IOException e) {
+			logger.error(String.format("readTokenKey: failed read token key: %s %s", path, e));
+			return null;
+		}
+	}
+
+
+	private String getTokenKeyPath() {
+		String filename = "sso";
+		String host = UriUtils.getHost(config.getServer());
+		if (host!=null && host.isEmpty() && host!="localhost" && Character.isAlphabetic(host.charAt(0))) {
+			filename = host;
+		}
+		URI uri = UriUtils.makeURI(config.getServer());
+		if (uri!=null) {
+			if (uri.getPort()>0) {
+				filename += "-" + uri.getPort();
+			}
+		}
+		filename = filename + ".cert";
+        String tmp = System.getProperty("java.io.tmpdir");
+        return PathUtil.concat(tmp, filename, File.separator);
 	}
 	
 	@Override

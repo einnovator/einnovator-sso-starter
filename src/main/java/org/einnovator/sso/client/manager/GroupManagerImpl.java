@@ -7,9 +7,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
-
 import org.einnovator.sso.client.model.Group;
-import org.einnovator.sso.client.model.GroupType;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.GroupFilter;

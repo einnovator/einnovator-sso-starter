@@ -7,8 +7,9 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.einnovator.sso.client.SsoClient;
-
+import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.Member;
+import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
@@ -23,6 +24,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.PayloadApplicationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -30,6 +32,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 public class UserManagerImpl extends ManagerBase implements UserManager {
 
 	public static final String CACHE_USER = "User";
+	public static final Pageable PAGE_SIZE_ALL = new PageRequest(0, Integer.MAX_VALUE);
 
 	private final Log logger = LogFactory.getLog(getClass());
 	
@@ -37,6 +40,9 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 	@Autowired
 	private SsoClient ssoClient;
+	
+	@Autowired
+	private GroupManager groupManager;
 	
 	public UserManagerImpl(SsoClient ssoClient, CacheManager cacheManager) {
 		this.ssoClient = ssoClient;
@@ -54,8 +60,17 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 
 	@Override
 	public User getLocalUser(String id, boolean remote) {
+		if (id==null) {
+			if (SecurityUtil.isAnonymous()) {
+				return null;
+			}
+			id = SecurityUtil.getPrincipalName();
+		}
+		if (id==null) {
+			return null;
+		}
 		String principalName = SecurityUtil.getPrincipalName();
-		if (id==null || principalName==null || SecurityUtil.isAnonymous()) {
+		if (principalName==null || SecurityUtil.isAnonymous()) {
 			return null;
 		}
 		if (id.equals(principalName)) {
@@ -239,12 +254,63 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	@Override
-	public List<String> getGroupsUuidForUser(String username) {
+	public List<String> getGroupsUuidForUser(String username, boolean local, boolean remote) {
+		List<Group> groups = getGroupsForUser(username, local, false);
+		if (groups!=null) {
+			return Group.getUuids(groups);
+		}
+		if (username==null) {
+			if (SecurityUtil.isAnonymous()) {
+				return null;
+			}
+			username = SecurityUtil.getPrincipalName();
+		}
 		if (username==null) {
 			return null;
 		}
-		User user = getUser(username, UserOptions.FULL);
-		return user!=null ? user.getGroupsUuid() : null;
+		if (local) {
+			String principalName = SecurityUtil.getPrincipalName();
+			if (principalName!=null && username.equals(principalName)) {
+				List<String> ids = Role.getGroups(SecurityUtil.getAuthorities());
+				if (ids!=null) {
+					return ids;
+				}
+			}			
+		}
+		if (remote) {
+			groups = getGroupsForUser(username, false, true);
+			if (groups!=null) {
+				return Group.getUuids(groups);
+			}
+		}
+		return null;
+	}
+
+
+	@Override
+	public List<Group> getGroupsForUser(String username, boolean local, boolean remote) {
+		if (username==null) {
+			if (SecurityUtil.isAnonymous()) {
+				return null;
+			}
+			username = SecurityUtil.getPrincipalName();
+		}
+		if (username==null) {
+			return null;
+		}
+		if (local) {
+			User user = getLocalUser(username, false);
+			if (user!=null) {
+				return Member.getGroups(user.getMembership());
+			}
+		}
+		if (remote) {
+			Page<Group> groups = groupManager.listGroupsForUser(username, null, PAGE_SIZE_ALL);
+			if (groups!=null) {
+				return groups.getContent();
+			}
+		}
+		return null;
 	}
 
 }

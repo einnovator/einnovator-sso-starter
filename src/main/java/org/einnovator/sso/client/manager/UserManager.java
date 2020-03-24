@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.einnovator.sso.client.SsoClient;
-
+import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.UserFilter;
 import org.einnovator.sso.client.modelx.UserOptions;
@@ -175,11 +175,23 @@ public interface UserManager {
 	//
 	
 	/**
-	 * Get list of UUIDs of {@code Groups} that the {@code User} with specified identifier is member of.
+	 * Get list of UUIDs of {@code Groups} that the {@code User} with specified username is member of.
 	 * 
 	 * @param id the {@code User} identifier
+	 * @param local use local data (e.g. principal info in security context or cached information)
+	 * @param remote fallback to remote server
 	 * @return the list of UUIDs (or null if error)
 	 */
-	List<String> getGroupsUuidForUser(String id);
+	List<String> getGroupsUuidForUser(String id, boolean local, boolean remote);
+
+	/**
+	 * Get list of {@code Groups} that the {@code User} with specified username is member of.
+	 * 
+	 * @param id the {@code User} identifier
+	 * @param local use local data (e.g. principal info in security context or cached information)
+	 * @param remote fallback to remote server
+	 * @return the list of UUIDs (or null if error)
+	 */
+	List<Group> getGroupsForUser(String username, boolean local, boolean remote);
 
 }
