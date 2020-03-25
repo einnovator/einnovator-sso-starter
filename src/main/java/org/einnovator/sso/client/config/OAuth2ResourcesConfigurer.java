@@ -173,7 +173,7 @@ public class OAuth2ResourcesConfigurer extends ResourceServerConfigurerAdapter {
 		String path = getTokenKeyPath();
 		try (PrintWriter out = new PrintWriter(new FileOutputStream(path))) {
 			out.println(tokenKey);
-			logger.info(String.format("writeTokenKey: %s %s", path));
+			logger.info(String.format("writeTokenKey: %s", path));
 		} catch (FileNotFoundException e) {
 			logger.error(String.format("writeTokenKey: failed write token key: %s %s", path, e));
 		}
