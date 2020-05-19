@@ -187,7 +187,7 @@ public interface UserManager {
 	/**
 	 * Get list of {@code Groups} that the {@code User} with specified username is member of.
 	 * 
-	 * @param id the {@code User} identifier
+	 * @param username the {@code User} username
 	 * @param local use local data (e.g. principal info in security context or cached information)
 	 * @param remote fallback to remote server
 	 * @return the list of UUIDs (or null if error)
