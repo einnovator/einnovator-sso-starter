@@ -33,6 +33,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 
 public class RoleManagerImpl extends ManagerBase implements RoleManager {
@@ -162,6 +163,9 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 
 	@Override
 	public boolean hasAnyRoleUser(String userId, String... roles) {
+		if (!StringUtils.hasText(userId) || userId.equals("anonymous") || userId.equals("anonymousUser")) {
+			return false;
+		}
 		User user = userManager.getUser(userId);
 		if (user == null) {
 			return false;
