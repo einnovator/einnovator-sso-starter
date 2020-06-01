@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.einnovator.sso.client.model.SsoRegistration;
+import org.einnovator.util.StringUtil;
 import org.einnovator.util.config.ConnectionConfiguration;
 import org.einnovator.util.model.ObjectBase;
 import org.einnovator.util.model.ToStringCreator;
@@ -27,7 +28,9 @@ public class SsoClientConfiguration extends ObjectBase {
 	public static String DEFAULT_REDIRECT_URI = "http://localhost/";
 
 	private String server = DEFAULT_SERVER;
-	
+
+	private String authorizeServer;
+
 	private String clientId;
 	
 	private String clientSecret;
@@ -85,6 +88,33 @@ public class SsoClientConfiguration extends ObjectBase {
 	 */
 	public void setServer(String server) {
 		this.server = server;
+	}
+
+	/**
+	 * Get the value of property {@code authorizeServer}.
+	 *
+	 * @return the authorizeServer
+	 */
+	public String getAuthorizeServer() {
+		return authorizeServer;
+	}
+
+	/**
+	 * Set the value of property {@code authorizeServer}.
+	 *
+	 * @param authorizeServer the value of property authorizeServer
+	 */
+	public void setAuthorizeServer(String authorizeServer) {
+		this.authorizeServer = authorizeServer;
+	}
+
+	/**
+	 * Get the value of property {@code authorizeServer} if set, otherwise return {@code server}.
+	 *
+	 * @return the value of {@code authorizeServer} or {@code server}
+	 */
+	public String getRequiredAuthorizeServer() {
+		return StringUtil.hasText(authorizeServer) ? authorizeServer : server;
 	}
 
 	/**

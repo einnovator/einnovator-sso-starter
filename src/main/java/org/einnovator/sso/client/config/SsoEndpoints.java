@@ -144,7 +144,7 @@ public class SsoEndpoints {
 	}
 
 	public static String getAuthorizationEndpoint(SsoClientConfiguration config) {
-		return config.getServer() + getEndpointPrefix(config) + "/authorize";
+		return config.getRequiredAuthorizeServer() + getEndpointPrefix(config) + "/authorize";
 	}
 
 	public static String getTokenEndpoint(SsoClientConfiguration config) {
