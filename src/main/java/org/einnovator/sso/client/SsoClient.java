@@ -120,6 +120,8 @@ public class SsoClient {
 
 	private boolean web = true;
 	
+	private static SsoClient instance = null;
+	
 	/**
 	 * Create instance of {@code SsoClient}.
 	 *
@@ -291,9 +293,28 @@ public class SsoClient {
 	}
 
 
+	/**
+	 * Get the value of property {@code instance}.
+	 *
+	 * @return the value of {@code instance}
+	 */
+	public static SsoClient getInstance() {
+		return instance;
+	}
+
+	/**
+	 * Set the value of property {@code instance}.
+	 *
+	 * @param instance the value of {@code instance}
+	 */
+	public static void setInstance(SsoClient instance) {
+		SsoClient.instance = instance;
+	}
+	
 	//
 	// Registration
 	//
+
 
 	/**
 	 * Register client application data with default server using default configured {@code SsoRegistration}.
@@ -1564,7 +1585,19 @@ public class SsoClient {
 	//
 	// Token utils
 	//
-	
+
+	/**
+	 * Get or request new {@code OAuth2AccessToken} for the session user using singleton {@code SsoClient}.
+	 * 
+	 * @return the {@code OAuth2AccessToken}
+	 */
+	public static OAuth2AccessToken setupUserToken() {
+		if (instance==null) {
+			return null;
+		}
+		return instance.setupToken();
+	}
+
 	/**
 	 * Get or request new {@code OAuth2AccessToken} for the session user.
 	 * 
@@ -1798,7 +1831,15 @@ public class SsoClient {
 	 */
 	public static final User getPrincipalUser() {
 		 Map<String, Object> details = SecurityUtil.getPrincipalDetails();
-		 return MappingUtils.convert(details, User.class);
+		 if (details!=null) {
+			 return MappingUtils.convert(details, User.class);			 
+		 }
+		 if (SecurityUtil.getPrincipal()!=null && !SecurityUtil.isAnonymous()) {
+			 String username = SecurityUtil.getPrincipalName();
+			 return new User().withUsername(username);
+		 }
+		 return null;
+		 
 	}
 	
 	//

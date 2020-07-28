@@ -31,6 +31,7 @@ public class SsoManagerImpl implements SsoManager {
 
 	@PostConstruct
 	public void initialize() {
+		SsoClient.setInstance(client);
 		if (config.getRegistration()!=null) {
 			if (config.getRegistration().isAuto()) {
 				register();

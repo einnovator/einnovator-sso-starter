@@ -34,6 +34,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
@@ -60,6 +61,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableConfigurationProperties(value=SsoClientConfiguration.class)
 @EnableCaching
 @Import({OAuth2ResourcesConfigurer.class})
+@Profile("!sso_exclude")
 public class SsoClientSecurityConfigurer {
 
 
