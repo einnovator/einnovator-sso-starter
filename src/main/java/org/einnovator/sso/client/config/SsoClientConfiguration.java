@@ -21,6 +21,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @ConfigurationProperties("sso")
 public class SsoClientConfiguration extends ObjectBase {
 
+	public static String SSO_EXCLUDE = "sso_exclude";
+	public static String SSO_LOCAL = "sso_local";
+
 	public static String OAUTH_TOKEN_NAME = "oauth_token";
 
 	public static String DEFAULT_SERVER = "http://localhost:2000";
@@ -41,7 +44,7 @@ public class SsoClientConfiguration extends ObjectBase {
 
 	private String[] ignore = { "/", "/index.html", "/login**", "/register**",
 			"/.well-known/**",
-			"/webjars/**", "/css/**", "/js/**", "/img/**", "/images/**", "/fonts/**", "/favicon.ico",  "/assets/**", "/theme/**", "/api**", "/api/**", "/ws/**" };
+			"/webjars/**", "/css/**", "/dist/**", "/js/**", "/img/**", "/images/**", "/fonts/**", "/favicon.ico",  "/assets/**", "/theme/**", "/api**", "/api/**", "/ws/**" };
 	
 	private String[] ignoreInclude = {};
 
