@@ -72,6 +72,34 @@ public interface UserManager {
 	User getUser(String id, UserOptions options);
 	
 	/**
+	 * Check if {@code User} with specified identifier exists.
+	 * 
+	 * Identifier {@code id} is the value of a property with unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Any, but results depend on each {@code User} privacy settings.
+	 * 
+	 * @param id the identifier
+	 * @param options (optional) {@code RequestOptions}
+	 * @return true if user exists, false if user does not exist, null if request failed.
+	 */
+	public Boolean checkUser(String id, RequestOptions options);
+	
+	/**
+	 * Get temporary login token for {@code User} with specified identifier.
+	 * 
+	 * Identifier {@code id} is the value of a property with unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Admin or authorized client.
+	 * 
+	 * @param id the identifier
+	 * @param options (optional) {@code RequestOptions}
+	 * @return the token
+	 */
+	public String loginUser(String id, RequestOptions options);
+	
+	/**
 	 * List {@code User}s.
 	 * 
 	 * <p><b>Required Security Credentials</b>: Any, but results depend on credentials and each {@code User} privacy settings.
@@ -193,5 +221,26 @@ public interface UserManager {
 	 * @return the list of UUIDs (or null if error)
 	 */
 	List<Group> getGroupsForUser(String username, boolean local, boolean remote);
+
+	/**
+	 * Make a {@code UserManager} with same configuration and setup with client authorities.
+	 * 
+	 * @return the {@code UserManager}
+	 */
+	UserManager makeAsClient();
+
+	/**
+	 * Get {@code User} with specified identifier with client credentials.
+	 * 
+	 * Identifier {@code id} is the value of a property with unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Any, but results depend on each {@code User} privacy settings.
+	 * 
+	 * @param id the identifier
+	 * @param options (optional) the {@code UserOptions} that tailor which fields are returned (projection)
+	 * @return the {@code User} if found, or null if not found or request failed
+	 */
+	User getUserAsClient(String id, UserOptions options);
 
 }

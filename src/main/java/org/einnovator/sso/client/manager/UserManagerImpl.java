@@ -44,15 +44,62 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	@Autowired
 	private GroupManager groupManager;
 	
+	//
+	// Constructors
+	//
+	
 	public UserManagerImpl(SsoClient ssoClient, CacheManager cacheManager) {
 		this.ssoClient = ssoClient;
 		this.cacheManager = cacheManager;
 	}
-	
+
+	public UserManagerImpl(SsoClient ssoClient) {
+		this.ssoClient = ssoClient;
+	}
+
 	public UserManagerImpl(CacheManager cacheManager) {
 		this.cacheManager = cacheManager;
 	}
 
+	public UserManagerImpl() {
+	}
+
+	//
+	// Setters/Getters
+	//
+
+	/**
+	 * @return the cacheManager
+	 */
+	public CacheManager getCacheManager() {
+		return cacheManager;
+	}
+
+	/**
+	 * @param cacheManager the cacheManager to set
+	 */
+	public void setCacheManager(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
+	}
+
+	/**
+	 * @return the ssoClient
+	 */
+	public SsoClient getSsoClient() {
+		return ssoClient;
+	}
+
+	/**
+	 * @param ssoClient the ssoClient to set
+	 */
+	public void setSsoClient(SsoClient ssoClient) {
+		this.ssoClient = ssoClient;
+	}
+
+	//
+	// UserManager
+	//
+	
 	@Override
 	public User getUser(String id) {
 		return getUser(id, UserOptions.DEFAULT);
@@ -112,7 +159,34 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			}
 			return null;
 		}
-
+	}
+	
+	public Boolean checkUser(String id, RequestOptions options) {
+		if (id==null) {
+			return null;
+		}
+		try {
+			return ssoClient.checkUser(id, options);	
+		} catch (RuntimeException e) {
+			if (options==null || !options.isSilent()) {
+				logger.error(String.format("checkUser: %s %s %s", e, id, options));								
+			}
+			return null;
+		}
+	}
+	
+	public String loginUser(String id, RequestOptions options) {
+		if (id==null) {
+			return null;
+		}
+		try {
+			return ssoClient.loginUser(id, options);	
+		} catch (RuntimeException e) {
+			if (options==null || !options.isSilent()) {
+				logger.error(String.format("loginUser: %s %s %s", e, id, options));								
+			}
+			return null;
+		}
 	}
 
 	protected boolean cacheable(UserOptions options) {
@@ -198,7 +272,10 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	@Override
-	public Cache getUserCache() {
+	public Cache getUserCache() { 
+		if (cacheManager==null) {
+			return null;
+		}
 		Cache cache = cacheManager.getCache(UserManagerImpl.CACHE_USER);
 		return cache;
 	}
@@ -311,6 +388,17 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public UserManager makeAsClient() {
+		SsoClient ssoClient2 = SsoClient.makeSsoClient(ssoClient.getConfig());
+		return new UserManagerImpl(ssoClient2, cacheManager);
+	}
+	
+	@Override
+	public User getUserAsClient(String id, UserOptions options) {
+		return makeAsClient().getUser(id, options);
 	}
 
 }

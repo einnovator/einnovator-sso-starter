@@ -14,6 +14,13 @@ public class SsoEndpoints {
 	public static String user(String id, SsoClientConfiguration config, boolean admin) {
 		return users(config, admin) + "/" + id;
 	}
+	public static String userCheck(String id, SsoClientConfiguration config, boolean admin) {
+		return user(id, config, admin) + "/check";
+	}
+
+	public static String userLogin(String id, SsoClientConfiguration config, boolean admin) {
+		return user(id, config, admin) + "/login";
+	}
 
 	public static String users(SsoClientConfiguration config, boolean admin) {
 		return api(config, admin) + "/user";

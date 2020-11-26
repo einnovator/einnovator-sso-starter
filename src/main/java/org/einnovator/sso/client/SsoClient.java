@@ -47,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +66,7 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -386,7 +388,58 @@ public class SsoClient {
 		ResponseEntity<User> result = exchange(request, User.class, options);
 		return result.getBody();
 	}
+
+	/**
+	 * Check if {@code User} with specified identifier exists.
+	 * 
+	 * Identifier {@code id} is the value of a property with unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Any, but results depend on each {@code User} privacy settings.
+	 * 
+	 * @param id the identifier
+	 * @param options (optional) {@code RequestOptions}
+	 * @return true if user exists, false otherwise.
+	 * @throws RestClientException if request fails
+	 */
+	public boolean checkUser(String id, RequestOptions options) {
+		id = encodeId(id);
+		URI uri = makeURI(SsoEndpoints.userCheck(id, config, isAdminRequest(options)));
+		uri = processURI(uri, options);
+		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
+		try {
+			exchange(request, Void.class, options);
+			return false;			
+		} catch (HttpStatusCodeException e) {
+			if (e.getStatusCode()==HttpStatus.CONFLICT) {
+				return true;
+			}
+			throw e;
+		}
+	}
 	
+	/**
+	 * Get temporary login token for {@code User} with specified identifier.
+	 * 
+	 * Identifier {@code id} is the value of a property with unique constraints, that is:
+	 * UUID, username, email.
+	 * 
+	 * <p><b>Required Security Credentials</b>: Admin or authorized client.
+	 * 
+	 * @param id the identifier
+	 * @param options (optional) {@code RequestOptions}
+	 * @return the token
+	 * @throws RestClientException if request fails
+	 */
+	public String loginUser(String id, RequestOptions options) {
+		id = encodeId(id);
+		URI uri = makeURI(SsoEndpoints.userLogin(id, config, isAdminRequest(options)));
+		uri = processURI(uri, options);
+		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
+		ResponseEntity<String> result = exchange(request, String.class, options);
+		return result.getBody();
+	}
+
 	
 	/**
 	 * List {@code User}s.
@@ -1842,6 +1895,8 @@ public class SsoClient {
 		 
 	}
 	
+
+
 	//
 	// Logout
 	//
