@@ -345,7 +345,7 @@ public class SsoClient {
 	 */
 	public void register(SsoRegistration registration) {
 		setupClientToken(oauth2ClientContext0);
-		register(registration, makeClientOAuth2RestTemplate());
+		register(registration, setupClientOAuth2RestTemplate(false, true));
 	}
 
 	/**
@@ -1401,12 +1401,14 @@ public class SsoClient {
 	 * @return the {@code OAuth2RestTemplate}
 	 */
 	protected OAuth2RestTemplate getRequiredRestTemplate(RequestOptions options) {
+		if (options!=null) {
+			if (Boolean.TRUE.equals(options.getRunAsClient())) {
+				return setupClientOAuth2RestTemplate(true, false);
+			}
+		}
 		OAuth2RestTemplate restTemplate = this.restTemplate;
 		if (WebUtil.getHttpServletRequest()==null && web) {
-			if (this.restTemplate0==null) {
-				this.restTemplate0 = makeClientOAuth2RestTemplate();
-			}
-			restTemplate = this.restTemplate0;
+			return setupClientOAuth2RestTemplate(true, false);
 		}			
 		return restTemplate;
 	}
@@ -1471,13 +1473,42 @@ public class SsoClient {
 	 * 
 	 * @return the {@code OAuth2RestTemplate}
 	 */
-	public OAuth2RestTemplate makeClientOAuth2RestTemplate() {
-		if (restTemplate0==null) {
+	public OAuth2RestTemplate setupClientOAuth2RestTemplate(boolean checkValid, boolean force) {
+		if (restTemplate0==null || force || (checkValid && isTokenValid(oauth2ClientContext0))) {
 			restTemplate0 = makeOAuth2RestTemplate(oauth2ClientContext0);
 		}
 		return restTemplate0;
 	}
+
+	/**
+	 * Make a {@code OAuth2RestTemplate} to connect to default server with Client credentials in singleton {@code OAuth2ClientContext}.
+	 * 
+	 * @return the {@code OAuth2RestTemplate}
+	 */
+	public OAuth2RestTemplate makeClientOAuth2RestTemplate() {
+		return makeOAuth2RestTemplate(oauth2ClientContext0);
+	}
 	
+	/**
+	 * Check if token is valid.
+	 * 
+	 * @param oauth2ClientContext the {@code oauth2ClientContext}
+	 * @return true if token valid, false otherwise.
+	 */
+	public static boolean isTokenValid(OAuth2ClientContext oauth2ClientContext) {
+		if (oauth2ClientContext==null) {
+			return false;
+		}
+		OAuth2AccessToken token = oauth2ClientContext.getAccessToken();
+		if (token==null) {
+			return false;
+		}
+		if (token.getExpiration()!=null && token.getExpiration().getTime()>System.currentTimeMillis()) {
+			return false;
+		}
+		
+		return true;
+	}
 	//
 	// Client Resource factory methods
 	//
