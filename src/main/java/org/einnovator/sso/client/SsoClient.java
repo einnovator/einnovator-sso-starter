@@ -536,8 +536,9 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void changePassword(String password, RequestOptions options) {
-		URI uri = makeURI(SsoEndpoints.password(config, isAdminRequest(options)) + "?password=" + password);
+		URI uri = makeURI(SsoEndpoints.password(config, isAdminRequest(options)));
 		uri = processURI(uri, options);
+		uri = UriUtils.appendQueryParameter(uri, "password", password);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, options);
 	}
@@ -807,8 +808,9 @@ public class SsoClient {
 	public URI addMemberToGroup(String userId, String groupId, RequestOptions options) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
+		uri = UriUtils.appendQueryParameter(uri, "username", userId);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();		
 		ResponseEntity<Void> result = exchange(request, Void.class, options);
 		return result.getHeaders().getLocation();
@@ -851,8 +853,9 @@ public class SsoClient {
 	public void removeMemberFromGroup(String userId, String groupId, RequestOptions options) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
+		uri = UriUtils.appendQueryParameter(uri, "username", userId);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, options);
 	}
@@ -1172,9 +1175,10 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	public void assignRole(String userId, String roleId, RequestOptions options) {
-		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(options)) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(options)));
 		userId = encodeId(userId);
 		uri = processURI(uri, options);
+		uri = UriUtils.appendQueryParameter(uri, "username", userId);
 		RequestEntity<Void> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, options);
 	}
@@ -1193,8 +1197,9 @@ public class SsoClient {
 	 */
 	public void unassignRole(String userId, String roleId, RequestOptions options) {
 		userId = encodeId(userId);
-		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(options)) + "?username=" + userId);
+		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
+		uri = UriUtils.appendQueryParameter(uri, "username", userId);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
 		exchange(request, Void.class, options);
 	}
