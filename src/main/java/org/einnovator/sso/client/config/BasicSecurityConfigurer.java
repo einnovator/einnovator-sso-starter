@@ -74,7 +74,7 @@ public class BasicSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		 */
 		protected String extractHeaderToken(HttpServletRequest request) {
 			Enumeration<String> headers = request.getHeaders(HttpHeaders.AUTHORIZATION);
-			while (headers.hasMoreElements()) { // typically there is only one (most servers enforce that)
+			while (headers.hasMoreElements()) { // typically only one (most servers enforce this)
 				String value = headers.nextElement();
 				if ((value.toLowerCase().startsWith(BASIC))) {
 					String authHeaderValue = value.substring(BASIC.length()).trim();

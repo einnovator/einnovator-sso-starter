@@ -44,7 +44,7 @@ public class FormSecurityConfigurer  extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers(config.getIgnore()).permitAll()
 			.antMatchers(config.getIgnoreInclude()).permitAll()
-			//.requestMatchers(new FormRequestMatcher()).authenticated()
+			.requestMatchers(new FormRequestMatcher()).authenticated()
 			.anyRequest().authenticated()
 			.and().logout().logoutUrl("/logout").permitAll().logoutSuccessUrl("/logout").logoutSuccessHandler(logoutHandler)
 			.and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
@@ -76,6 +76,7 @@ public class FormSecurityConfigurer  extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+	
 	public static class FormRequestMatcher implements RequestMatcher {
 		
 		private AuthorizationTokenExtractor tokenExtractor = new AuthorizationTokenExtractor();
@@ -83,7 +84,8 @@ public class FormSecurityConfigurer  extends WebSecurityConfigurerAdapter {
 		@Override
 		public boolean matches(HttpServletRequest request)  {
 			Authentication authentication = tokenExtractor.extract(request);
-			return authentication!=null;
+			System.out.println(String.format("!!FormRequestMatcher.matches: %s", (authentication==null)));
+			return authentication==null;
 		}
 	}
 
@@ -107,7 +109,7 @@ public class FormSecurityConfigurer  extends WebSecurityConfigurerAdapter {
 
 		
 		/**
-		 * Extract the Basic token from a header.
+		 * Extract the Authorization header value.
 		 * 
 		 * @param request The request.
 		 * @return The token, or null if no BASIC authorization header was supplied.

@@ -16,7 +16,6 @@ import org.einnovator.sso.client.web.SsoQueryRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -29,6 +28,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -55,18 +55,14 @@ public class LocalSsoSecurityConfigurer {
 	@SuppressWarnings("unused")
 	@Autowired
 	private SsoClientConfiguration config;
-	
-	@Configuration
-	@Order(SecurityProperties.BASIC_AUTH_ORDER)
-	public static class SsoClientBasicSecurityConfigurer extends BasicSecurityConfigurer {
-	}
+
 
 	@Configuration
 	public static class SsoClientFormSecurityConfigurer extends LocalFormSecurityConfigurer {
 		
 		@Autowired
-		public SsoClientFormSecurityConfigurer(SsoClientConfiguration config) {
-			super(config);
+		public SsoClientFormSecurityConfigurer(SsoClientConfiguration config, AuthenticationManager authenticationManager) {
+			super(config, authenticationManager);
 		}
 	}
 
