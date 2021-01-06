@@ -43,8 +43,9 @@ public class SsoClientConfiguration extends ObjectBase {
 	private String redirectUri = DEFAULT_REDIRECT_URI;
 
 	private String[] ignore = { "/", "/index.html", "/login**", "/register**", "/recover**",
-			"/.well-known/**",
-			"/webjars/**", "/css/**", "/dist/**", "/js/**", "/img/**", "/images/**", "/fonts/**", "/favicon.ico",  "/assets/**", "/theme/**", "/api**", "/api/**", "/ws/**" };
+			"/.well-known/**", "/api/info",
+			"/webjars/**", "/css/**", "/dist/**", "/js/**", "/img/**", "/images/**", "/fonts/**", "/favicon.ico",  "/assets/**", "/theme/**", 
+			"/ws/**" };
 	
 	private String[] ignoreInclude = {};
 
