@@ -84,7 +84,6 @@ public class FormSecurityConfigurer  extends WebSecurityConfigurerAdapter {
 		@Override
 		public boolean matches(HttpServletRequest request)  {
 			Authentication authentication = tokenExtractor.extract(request);
-			System.out.println(String.format("!!FormRequestMatcher.matches: %s", (authentication==null)));
 			return authentication==null;
 		}
 	}
