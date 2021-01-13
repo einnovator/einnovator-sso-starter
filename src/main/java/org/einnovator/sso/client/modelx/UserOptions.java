@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Options for {@code User} lookup.
+ * Options for {@code User} lookup and operations.
  * 
  * @see UserFilter
  * @see org.einnovator.sso.client.manager.UserManager
@@ -92,7 +92,7 @@ public class UserOptions extends EntityOptions<User> {
 	/**
 	 * Set the value of property {@code authorities}.
 	 *
-	 * @param authorities the authorities to set
+	 * @param authorities the authorities
 	 */
 	public void setAuthorities(Boolean authorities) {
 		this.authorities = authorities;

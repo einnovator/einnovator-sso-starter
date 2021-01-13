@@ -50,7 +50,6 @@ public interface UserManager {
 	 * <p><b>Required Security Credentials</b>: Any, but results depend on each {@code User} privacy settings.
 	 * 
 	 * @param id the {@code User} uuid or username
-
 	 * @return the {@code User} if found, or null if not found or request failed
 	 */
 	User getUser(String id);
@@ -66,7 +65,6 @@ public interface UserManager {
 	 * 
 	 * @param id the identifier
 	 * @param options (optional) the {@code UserOptions} that tailor which fields are returned (projection)
-
 	 * @return the {@code User} if found, or null if not found or request failed
 	 */
 	User getUser(String id, UserOptions options);
@@ -120,11 +118,10 @@ public interface UserManager {
 	 * <p><b>Required Security Credentials</b>: Client or Admin (global role ADMIN).
 	 * 
 	 * @param user the {@code User}
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code UserOptions}
 	 * @return the location {@code URI} for the created {@code User}, or null if request failed
 	 */
-	URI createUser(User user, RequestOptions options);
+	URI createUser(User user, UserOptions options);
 	
 	/**
 	 * Update existing {@code User}
@@ -132,11 +129,10 @@ public interface UserManager {
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
 	 * @param user the {@code User}
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code UserOptions}
 	 * @return the same {@code User}, or null if request failed
 	 */
-	User updateUser(User user, RequestOptions options);
+	User updateUser(User user, UserOptions options);
 
 	/**
 	 * Delete existing {@code User}
@@ -148,10 +144,9 @@ public interface UserManager {
 	 * 
 	 * @param userId the {@code User} identifier
 	 * @param options optional {@code RequestOptions}
-
 	 * @return true if {@code User} was deleted, or false if request failed
 	 */
-	boolean deleteUser(String userId, RequestOptions options);
+	boolean deleteUser(String userId, UserOptions options);
 	
 	
 	//

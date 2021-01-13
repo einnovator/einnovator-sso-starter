@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.einnovator.sso.client.SsoClient;
-
 import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.modelx.GroupFilter;
+import org.einnovator.sso.client.modelx.GroupOptions;
 import org.einnovator.sso.client.modelx.MemberFilter;
+import org.einnovator.sso.client.modelx.MemberOptions;
 import org.einnovator.sso.client.modelx.UserOptions;
-import org.einnovator.util.web.RequestOptions;
 import org.springframework.cache.Cache;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.data.domain.Page;
@@ -51,7 +51,6 @@ public interface GroupManager {
 	 * <p><b>Required Security Credentials</b>: any, but results depend on each {@code Group}, parent and root {@code Group} privacy settings.
 	 * 
 	 * @param groupId the identifier
-
 	 * @return the {@code User} if found, or null if not found or request failed
 	 */
 	Group getGroup(String groupId);
@@ -90,11 +89,11 @@ public interface GroupManager {
 	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param group the {@code Group}
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code GroupOptions}
 
 	 * @return the location {@code URI} for the created {@code Group}, or null if request failed
 	 */
-	URI createGroup(Group group, RequestOptions options);
+	URI createGroup(Group group, GroupOptions options);
 	
 	/**
 	 * Update existing {@code Group}
@@ -104,11 +103,10 @@ public interface GroupManager {
 	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param group the {@code Group}
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code GroupOptions}
 	 * @return the same {@code Group}, or null if request failed
 	 */
-	Group updateGroup(Group group, RequestOptions options);
+	Group updateGroup(Group group, GroupOptions options);
 
 	/**
 	 * Delete existing {@code Group}
@@ -118,11 +116,10 @@ public interface GroupManager {
 	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param groupId the {@code Group} identifier
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code GroupOptions}
 	 * @return true if {@code Group} was deleted, or false if request failed
 	 */
-	boolean deleteGroup(String groupId, RequestOptions options);
+	boolean deleteGroup(String groupId, GroupOptions options);
 
 	
 	//
@@ -231,11 +228,10 @@ public interface GroupManager {
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code MemberOptions}
 	 * @return the location {@code URI} for the created {@code Member}, or null if request failed
 	 */
-	URI addMember(String userId, String groupId, RequestOptions options);
+	URI addMember(String userId, String groupId, MemberOptions options);
 
 
 	/**
@@ -246,11 +242,10 @@ public interface GroupManager {
 	 * 
 	 * @param member the {@code Member} to add to Group
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code MemberOptions}
 	 * @return the location {@code URI} for the created {@code Member}, or null if request failed
 	 */
-	public URI addMember(Member member, String groupId, RequestOptions options);
+	public URI addMember(Member member, String groupId, MemberOptions options);
 	
 	/**
 	 * Remove {@code User} from a {@code Group}
@@ -261,11 +256,10 @@ public interface GroupManager {
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code MemberOptions}
 	 * @return true if {@code Member} was deleted, or false if request failed
 	 */
-	boolean removeMember(String userId, String groupId, RequestOptions options);
+	boolean removeMember(String userId, String groupId, MemberOptions options);
 
 	
 	/**
@@ -277,7 +271,6 @@ public interface GroupManager {
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param filter a {@code UserFilter} (optional)
 	 * @param pageable a {@code Pageable} (optional)
-
 	 * @return a {@code Page} with {@code Group}s, or false if request failed
 	 */	
 	Page<Group> listGroupsForUser(String userId, GroupFilter filter, Pageable pageable);
@@ -305,7 +298,6 @@ public interface GroupManager {
 	 * 
 	 * @param id the {@code Group} UUID
 	 * @param details new state of {@code User}
-
 	 */
 	void onGroupUpdate(String id, Map<String, Object> details);
 
@@ -314,7 +306,6 @@ public interface GroupManager {
 	 * 
 	 * @param id the {@code Member} UUID
 	 * @param userId the {@code User} username or UUID
-
 	 */
 	void onGroupMemberUpdate(String id, String userId);
 

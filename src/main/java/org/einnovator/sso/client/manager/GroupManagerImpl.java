@@ -11,10 +11,11 @@ import org.einnovator.sso.client.model.Group;
 import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.GroupFilter;
+import org.einnovator.sso.client.modelx.GroupOptions;
 import org.einnovator.sso.client.modelx.MemberFilter;
+import org.einnovator.sso.client.modelx.MemberOptions;
 import org.einnovator.sso.client.modelx.UserOptions;
 import org.einnovator.util.security.SecurityUtil;
-import org.einnovator.util.web.RequestOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -79,7 +80,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 	
 	@Override
-	public URI createGroup(Group group, RequestOptions options) {
+	public URI createGroup(Group group, GroupOptions options) {
 		try {
 			URI uri = client.createGroup(group, options);
 			if (uri == null) {
@@ -130,7 +131,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 
 	@Override
-	public Group updateGroup(Group group, RequestOptions options) {
+	public Group updateGroup(Group group, GroupOptions options) {
 		try {
 			client.updateGroup(group, options);
 			if (group == null) {
@@ -161,7 +162,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@CacheEvict(value = CACHE_GROUP, key = "#groupId")
-	public boolean deleteGroup(String groupId, RequestOptions options) {
+	public boolean deleteGroup(String groupId, GroupOptions options) {
 		try {
 			client.deleteGroup(groupId, options);
 			if (groupId == null) {
@@ -215,7 +216,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 
 	@Override
-	public URI addMember(String userId, String groupId, RequestOptions options) {
+	public URI addMember(String userId, String groupId, MemberOptions options) {
 		try {
 			if (groupId == null) {
 				logger.error("addToGroup: " + userId);
@@ -231,7 +232,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 	}
 	
 	@Override
-	public URI addMember(Member member, String groupId, RequestOptions options) {
+	public URI addMember(Member member, String groupId, MemberOptions options) {
 		try {
 			if (groupId == null) {
 				logger.error("addToGroup: " + member);
@@ -250,7 +251,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 
 	@Override
 	@CacheEvict(value = CACHE_GROUP_MEMBERS, key = "#groupId + #userId")
-	public boolean removeMember(String userId, String groupId, RequestOptions options) {
+	public boolean removeMember(String userId, String groupId, MemberOptions options) {
 		if (groupId == null) {
 			logger.error("removeFromGroup: " + userId + " " + groupId);
 			return false;

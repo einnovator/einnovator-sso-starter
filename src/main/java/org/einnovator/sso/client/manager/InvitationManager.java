@@ -3,12 +3,10 @@ package org.einnovator.sso.client.manager;
 import java.net.URI;
 
 import org.einnovator.sso.client.SsoClient;
-
 import org.einnovator.sso.client.model.Invitation;
 import org.einnovator.sso.client.model.InvitationStats;
 import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.modelx.InvitationOptions;
-import org.einnovator.util.web.RequestOptions;
 import org.springframework.cache.Cache;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -71,7 +69,7 @@ public interface InvitationManager {
 
 	 * @return the same {@code Invitation}, or null if request failed
 	 */
-	Invitation updateInvitation(Invitation invitation, RequestOptions options);
+	Invitation updateInvitation(Invitation invitation, InvitationOptions options);
 
 	/**
 	 * Get {@code InvitationStats} with {@code Invitation} statistics.
@@ -79,10 +77,9 @@ public interface InvitationManager {
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN).
 	 *
 	 * @param options optional  {@code InvitationOptions}
-
 	 * @return the {@code InvitationStats}, or null if request failed
 	 */
-	InvitationStats getInvitationStats(RequestOptions options);
+	InvitationStats getInvitationStats(InvitationOptions options);
 	
 	/**
 	 * Get invitation {@code URI} with token for specified {@code Invitation}.
@@ -92,7 +89,6 @@ public interface InvitationManager {
 	 *
 	 * @param id the identifier of the {@code Invitation} (UUID)
 	 * @param options optional  {@code InvitationOptions}
-
 	 * @return the invitation token as an {@code URI}, or null if request failed
 	 */
 	URI getInvitationToken(String id, InvitationOptions options);
@@ -104,10 +100,9 @@ public interface InvitationManager {
 	 * 
 	 * @param id the identifier (UUID)
 	 * @param options optional  {@code InvitationOptions}
-
 	 * @return true if {@code User} was deleted, or false if request failed
 	 */
-	boolean deleteInvitation(String id, RequestOptions options);
+	boolean deleteInvitation(String id, InvitationOptions options);
 	
 	
 	//

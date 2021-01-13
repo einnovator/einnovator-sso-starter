@@ -75,10 +75,10 @@ public interface ClientManager {
 	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param client the {@code Client}
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code ClientOptions}
 	 * @return the same {@code Client}, or null if request failed
 	 */
-	Client updateClient(Client client, RequestOptions options);
+	Client updateClient(Client client, ClientOptions options);
 
 	/**
 	 * Delete existing {@code Client}
@@ -86,10 +86,10 @@ public interface ClientManager {
 	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param clientId the {@code Client}
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code ClientOptions}
 	 * @return true if {@code Client} was deleted, or false if request failed
 	 */
-	boolean deleteClient(String clientId, RequestOptions options);
+	boolean deleteClient(String clientId, ClientOptions options);
 	
 	//
 	// Caching

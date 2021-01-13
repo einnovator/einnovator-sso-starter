@@ -27,9 +27,11 @@ import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.ClientFilter;
 import org.einnovator.sso.client.modelx.ClientOptions;
 import org.einnovator.sso.client.modelx.GroupFilter;
+import org.einnovator.sso.client.modelx.GroupOptions;
 import org.einnovator.sso.client.modelx.InvitationFilter;
 import org.einnovator.sso.client.modelx.InvitationOptions;
 import org.einnovator.sso.client.modelx.MemberFilter;
+import org.einnovator.sso.client.modelx.MemberOptions;
 import org.einnovator.sso.client.modelx.RoleFilter;
 import org.einnovator.sso.client.modelx.RoleOptions;
 import org.einnovator.sso.client.modelx.UserFilter;
@@ -39,6 +41,7 @@ import org.einnovator.util.PageResult;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Application;
+import org.einnovator.util.model.EntityBase;
 import org.einnovator.util.security.SecurityUtil;
 import org.einnovator.util.web.RequestOptions;
 import org.einnovator.util.web.Result;
@@ -66,6 +69,7 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -171,7 +175,7 @@ public class SsoClient {
 	/**
 	 * Set the value of property {@code application}.
 	 *
-	 * @param application the application to set
+	 * @param application the application
 	 */
 	public void setApplication(Application application) {
 		this.application = application;
@@ -189,7 +193,7 @@ public class SsoClient {
 	/**
 	 * Set the value of property {@code config}.
 	 *
-	 * @param config the config to set
+	 * @param config the config
 	 */
 	public void setConfig(SsoClientConfiguration config) {
 		this.config = config;
@@ -207,7 +211,7 @@ public class SsoClient {
 	/**
 	 * Set the value of property {@code restTemplate}.
 	 *
-	 * @param restTemplate the restTemplate to set
+	 * @param restTemplate the restTemplate
 	 */
 	public void setRestTemplate(OAuth2RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
@@ -225,7 +229,7 @@ public class SsoClient {
 	/**
 	 * Set the value of property {@code oauth2ClientContext}.
 	 *
-	 * @param oauth2ClientContext the oauth2ClientContext to set
+	 * @param oauth2ClientContext the oauth2ClientContext
 	 */
 	public void setOauth2ClientContext(OAuth2ClientContext oauth2ClientContext) {
 		this.oauth2ClientContext = oauth2ClientContext;
@@ -243,7 +247,7 @@ public class SsoClient {
 	/**
 	 * Set the value of property {@code oauth2ClientContext0}.
 	 *
-	 * @param oauth2ClientContext0 the oauth2ClientContext0 to set
+	 * @param oauth2ClientContext0 the oauth2ClientContext0
 	 */
 	public void setOauth2ClientContext0(OAuth2ClientContext oauth2ClientContext0) {
 		this.oauth2ClientContext0 = oauth2ClientContext0;
@@ -261,7 +265,7 @@ public class SsoClient {
 	/**
 	 * Set the value of property {@code restTemplate0}.
 	 *
-	 * @param restTemplate0 the restTemplate0 to set
+	 * @param restTemplate0 the restTemplate0
 	 */
 	public void setRestTemplate0(OAuth2RestTemplate restTemplate0) {
 		this.restTemplate0 = restTemplate0;
@@ -469,12 +473,11 @@ public class SsoClient {
 	 * <p><b>Required Security Credentials</b>: Client or Admin (global role ADMIN).
 	 * 
 	 * @param user the {@code User}
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code UserOptions}
 	 * @return the location {@code URI} for the created {@code User}
 	 * @throws RestClientException if request fails
 	 */
-	public URI createUser(User user, RequestOptions options) {
+	public URI createUser(User user, UserOptions options) {
 		URI uri = makeURI(SsoEndpoints.users(config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		RequestEntity<User> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(user);
@@ -483,22 +486,36 @@ public class SsoClient {
 	}
 	
 	/**
-	 * Update existing {@code User}
+	 * Update {@code User} with specified identifier.
 	 * 
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
+	 * @param id the identifier (id | uuid | username)
 	 * @param user the {@code User}
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code UserOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void updateUser(User user, RequestOptions options) {
-		URI uri = makeURI(SsoEndpoints.user(user.getId(), config, isAdminRequest(options)));
+	public void updateUser(String id, User user, UserOptions options) {
+		URI uri = makeURI(SsoEndpoints.user(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		RequestEntity<User> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(user);
 		exchange(request, User.class, options);
 	}
-	
+
+	/**
+	 * Update a {@code User}.
+	 * 
+	 * <p>ID is extracted from fields: UUID, ID, or username.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
+	 * 
+	 * @param user the {@code User}
+	 * @param options optional {@code UserOptions}
+	 * @throws RestClientException if request fails
+	 */
+	public void updateUser(User user, UserOptions options) {
+		updateUser(getId(user), user, options);
+	}
+
 	/**
 	 * Delete existing {@code User}
 	 * 
@@ -508,11 +525,10 @@ public class SsoClient {
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
 	 * @param id the {@code User} identifier
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code UserOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void deleteUser(String id, RequestOptions options) {
+	public void deleteUser(String id, UserOptions options) {
 		id = encodeId(id);
 		URI uri = makeURI(SsoEndpoints.user(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
@@ -531,11 +547,10 @@ public class SsoClient {
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner {@code User}.
 	 * 
 	 * @param password the password
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code UserOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void changePassword(String password, RequestOptions options) {
+	public void changePassword(String password, UserOptions options) {
 		URI uri = makeURI(SsoEndpoints.password(config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		uri = UriUtils.appendQueryParameter(uri, "password", password);
@@ -559,7 +574,6 @@ public class SsoClient {
 	 *
 	 * @param groupId the identifier
 	 * @param filter (optional) the {@code GroupOptions} that tailor which fields are returned (projection) and {@code GroupFilter} for sub-groups
-
 	 * @return the {@code Group}
 	 * @throws RestClientException if request fails
 	 */
@@ -599,12 +613,11 @@ public class SsoClient {
 	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param group the {@code Group}
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code GroupOptions}
 	 * @return the location {@code URI} for the created {@code User}
 	 * @throws RestClientException if request fails
 	 */
-	public URI createGroup(Group group, RequestOptions options) {
+	public URI createGroup(Group group, GroupOptions options) {
 		URI uri = makeURI(SsoEndpoints.groups(config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		RequestEntity<Group> request = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON).body(group);
@@ -613,22 +626,38 @@ public class SsoClient {
 	}
 
 	/**
-	 * Update existing {@code Group}
+	 * Update {@code Group} with specified identifier.
 	 * 
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN).
 	 * <p>For root {@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}
 	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
+	 * @param id the identifier (id | uuid)
 	 * @param group the {@code Group}
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code GroupOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void updateGroup(Group group, RequestOptions options) {
-		URI uri = makeURI(SsoEndpoints.group(encode(group.getId()), config, isAdminRequest(options)));
+	public void updateGroup(String id, Group group, GroupOptions options) {
+		URI uri = makeURI(SsoEndpoints.group(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
-		RequestEntity<Group> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(group);		
+		RequestEntity<Group> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(group);
 		exchange(request, Group.class, options);
+	}
+
+	/**
+	 * Update a {@code Group}.
+	 * 
+	 * <p>ID is extracted from fields: UUID, ID.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN).
+	 * <p>For root {@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}
+	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * 
+	 * @param group the {@code Group}
+	 * @param options optional {@code GroupOptions}
+	 * @throws RestClientException if request fails
+	 */
+	public void updateGroup(Group group, GroupOptions options) {
+		updateGroup(getId(group), group, options);
 	}
 
 	/**
@@ -639,11 +668,10 @@ public class SsoClient {
 	 * <p>For sub-{@code Group}s: owner or role <b>GROUP_MANAGER</b> in {@code Group}, owner or role <b>GROUP_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param id the {@code Group} identifier
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code GroupOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void deleteGroup(String id, RequestOptions options) {
+	public void deleteGroup(String id, GroupOptions options) {
 		id = encode(id);
 		URI uri = makeURI(SsoEndpoints.group(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
@@ -801,11 +829,11 @@ public class SsoClient {
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code MemberOptions}
 	 * @return the location {@code URI} for the created {@code Member}
 	 * @throws RestClientException if request fails
 	 */
-	public URI addMemberToGroup(String userId, String groupId, RequestOptions options) {
+	public URI addMemberToGroup(String userId, String groupId, MemberOptions options) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)));
@@ -824,11 +852,11 @@ public class SsoClient {
 	 * 
 	 * @param member the {@code Member} to add to Group
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code MemberOptions}
 	 * @return the location {@code URI} for the created {@code Member}
 	 * @throws RestClientException if request fails
 	 */
-	public URI addMemberToGroup(Member member, String groupId, RequestOptions options) {
+	public URI addMemberToGroup(Member member, String groupId, MemberOptions options) {
 		groupId = encode(groupId);
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
@@ -846,11 +874,10 @@ public class SsoClient {
 	 * 
 	 * @param userId the identifier of a {@code User} (UUID, or username)
 	 * @param groupId the {@code Group} identifier (UUID, or name of root group if supported)
-	 * @param options optional {@code RequestOptions}
-
+	 * @param options optional {@code MemberOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void removeMemberFromGroup(String userId, String groupId, RequestOptions options) {
+	public void removeMemberFromGroup(String userId, String groupId, MemberOptions options) {
 		groupId = encode(groupId);
 		userId = encodeId(userId);
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)));
@@ -941,22 +968,37 @@ public class SsoClient {
 		return result.getHeaders().getLocation();
 	}
 	
+	
 	/**
-	 * Update existing {@code Invitation}
+	 * Update {@code Invitation} with specified identifier.
 	 * 
-	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner. 
 	 * 
+	 * @param id the identifier (id | uuid)
 	 * @param invitation the {@code Invitation}
-	 * @param options optional  {@code InvitationOptions}
+	 * @param options the {@code InvitationOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void updateInvitation(Invitation invitation, RequestOptions options) {
-		URI uri = makeURI(SsoEndpoints.invitation(invitation.getUuid(), config, isAdminRequest(options)));
+	public void updateInvitation(String id, Invitation invitation, InvitationOptions options) {
+		URI uri = makeURI(SsoEndpoints.invitation(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		RequestEntity<Invitation> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(invitation);
 		exchange(request, Invitation.class, options);
 	}
 
+	/**
+	 * Update a {@code Invitation}.
+	 * 
+	 * <p>ID is extracted from fields: UUID, ID.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), owner. 
+	 * 
+	 * @param invitation the {@code Invitation}
+	 * @param options the {@code InvitationOptions}
+	 * @throws RestClientException if request fails
+	 */
+	public void updateInvitation(Invitation invitation, InvitationOptions options) {
+		updateInvitation(getId(invitation), invitation, options);
+	}
 	
 	/**
 	 * Get {@code InvitationStats} with {@code Invitation} statistics.
@@ -967,7 +1009,7 @@ public class SsoClient {
 	 * @return the {@code InvitationStats}
 	 * @throws RestClientException if request fails
 	 */
-	public InvitationStats getInvitationStats(RequestOptions options) {
+	public InvitationStats getInvitationStats(InvitationOptions options) {
 		URI uri = makeURI(SsoEndpoints.invitationStats(config, isAdminRequest(options)));
 		RequestEntity<Void> request = RequestEntity.get(uri).accept(MediaType.APPLICATION_JSON).build();
 		ResponseEntity<InvitationStats> result = exchange(request, InvitationStats.class, options);
@@ -999,10 +1041,10 @@ public class SsoClient {
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN), or owner.
 	 * 
 	 * @param id the identifier (UUID)
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code InvitationOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void deleteInvitation(String id, RequestOptions options) {
+	public void deleteInvitation(String id, InvitationOptions options) {
 		URI uri = makeURI(SsoEndpoints.invitation(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
@@ -1077,24 +1119,41 @@ public class SsoClient {
 		return result.getHeaders().getLocation();
 	}
 	
+
 	/**
-	 * Update existing {@code Role}
+	 * Update {@code Role} with specified identifier.
 	 * 
 	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
 	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
+	 * @param id the identifier (id | uuid)
 	 * @param role the {@code Role}
-	 * @param options optional {@code RequestOptions}
+	 * @param options the {@code RoleOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void updateRole(Role role, RequestOptions options) {
-		URI uri = makeURI(SsoEndpoints.role(role.getId(), config, isAdminRequest(options)));
+	public void updateRole(String id, Role role, RoleOptions options) {
+		URI uri = makeURI(SsoEndpoints.role(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		RequestEntity<Role> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(role);
 		exchange(request, Role.class, options);
 	}
-	
+
+	/**
+	 * Update a {@code Role}.
+	 * 
+	 * <p>ID is extracted from fields: UUID, ID.
+	 * <p><b>Required Security Credentials</b>: Client, Admin (global role ADMIN) for global Roles and group Roles prototypes. 
+	 * <p>For root {@code Group}s: owner or role <b>PERMISSION_MANAGER</b> of parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
+	 * 
+	 * @param role the {@code Role}
+	 * @param options the {@code RoleOptions}
+	 * @throws RestClientException if request fails
+	 */
+	public void updateRole(Role role, RoleOptions options) {
+		updateRole(getId(role), role, options);
+	}
 	
 	
 	/**
@@ -1312,19 +1371,34 @@ public class SsoClient {
 	}
 	
 	/**
-	 * Update existing {@code Client}
+	 * Update {@code Client} with specified identifier.
 	 * 
 	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
+	 * @param id the identifier (id | uuid)
 	 * @param client the {@code Client}
-	 * @param options optional {@code RequestOptions}
+	 * @param options the {@code ClientOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void updateClient(Client client, RequestOptions options) {
-		URI uri = makeURI(SsoEndpoints.client(client.getId(), config, isAdminRequest(options)));
+	public void updateClient(String id, Client client, ClientOptions options) {
+		URI uri = makeURI(SsoEndpoints.client(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		RequestEntity<Client> request = RequestEntity.put(uri).accept(MediaType.APPLICATION_JSON).body(client);
 		exchange(request, Client.class, options);
+	}
+
+	/**
+	 * Update a {@code Client}.
+	 * 
+	 * <p>ID is extracted from fields: UUID, ID.
+	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
+	 * 
+	 * @param client the {@code Client}
+	 * @param options the {@code ClientOptions}
+	 * @throws RestClientException if request fails
+	 */
+	public void updateClient(Client client, ClientOptions options) {
+		updateClient(getId(client), client, options);
 	}
 	
 	/**
@@ -1333,10 +1407,10 @@ public class SsoClient {
 	 * <p><b>Required Security Credentials</b>: Admin (global role ADMIN).
 	 * 
 	 * @param clientId the {@code Client}
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code ClientOptions}
 	 * @throws RestClientException if request fails
 	 */
-	public void deleteClient(String clientId, RequestOptions options) {
+	public void deleteClient(String clientId, ClientOptions options) {
 		clientId = encodeId(clientId);
 		URI uri = makeURI(SsoEndpoints.client(clientId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
@@ -1475,9 +1549,11 @@ public class SsoClient {
 	 * Make a {@code OAuth2RestTemplate} to connect to default server with Client credentials in singleton {@code OAuth2ClientContext}.
 	 * 
 	 * Sets the created {@code OAuth2RestTemplate} as value of property {@code restTemplate0} if currently null.
-	 * 
+	 * @param checkValid check if token is valid
+	 * @param force create always, ignore cached one if any
 	 * @return the {@code OAuth2RestTemplate}
 	 */
+
 	public OAuth2RestTemplate setupClientOAuth2RestTemplate(boolean checkValid, boolean force) {
 		if (restTemplate0==null || force || (checkValid && isTokenValid(oauth2ClientContext0))) {
 			restTemplate0 = makeOAuth2RestTemplate(oauth2ClientContext0);
@@ -2018,5 +2094,18 @@ public class SsoClient {
 		return UriUtils.appendQueryParameters(uri, objs);
 	}
 	
-
+	private static String getId(EntityBase obj) {
+		return EntityBase.getAnyId(obj);
+	}
+	
+	private static String getId(User user) {
+		String id = getId((EntityBase)user);
+		if (id!=null) {
+			return id;
+		}
+		if (StringUtils.hasText(user.getUsername())) {
+			return user.getUsername();
+		}
+		return null;
+	}
 }

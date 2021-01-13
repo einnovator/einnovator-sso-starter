@@ -59,7 +59,7 @@ public class ClientFilter extends ClientOptions {
 	/**
 	 * Set the value of property {@code startDate}.
 	 *
-	 * @param startDate the startDate to set
+	 * @param startDate the startDate
 	 */
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
@@ -77,7 +77,7 @@ public class ClientFilter extends ClientOptions {
 	/**
 	 * Set the value of property {@code endDate}.
 	 *
-	 * @param endDate the endDate to set
+	 * @param endDate the endDate
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;

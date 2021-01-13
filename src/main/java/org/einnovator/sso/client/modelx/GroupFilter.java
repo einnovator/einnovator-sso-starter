@@ -61,7 +61,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code root}.
 	 *
-	 * @param root the root to set
+	 * @param root the root
 	 */
 	public void setRoot(String root) {
 		this.root = root;
@@ -79,7 +79,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code parent}.
 	 *
-	 * @param parent the parent to set
+	 * @param parent the parent
 	 */
 	public void setParent(String parent) {
 		this.parent = parent;
@@ -97,7 +97,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code address}.
 	 *
-	 * @param address the address to set
+	 * @param address the address
 	 */
 	public void setAddress(Address address) {
 		this.address = address;
@@ -116,7 +116,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code qaddress}.
 	 *
-	 * @param qaddress the qaddress to set
+	 * @param qaddress the qaddress
 	 */
 	public void setQaddress(Boolean qaddress) {
 		this.qaddress = qaddress;
@@ -134,7 +134,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code featured}.
 	 *
-	 * @param featured the featured to set
+	 * @param featured the featured
 	 */
 	public void setFeatured(Boolean featured) {
 		this.featured = featured;
@@ -152,7 +152,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code hidden}.
 	 *
-	 * @param hidden the hidden to set
+	 * @param hidden the hidden
 	 */
 	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
@@ -170,7 +170,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code user}.
 	 *
-	 * @param user the user to set
+	 * @param user the user
 	 */
 	public void setUser(String user) {
 		this.user = user;
@@ -190,7 +190,7 @@ public class GroupFilter extends GroupOptions {
 	/**
 	 * Set the value of property {@code owner}.
 	 *
-	 * @param owner the owner to set
+	 * @param owner the owner
 	 */
 	public void setOwner(String owner) {
 		this.owner = owner;

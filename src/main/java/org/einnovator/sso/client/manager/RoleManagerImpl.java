@@ -249,7 +249,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 	}
 
 	@Override
-	public Role updateRole(Role role, RequestOptions options) {
+	public Role updateRole(Role role, RoleOptions options) {
 		try {
 			client.updateRole(role, options);
 			if (role == null) {

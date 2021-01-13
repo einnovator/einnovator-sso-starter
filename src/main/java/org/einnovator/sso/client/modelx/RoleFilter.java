@@ -51,7 +51,7 @@ public class RoleFilter extends RoleOptions {
 	/**
 	 * Set the value of property {@code q}.
 	 *
-	 * @param q the q to set
+	 * @param q the q
 	 */
 	public void setQ(String q) {
 		this.q = q;
@@ -70,7 +70,7 @@ public class RoleFilter extends RoleOptions {
 	/**
 	 * Set the value of property {@code name}.
 	 *
-	 * @param name the name to set
+	 * @param name the name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -90,7 +90,7 @@ public class RoleFilter extends RoleOptions {
 	/**
 	 * Set the value of property {@code type}.
 	 *
-	 * @param type the type to set
+	 * @param type the type
 	 */
 	public void setType(RoleType type) {
 		this.type = type;
@@ -108,7 +108,7 @@ public class RoleFilter extends RoleOptions {
 	/**
 	 * Set the value of property {@code group}.
 	 *
-	 * @param group the group to set
+	 * @param group the group
 	 */
 	public void setGroup(String group) {
 		this.group = group;

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Options for {@code Invitation} lookup.
+ * Options for {@code Invitation} lookup and operations.
  * 
  * @see InvitationFilter
  * @see org.einnovator.sso.client.manager.InvitationManager

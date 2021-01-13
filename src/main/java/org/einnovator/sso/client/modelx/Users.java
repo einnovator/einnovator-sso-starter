@@ -45,7 +45,7 @@ public class Users extends ObjectBase {
 	/**
 	 * Set the value of property {@code users}.
 	 *
-	 * @param users the users to set
+	 * @param users the users
 	 */
 	public void setUsers(List<String> users) {
 		this.users = users;

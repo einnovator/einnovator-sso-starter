@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Options for {@code Group} lookup.
+ * Options for {@code Group} lookup and operations.
  * 
  * @see GroupFilter
  * @see org.einnovator.sso.client.manager.GroupManager
@@ -63,7 +63,7 @@ public class GroupOptions extends EntityOptions<Group> {
 	/**
 	 * Set the value of property {@code type}.
 	 *
-	 * @param type the type to set
+	 * @param type the type
 	 */
 	public void setType(GroupType type) {
 		this.type = type;
@@ -81,7 +81,7 @@ public class GroupOptions extends EntityOptions<Group> {
 	/**
 	 * Set the value of property {@code types}.
 	 *
-	 * @param types the types to set
+	 * @param types the types
 	 */
 	public void setTypes(List<GroupType> types) {
 		this.types = types;
@@ -99,7 +99,7 @@ public class GroupOptions extends EntityOptions<Group> {
 	/**
 	 * Set the value of property {@code orgs}.
 	 *
-	 * @param orgs the orgs to set
+	 * @param orgs the orgs
 	 */
 	public void setOrgs(Boolean orgs) {
 		this.orgs = orgs;
@@ -117,7 +117,7 @@ public class GroupOptions extends EntityOptions<Group> {
 	/**
 	 * Set the value of property {@code ops}.
 	 *
-	 * @param ops the ops to set
+	 * @param ops the ops
 	 */
 	public void setOps(Boolean ops) {
 		this.ops = ops;
@@ -135,7 +135,7 @@ public class GroupOptions extends EntityOptions<Group> {
 	/**
 	 * Set the value of property {@code tree}.
 	 *
-	 * @param tree the tree to set
+	 * @param tree the tree
 	 */
 	public void setTree(Boolean tree) {
 		this.tree = tree;

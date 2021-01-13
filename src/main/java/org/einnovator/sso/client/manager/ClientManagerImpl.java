@@ -97,7 +97,7 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	
 
 	@Override
-	public Client updateClient(Client client, RequestOptions options) {
+	public Client updateClient(Client client, ClientOptions options) {
 		try {
 			ssoClient.updateClient(client, options);
 			evictCaches(client.getUuid());
@@ -109,7 +109,7 @@ public class ClientManagerImpl extends ManagerBase implements ClientManager {
 	}
 	
 	@Override
-	public boolean deleteClient(String clientId, RequestOptions options) {
+	public boolean deleteClient(String clientId, ClientOptions options) {
 		try {
 			ssoClient.deleteClient(clientId, options);
 			evictCaches(clientId);

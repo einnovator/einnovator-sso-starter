@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Options for {@code Role} lookup.
+ * Options for {@code Role} lookup and operations.
  * 
  * @see RoleFilter
  * @see org.einnovator.sso.client.manager.RoleManager

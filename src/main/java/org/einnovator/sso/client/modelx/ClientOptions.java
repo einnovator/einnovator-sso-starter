@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 
 /**
- * Options for {@code Client} lookup.
+ * Options for {@code Client} lookup and operations.
  * 
  * @see ClientFilter
  * @see org.einnovator.sso.client.manager.ClientManager

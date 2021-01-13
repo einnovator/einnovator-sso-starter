@@ -76,7 +76,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	/**
-	 * @param cacheManager the cacheManager to set
+	 * @param cacheManager the cacheManager
 	 */
 	public void setCacheManager(CacheManager cacheManager) {
 		this.cacheManager = cacheManager;
@@ -90,7 +90,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 
 	/**
-	 * @param ssoClient the ssoClient to set
+	 * @param ssoClient the ssoClient
 	 */
 	public void setSsoClient(SsoClient ssoClient) {
 		this.ssoClient = ssoClient;
@@ -195,7 +195,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	}
 	
 	@Override
-	public URI createUser(User user, RequestOptions options) {
+	public URI createUser(User user, UserOptions options) {
 		try {
 			return ssoClient.createUser(user, options);
 		} catch (RuntimeException e) {
@@ -208,7 +208,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 
 	@Override
-	public User updateUser(User user, RequestOptions options) {
+	public User updateUser(User user, UserOptions options) {
 		try {
 			ssoClient.updateUser(user, options);
 			evictCaches(user.getUuid());
@@ -224,7 +224,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 	
 	@Override
 	@CacheEvict(value=CACHE_USER, key="#id")
-	public boolean deleteUser(String userId, RequestOptions options) {
+	public boolean deleteUser(String userId, UserOptions options) {
 		try {
 			ssoClient.deleteUser(userId, options);
 			return true;

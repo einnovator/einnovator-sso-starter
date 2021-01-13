@@ -77,11 +77,11 @@ public interface RoleManager {
 	 * For sub{@code Group}s: owner or role <b>PERMISSION_MANAGER</b>, owner or role <b>PERMISSION_MANAGER</b> in parent {@code Group}, or owner or role <b>GROUP_MANAGER</b> of tree root {@code Group}.
 	 * 
 	 * @param role the {@code Role}
-	 * @param options optional {@code RequestOptions}
+	 * @param options optional {@code RoleOptions}
 
 	 * @return the same {@code Role}, or null if request failed
 	 */
-	Role updateRole(Role role, RequestOptions options);
+	Role updateRole(Role role, RoleOptions options);
 
 	/**
 	 * Delete existing {@code Role}

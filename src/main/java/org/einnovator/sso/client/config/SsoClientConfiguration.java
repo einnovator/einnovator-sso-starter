@@ -88,7 +88,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code server}.
 	 *
-	 * @param server the server to set
+	 * @param server the server
 	 */
 	public void setServer(String server) {
 		this.server = server;
@@ -133,7 +133,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code clientId}.
 	 *
-	 * @param clientId the clientId to set
+	 * @param clientId the clientId
 	 */
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
@@ -151,7 +151,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code clientSecret}.
 	 *
-	 * @param clientSecret the clientSecret to set
+	 * @param clientSecret the clientSecret
 	 */
 	public void setClientSecret(String clientSecret) {
 		this.clientSecret = clientSecret;
@@ -169,7 +169,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code scopes}.
 	 *
-	 * @param scopes the scopes to set
+	 * @param scopes the scopes
 	 */
 	public void setScopes(List<String> scopes) {
 		this.scopes = scopes;
@@ -187,7 +187,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code redirectUri}.
 	 *
-	 * @param redirectUri the redirectUri to set
+	 * @param redirectUri the redirectUri
 	 */
 	public void setRedirectUri(String redirectUri) {
 		this.redirectUri = redirectUri;
@@ -205,7 +205,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code ignore}.
 	 *
-	 * @param ignore the ignore to set
+	 * @param ignore the ignore
 	 */
 	public void setIgnore(String[] ignore) {
 		this.ignore = ignore;
@@ -223,7 +223,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code ignoreInclude}.
 	 *
-	 * @param ignoreInclude the ignoreInclude to set
+	 * @param ignoreInclude the ignoreInclude
 	 */
 	public void setIgnoreInclude(String[] ignoreInclude) {
 		this.ignoreInclude = ignoreInclude;
@@ -241,7 +241,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code csrfIgnore}.
 	 *
-	 * @param csrfIgnore the csrfIgnore to set
+	 * @param csrfIgnore the csrfIgnore
 	 */
 	public void setCsrfIgnore(String[] csrfIgnore) {
 		this.csrfIgnore = csrfIgnore;
@@ -259,7 +259,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code csrfEnabled}.
 	 *
-	 * @param csrfEnabled the csrfEnabled to set
+	 * @param csrfEnabled the csrfEnabled
 	 */
 	public void setCsrfEnabled(Boolean csrfEnabled) {
 		this.csrfEnabled = csrfEnabled;
@@ -277,7 +277,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code sessionCreationPolicy}.
 	 *
-	 * @param sessionCreationPolicy the sessionCreationPolicy to set
+	 * @param sessionCreationPolicy the sessionCreationPolicy
 	 */
 	public void setSessionCreationPolicy(SessionCreationPolicy sessionCreationPolicy) {
 		this.sessionCreationPolicy = sessionCreationPolicy;
@@ -295,7 +295,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code connection}.
 	 *
-	 * @param connection the connection to set
+	 * @param connection the connection
 	 */
 	public void setConnection(ConnectionConfiguration connection) {
 		this.connection = connection;
@@ -313,7 +313,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code access}.
 	 *
-	 * @param access the access to set
+	 * @param access the access
 	 */
 	public void setAccess(AccessConfiguration access) {
 		this.access = access;
@@ -332,7 +332,7 @@ public class SsoClientConfiguration extends ObjectBase {
 	/**
 	 * Set the value of property {@code registration}.
 	 *
-	 * @param registration the registration to set
+	 * @param registration the registration
 	 */
 	public void setRegistration(SsoRegistration registration) {
 		this.registration = registration;

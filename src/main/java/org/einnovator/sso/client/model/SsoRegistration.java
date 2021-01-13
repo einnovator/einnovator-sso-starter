@@ -62,7 +62,7 @@ public class SsoRegistration extends ObjectBase {
 	/**
 	 * Set the value of property {@code auto}.
 	 *
-	 * @param auto the auto to set
+	 * @param auto the auto
 	 */
 	public void setAuto(boolean auto) {
 		this.auto = auto;
@@ -82,7 +82,7 @@ public class SsoRegistration extends ObjectBase {
 	/**
 	 * Set the value of property {@code application}.
 	 *
-	 * @param application the application to set
+	 * @param application the application
 	 */
 	public void setApplication(Application application) {
 		this.application = application;
@@ -102,7 +102,7 @@ public class SsoRegistration extends ObjectBase {
 	/**
 	 * Set the value of property {@code roles}.
 	 *
-	 * @param roles the roles to set
+	 * @param roles the roles
 	 */
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
@@ -121,7 +121,7 @@ public class SsoRegistration extends ObjectBase {
 	/**
 	 * Set the value of property {@code properties}.
 	 *
-	 * @param properties the properties to set
+	 * @param properties the properties
 	 */
 	public void setProperties(Map<String, Object> properties) {
 		this.properties = properties;

@@ -4,6 +4,11 @@ import java.net.URI;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.einnovator.sso.client.SsoClient;
+import org.einnovator.sso.client.model.Invitation;
+import org.einnovator.sso.client.model.InvitationStats;
+import org.einnovator.sso.client.modelx.InvitationFilter;
+import org.einnovator.sso.client.modelx.InvitationOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -13,14 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
-
-import org.einnovator.sso.client.SsoClient;
-
-import org.einnovator.sso.client.model.Invitation;
-import org.einnovator.sso.client.modelx.InvitationFilter;
-import org.einnovator.sso.client.modelx.InvitationOptions;
-import org.einnovator.util.web.RequestOptions;
-import org.einnovator.sso.client.model.InvitationStats;
 
 public class InvitationManagerImpl implements InvitationManager {
 	
@@ -100,7 +97,7 @@ public class InvitationManagerImpl implements InvitationManager {
 
 
 	@Override
-	public InvitationStats getInvitationStats(RequestOptions options) {
+	public InvitationStats getInvitationStats(InvitationOptions options) {
 		try {
 			InvitationStats stats = client.getInvitationStats(options);
 			if (stats == null) {
@@ -141,7 +138,7 @@ public class InvitationManagerImpl implements InvitationManager {
 	}
 
 	@Override
-	public Invitation updateInvitation(Invitation invitation, RequestOptions options) {
+	public Invitation updateInvitation(Invitation invitation, InvitationOptions options) {
 		try {
 			if (StringUtils.hasText(invitation.getOwner())) {
 				evictCachesForUser(invitation.getOwner());
@@ -159,7 +156,7 @@ public class InvitationManagerImpl implements InvitationManager {
 
 	@Override
 	@CacheEvict(value=CACHE_INVITATION, key="#id")
-	public boolean deleteInvitation(String id, RequestOptions options) {
+	public boolean deleteInvitation(String id, InvitationOptions options) {
 		try {
 			client.deleteInvitation(id, options);
 			return true;
