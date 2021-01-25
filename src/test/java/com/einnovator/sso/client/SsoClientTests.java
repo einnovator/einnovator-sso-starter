@@ -1,11 +1,11 @@
 package com.einnovator.sso.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.net.URI;
 import java.util.Random;
@@ -25,9 +25,9 @@ import org.einnovator.util.PageUtil;
 import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Address;
 import org.einnovator.util.model.Phone;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -36,13 +36,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = { SsoClientTests.TestConfig.class,
 		SsoClientSecurityConfigurer.class }, webEnvironment = WebEnvironment.MOCK)
 @EnableCaching
 @TestPropertySource(properties = { "sso.server=http://localhost:2001" })
+@ExtendWith(SpringExtension.class)
 public class SsoClientTests {
 
 	@Autowired
@@ -67,7 +67,7 @@ public class SsoClientTests {
 
 	}
 
-	@Before
+	@BeforeEach
 	public void init() {
 		config.setClientId(CLIENT_ID);
 		config.setClientSecret(CLIENT_SECRET);

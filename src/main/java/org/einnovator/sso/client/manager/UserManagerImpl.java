@@ -32,7 +32,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 public class UserManagerImpl extends ManagerBase implements UserManager {
 
 	public static final String CACHE_USER = "User";
-	public static final Pageable PAGE_SIZE_ALL = new PageRequest(0, Integer.MAX_VALUE);
+	public static final Pageable PAGE_SIZE_ALL = PageRequest.of(0, Integer.MAX_VALUE);
 
 	private final Log logger = LogFactory.getLog(getClass());
 	

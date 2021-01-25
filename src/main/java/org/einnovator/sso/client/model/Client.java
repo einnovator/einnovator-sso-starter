@@ -14,7 +14,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.Jackson2ArrayOrStringDeserializer;
-import org.springframework.security.oauth2.provider.client.JacksonArrayOrStringDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -38,7 +37,6 @@ public class Client extends EntityBase {
 	@JsonProperty("client_secret")
 	private String clientSecret;
 
-	@org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
 	@JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
 	private Set<String> scope = Collections.emptySet();
 

@@ -357,7 +357,7 @@ public class RoleManagerImpl extends ManagerBase implements RoleManager {
 				filter.setType(RoleType.GLOBAL);
 			}
 			filter.setGroup(groupId);
-			Page<Role> page = listRoles(filter, new PageRequest(0, Integer.MAX_VALUE));
+			Page<Role> page = listRoles(filter, PageRequest.of(0, Integer.MAX_VALUE));
 			if (page == null || page.getContent() == null) {
 				return null;
 			}

@@ -1,22 +1,20 @@
 package com.einnovator.sso.client.manager;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes=SsoClientSecurityConfigurer.class, webEnvironment=WebEnvironment.MOCK)
 @SuppressWarnings("unused")
 public class UserManagerMetricsTests {
@@ -36,7 +34,7 @@ public class UserManagerMetricsTests {
 	@Autowired
 	private GroupManager groupManager;
 	
-	@Before
+	@BeforeEach
 	public void init() {
 		client.getToken(TEST_USER2, TEST_PASSWORD);
 	}

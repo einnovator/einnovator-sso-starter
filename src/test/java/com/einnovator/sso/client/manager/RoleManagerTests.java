@@ -1,7 +1,7 @@
 package com.einnovator.sso.client.manager;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,10 +14,9 @@ import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.Role;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.util.security.SecurityUtil;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -27,7 +26,6 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes=SsoClientSecurityConfigurer.class, webEnvironment=WebEnvironment.MOCK)
 @SuppressWarnings("unused")
 @TestPropertySource(properties = { "sso.server=http://localhost:2001" })
@@ -55,7 +53,7 @@ public class RoleManagerTests {
 	public void contextLoads() {
 	}
 	
-	@Before
+	@BeforeEach
 	public void init() {
 		OAuth2AccessToken token = client.getToken(TEST_USER, TEST_PASSWORD);
 		System.out.println(token);
@@ -70,7 +68,7 @@ public class RoleManagerTests {
 
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void checkPrincipalPermissions() {
 		Collection<? extends GrantedAuthority> authorities = SecurityUtil.getAuthorities();
 		assertNotNull(authorities);

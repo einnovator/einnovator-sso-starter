@@ -110,7 +110,7 @@ public class SsoClient {
 
 	@Autowired
 	@Qualifier("ssoOAuth2RestTemplate")
-	private OAuth2RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Autowired
 	private OAuth2ClientContext oauth2ClientContext;
@@ -144,20 +144,22 @@ public class SsoClient {
 	 * @param restTemplate the {@code OAuth2RestTemplate} to use for HTTP transport
 	 * @param config the {@code SsoClientConfiguration}
 	 */
-	public SsoClient(OAuth2RestTemplate restTemplate, SsoClientConfiguration config) {
+	public SsoClient(RestTemplate restTemplate, SsoClientConfiguration config) {
 		this.config = config;
 		this.restTemplate = restTemplate;
-		this.oauth2ClientContext = restTemplate.getOAuth2ClientContext();
+		if (restTemplate instanceof OAuth2RestTemplate) {
+			this.oauth2ClientContext = ((OAuth2RestTemplate)restTemplate).getOAuth2ClientContext();			
+		}
 	}
 
 	/**
 	 * Create instance of {@code SsoClient}.
 	 *
-	 * @param restTemplate the {@code OAuth2RestTemplate} used for HTTP transport
+	 * @param restTemplate the {@code RestTemplate} used for HTTP transport
 	 * @param config the {@code SsoClientConfiguration}
 	 * @param web true if auto-detect web-environment 
 	 */
-	public SsoClient(OAuth2RestTemplate restTemplate, SsoClientConfiguration config, boolean web) {
+	public SsoClient(RestTemplate restTemplate, SsoClientConfiguration config, boolean web) {
 		this(restTemplate, config);
 		this.web = web;
 	}
@@ -204,7 +206,7 @@ public class SsoClient {
 	 *
 	 * @return the restTemplate
 	 */
-	public OAuth2RestTemplate getRestTemplate() {
+	public RestTemplate getRestTemplate() {
 		return restTemplate;
 	}
 
@@ -213,7 +215,7 @@ public class SsoClient {
 	 *
 	 * @param restTemplate the restTemplate
 	 */
-	public void setRestTemplate(OAuth2RestTemplate restTemplate) {
+	public void setRestTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 
@@ -1438,7 +1440,7 @@ public class SsoClient {
 	 * @throws RestClientException if request fails
 	 */
 	protected <T> ResponseEntity<T> exchange(RequestEntity<?> request, Class<T> responseType, RequestOptions options) throws RestClientException {
-		OAuth2RestTemplate restTemplate = getRequiredRestTemplate(options);
+		RestTemplate restTemplate = getRequiredRestTemplate(options);
 		try {
 			return exchange(restTemplate, request, responseType);			
 		} catch (RuntimeException e) {
@@ -1455,13 +1457,13 @@ public class SsoClient {
 	 * May be overriden by sub-classes for custom/advanced functionality.
 	 * 
 	 * @param <T> response type
-	 * @param restTemplate the {@code OAuth2RestTemplate} to use
+	 * @param restTemplate the {@code RestTemplate} to use
 	 * @param request the {@code RequestEntity}
 	 * @param responseType the response type
 	 * @return the result {@code ResponseEntity}
 	 * @throws RestClientException if request fails
 	 */
-	protected <T> ResponseEntity<T> exchange(OAuth2RestTemplate restTemplate, RequestEntity<?> request, Class<T> responseType) throws RestClientException {
+	protected <T> ResponseEntity<T> exchange(RestTemplate restTemplate, RequestEntity<?> request, Class<T> responseType) throws RestClientException {
 		if (autoSetupToken) {
 			setupToken();
 		}
@@ -1479,13 +1481,13 @@ public class SsoClient {
 	 * @param options optional {@code RequestOptions}
 	 * @return the {@code OAuth2RestTemplate}
 	 */
-	protected OAuth2RestTemplate getRequiredRestTemplate(RequestOptions options) {
+	protected RestTemplate getRequiredRestTemplate(RequestOptions options) {
 		if (options!=null) {
 			if (Boolean.TRUE.equals(options.getRunAsClient())) {
 				return setupClientOAuth2RestTemplate(true, false);
 			}
 		}
-		OAuth2RestTemplate restTemplate = this.restTemplate;
+		RestTemplate restTemplate = this.restTemplate;
 		if (WebUtil.getHttpServletRequest()==null && web) {
 			return setupClientOAuth2RestTemplate(true, false);
 		}			

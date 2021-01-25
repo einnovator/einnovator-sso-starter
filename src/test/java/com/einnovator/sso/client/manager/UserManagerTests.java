@@ -1,7 +1,7 @@
 package com.einnovator.sso.client.manager;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
@@ -11,9 +11,8 @@ import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.manager.GroupManager;
 import org.einnovator.sso.client.manager.UserManager;
 import org.einnovator.sso.client.model.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes=SsoClientSecurityConfigurer.class, webEnvironment=WebEnvironment.MOCK)
 @SuppressWarnings("unused")
 @TestPropertySource(properties = { "sso.server=http://localhost:2001" })
@@ -53,7 +51,7 @@ public class UserManagerTests {
 	public void contextLoads() {
 	}
 	
-	@Before
+	@BeforeEach
 	public void init() {
 		config.setClientId(CLIENT_ID);
 		config.setClientSecret(CLIENT_SECRET);

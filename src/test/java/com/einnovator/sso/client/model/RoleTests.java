@@ -3,13 +3,13 @@
  */
 package com.einnovator.sso.client.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.einnovator.sso.client.model.Role;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 
 /**

@@ -2,9 +2,9 @@ package com.einnovator.sso.client;
 
 import static com.einnovator.sso.client.Profiler.dump;
 import static com.einnovator.sso.client.Profiler.run;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URI;
 import java.util.UUID;
@@ -18,10 +18,9 @@ import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Address;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -31,7 +30,6 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = { SsoClientLoadTests.TestConfig.class,
 		SsoClientSecurityConfigurer.class }, webEnvironment = WebEnvironment.MOCK)
 @EnableCaching
@@ -60,7 +58,7 @@ public class SsoClientLoadTests {
 
 	}
 
-	@Before
+	@BeforeEach
 	public void init() {
 		config.setClientId(CLIENT_ID);
 		config.setClientSecret(CLIENT_SECRET);
@@ -149,7 +147,7 @@ public class SsoClientLoadTests {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void createUserAndGetTest() {
 		String username = "tdd-" + UUID.randomUUID().toString();
 		User user = new User().withUsername(username).withEmail(username + "@test.org")

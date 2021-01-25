@@ -1,8 +1,8 @@
 package com.einnovator.sso.client;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URI;
 import java.util.UUID;
@@ -13,9 +13,8 @@ import org.einnovator.sso.client.SsoClient;
 import org.einnovator.sso.client.config.SsoClientConfiguration;
 import org.einnovator.sso.client.config.SsoClientSecurityConfigurer;
 import org.einnovator.sso.client.model.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -25,7 +24,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes= {SsoClientTokenTests.TestConfig.class, SsoClientSecurityConfigurer.class}, webEnvironment=WebEnvironment.MOCK)
 @EnableCaching
 @TestPropertySource(properties = { "sso.server=http://localhost:2001" })
@@ -48,7 +46,7 @@ public class SsoClientTokenTests {
 		
 	}
 	
-	@Before
+	@BeforeEach
 	public void init() {
 		client.setupClientToken(TEST_CLIENT_ID, TEST_CLIENT_SECRET);
 	}

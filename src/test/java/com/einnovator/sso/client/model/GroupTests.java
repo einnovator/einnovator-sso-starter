@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.einnovator.sso.client.model.Group;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  *

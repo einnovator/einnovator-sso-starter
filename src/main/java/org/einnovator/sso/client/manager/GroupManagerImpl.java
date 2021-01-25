@@ -319,7 +319,7 @@ public class GroupManagerImpl extends ManagerBase implements GroupManager {
 			}
 		}
 		if (remote) {
-			Page<Group> page = listGroupsForUser(username, filter, new PageRequest(0, Integer.MAX_VALUE));
+			Page<Group> page = listGroupsForUser(username, filter, PageRequest.of(0, Integer.MAX_VALUE));
 			if (page!=null) {
 				return page.getContent();
 			}
