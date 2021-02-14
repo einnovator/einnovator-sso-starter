@@ -534,7 +534,7 @@ public class SsoClient {
 		id = encodeId(id);
 		URI uri = makeURI(SsoEndpoints.user(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		RequestEntity<Void> request = RequestEntity.delete(uri).build();
 		exchange(request, Void.class, options);
 	}
 	
@@ -677,7 +677,7 @@ public class SsoClient {
 		id = encode(id);
 		URI uri = makeURI(SsoEndpoints.group(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		RequestEntity<Void> request = RequestEntity.delete(uri).build();
 		exchange(request, Void.class, options);
 	}
 	
@@ -885,7 +885,7 @@ public class SsoClient {
 		URI uri = makeURI(SsoEndpoints.groupMembers(groupId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		uri = UriUtils.appendQueryParameter(uri, "username", userId);
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		RequestEntity<Void> request = RequestEntity.delete(uri).build();
 		exchange(request, Void.class, options);
 	}
 	
@@ -1049,7 +1049,7 @@ public class SsoClient {
 	public void deleteInvitation(String id, InvitationOptions options) {
 		URI uri = makeURI(SsoEndpoints.invitation(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		RequestEntity<Void> request = RequestEntity.delete(uri).build();
 		exchange(request, Void.class, options);
 	}
 	
@@ -1172,7 +1172,7 @@ public class SsoClient {
 	public void deleteRole(String id, RequestOptions options) {
 		URI uri = makeURI(SsoEndpoints.role(id, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		RequestEntity<Void> request = RequestEntity.delete(uri).build();
 		exchange(request, Void.class, options);
 	}
 	
@@ -1261,7 +1261,7 @@ public class SsoClient {
 		URI uri = makeURI(SsoEndpoints.roleBindings(roleId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
 		uri = UriUtils.appendQueryParameter(uri, "username", userId);
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		RequestEntity<Void> request = RequestEntity.delete(uri).build();
 		exchange(request, Void.class, options);
 	}
 	
@@ -1416,7 +1416,7 @@ public class SsoClient {
 		clientId = encodeId(clientId);
 		URI uri = makeURI(SsoEndpoints.client(clientId, config, isAdminRequest(options)));
 		uri = processURI(uri, options);
-		RequestEntity<Void> request = RequestEntity.delete(uri).accept(MediaType.APPLICATION_JSON).build();
+		RequestEntity<Void> request = RequestEntity.delete(uri).build();
 		exchange(request, Void.class, options);
 	}
 

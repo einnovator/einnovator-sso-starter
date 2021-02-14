@@ -175,7 +175,7 @@ public class SsoClientTests {
 		assertFalse(id.isEmpty());
 		User user2 = client.getUser(id, null);
 		assertNotNull(user2);
-		assertEquals(id, user2.getId());
+		assertEquals(id, user2.getUuid());
 		assertEquals(user.getUsername(), user2.getUsername());
 
 		System.out.println(user2);
