@@ -21,6 +21,7 @@ import org.einnovator.sso.client.model.Member;
 import org.einnovator.sso.client.model.User;
 import org.einnovator.sso.client.modelx.InvitationOptions;
 import org.einnovator.sso.client.modelx.UserFilter;
+import org.einnovator.sso.client.modelx.UserOptions;
 import org.einnovator.util.PageUtil;
 import org.einnovator.util.UriUtils;
 import org.einnovator.util.model.Address;
@@ -179,7 +180,7 @@ public class SsoClientTests {
 		assertEquals(user.getUsername(), user2.getUsername());
 
 		System.out.println(user2);
-		client.deleteUser(id, null);
+		client.deleteUser(id, new UserOptions());
 		try {
 			client.getUser(id, null);
 			fail();
