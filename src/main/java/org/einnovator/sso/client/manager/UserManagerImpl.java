@@ -148,13 +148,13 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			return user;
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode()!=HttpStatus.NOT_FOUND) {
-				if (options==null || !options.isSilent()) {
+				if (options==null || !Boolean.TRUE.equals(options.getSilent())) {
 					logger.error(String.format("getUser: %s %s %s", e, id, options));
 				}
 			}
 			return null;
 		} catch (RuntimeException e) {
-			if (options==null || !options.isSilent()) {
+			if (options==null || !Boolean.TRUE.equals(options.getSilent())) {
 				logger.error(String.format("getUser: %s %s %s", e, id, options));								
 			}
 			return null;
@@ -168,7 +168,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		try {
 			return ssoClient.checkUser(id, options);	
 		} catch (RuntimeException e) {
-			if (options==null || !options.isSilent()) {
+			if (options==null || !Boolean.TRUE.equals(options.getSilent())) {
 				logger.error(String.format("checkUser: %s %s %s", e, id, options));								
 			}
 			return null;
@@ -182,7 +182,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		try {
 			return ssoClient.loginUser(id, options);	
 		} catch (RuntimeException e) {
-			if (options==null || !options.isSilent()) {
+			if (options==null || !Boolean.TRUE.equals(options.getSilent())) {
 				logger.error(String.format("loginUser: %s %s %s", e, id, options));								
 			}
 			return null;
@@ -199,7 +199,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 		try {
 			return ssoClient.createUser(user, options);
 		} catch (RuntimeException e) {
-			if (options==null || !options.isSilent()) {
+			if (options==null || !Boolean.TRUE.equals(options.getSilent())) {
 				logger.error(String.format("createUser: %s", e));								
 			}
 			return null;
@@ -214,7 +214,7 @@ public class UserManagerImpl extends ManagerBase implements UserManager {
 			evictCaches(user.getUuid());
 			return user;
 		} catch (RuntimeException e) {
-			if (!options.isSilent()) {
+			if (!Boolean.TRUE.equals(options.getSilent())) {
 				logger.error(String.format("updateUser: %s", e));								
 			}
 			return null;
