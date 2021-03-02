@@ -25,13 +25,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserOptions extends EntityOptions<User> {
 
-	public static final UserOptions ORGS = new UserOptions(true, false, false, false, false);
+	public static final UserOptions ORGS = new UserOptions(true, false, false, false);
 
-	public static final UserOptions ORGS_OPS = new UserOptions(true, true, false, false, false);
+	public static final UserOptions ORGS_OPS = new UserOptions(true, true, false, false);
 
-	public static final UserOptions ORGS_OPS_TEAMS = new UserOptions(true, true, true, false, false);
+	public static final UserOptions ORGS_OPS_TEAMS = new UserOptions(true, true, true, false);
 
-	public static final UserOptions FULL = new UserOptions(true, true, true, true, true);
+	public static final UserOptions FULL = new UserOptions(true, true, true, true);
 
 	public static final UserOptions DEFAULT = ORGS;
 
@@ -41,75 +41,232 @@ public class UserOptions extends EntityOptions<User> {
 
 	private Boolean teams;
 
-	private Boolean authorities;
+	private Boolean notify;
+
+	private Boolean sms;
+
+	private Boolean code;
 	
+	//
+	// Constructors
+	//
+
+	/**
+	 * Create instance of {@code UserOptions}.
+	 *
+	 */
 	public UserOptions() {
 	}
 
-	public UserOptions(Boolean orgs, Boolean ops, Boolean teams, Boolean roles, Boolean authorities) {
+	/**
+	 * Create instance of {@code UserOptions}.
+	 * 
+	 * @param orgs fetch group membership in organizations
+	 * @param teams fetch group membership in teams
+	 * @param roles fetch roles
+
+	 * 
+	 */
+	public UserOptions(Boolean orgs, Boolean ops, Boolean teams, Boolean roles) {
 		super();
 		this.orgs = orgs;
 		this.ops = ops;
 		this.teams = teams;
-		this.authorities = authorities;
 	}
 
-
+	//
+	// Getter/Setter
+	//
+	
+	/**
+	 * Get the value of property {@code orgs}.
+	 *
+	 * @return the value of {@code orgs}
+	 */
 	public Boolean getOrgs() {
 		return orgs;
 	}
 
+	/**
+	 * Set the value of property {@code orgs}.
+	 *
+	 * @param orgs the value of {@code orgs}
+	 */
 	public void setOrgs(Boolean orgs) {
 		this.orgs = orgs;
 	}
 
+	/**
+	 * Get the value of property {@code ops}.
+	 *
+	 * @return the value of {@code ops}
+	 */
 	public Boolean getOps() {
 		return ops;
 	}
 
+	/**
+	 * Set the value of property {@code ops}.
+	 *
+	 * @param ops the value of {@code ops}
+	 */
 	public void setOps(Boolean ops) {
 		this.ops = ops;
 	}
 
+	/**
+	 * Get the value of property {@code teams}.
+	 *
+	 * @return the value of {@code teams}
+	 */
 	public Boolean getTeams() {
 		return teams;
 	}
 
+	/**
+	 * Set the value of property {@code teams}.
+	 *
+	 * @param teams the value of {@code teams}
+	 */
 	public void setTeams(Boolean teams) {
 		this.teams = teams;
 	}
 
+	/**
+	 * Get the value of property {@code notify}.
+	 *
+	 * @return the value of {@code notify}
+	 */
+	public Boolean getNotify() {
+		return notify;
+	}
+
+	/**
+	 * Set the value of property {@code notify}.
+	 *
+	 * @param notify the value of {@code notify}
+	 */
+	public void setNotify(Boolean notify) {
+		this.notify = notify;
+	}
+
+	/**
+	 * Get the value of property {@code sms}.
+	 *
+	 * @return the value of {@code sms}
+	 */
+	public Boolean getSms() {
+		return sms;
+	}
+
+	/**
+	 * Set the value of property {@code sms}.
+	 *
+	 * @param sms the value of {@code sms}
+	 */
+	public void setSms(Boolean sms) {
+		this.sms = sms;
+	}
+
+	/**
+	 * Get the value of property {@code code}.
+	 *
+	 * @return the value of {@code code}
+	 */
+	public Boolean getCode() {
+		return code;
+	}
+
+	/**
+	 * Set the value of property {@code code}.
+	 *
+	 * @param code the value of {@code code}
+	 */
+	public void setCode(Boolean code) {
+		this.code = code;
+	}
+
+
+	//
+	// With
+	//
 	
 	/**
-	 * Get the value of property {@code authorities}.
+	 * Set the value of property {@code orgs}.
 	 *
-	 * @return the authorities
+	 * @param orgs the value of {@code orgs}
+	 * @return this
 	 */
-	public Boolean getAuthorities() {
-		return authorities;
+	public UserOptions withOrgs(Boolean orgs) {
+		this.orgs = orgs;
+		return this;
 	}
 
 	/**
-	 * Set the value of property {@code authorities}.
+	 * Set the value of property {@code ops}.
 	 *
-	 * @param authorities the authorities
+	 * @param ops the value of {@code ops}
+	 * @return this
 	 */
-	public void setAuthorities(Boolean authorities) {
-		this.authorities = authorities;
+	public UserOptions withOps(Boolean ops) {
+		this.ops = ops;
+		return this;
 	}
 
-
-
-	/* (non-Javadoc)
-	 * @see org.einnovator.util.model.ObjectBase#toString(org.einnovator.util.model.ToStringCreator)
+	/**
+	 * Set the value of property {@code teams}.
+	 *
+	 * @param teams the value of {@code teams}
+	 * @return this
 	 */
+	public UserOptions withTeams(Boolean teams) {
+		this.teams = teams;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code notify}.
+	 *
+	 * @param notify the value of {@code notify}
+	 * @return this
+	 */
+	public UserOptions withNotify(Boolean notify) {
+		this.notify = notify;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code sms}.
+	 *
+	 * @param sms the value of {@code sms}
+	 * @return this
+	 */
+	public UserOptions withSms(Boolean sms) {
+		this.sms = sms;
+		return this;
+	}
+
+	/**
+	 * Set the value of property {@code code}.
+	 *
+	 * @param code the value of {@code code}
+	 * @return this
+	 */
+	public UserOptions withCode(Boolean code) {
+		this.code = code;
+		return this;
+	}
+
+	
 	@Override
 	public ToStringCreator toString(ToStringCreator creator) {
 		return super.toString(creator
 				.append("orgs", orgs)
 				.append("ops", ops)
 				.append("teams", teams)
-				.append("authorities", authorities)
+				.append("notify", notify)
+				.append("sms", sms)
+				.append("code", code)
 				);
 	}
 	
@@ -139,7 +296,6 @@ public class UserOptions extends EntityOptions<User> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((authorities == null) ? 0 : authorities.hashCode());
 		result = prime * result + ((ops == null) ? 0 : ops.hashCode());
 		result = prime * result + ((orgs == null) ? 0 : orgs.hashCode());
 		result = prime * result + ((teams == null) ? 0 : teams.hashCode());
@@ -158,11 +314,6 @@ public class UserOptions extends EntityOptions<User> {
 		if (getClass() != obj.getClass())
 			return false;
 		UserOptions other = (UserOptions) obj;
-		if (authorities == null) {
-			if (other.authorities != null)
-				return false;
-		} else if (!authorities.equals(other.authorities))
-			return false;
 		if (ops == null) {
 			if (other.ops != null)
 				return false;
