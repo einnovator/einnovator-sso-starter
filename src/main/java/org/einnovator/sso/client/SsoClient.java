@@ -1444,7 +1444,7 @@ public class SsoClient {
 		try {
 			return exchange(restTemplate, request, responseType);			
 		} catch (RuntimeException e) {
-			if (options!=null && !options.isSingleton()) {
+			if (options!=null && !Boolean.TRUE.equals(options.getSingleton())) {
 				options.setResult(new Result<Object>(e));
 			}
 			throw e;

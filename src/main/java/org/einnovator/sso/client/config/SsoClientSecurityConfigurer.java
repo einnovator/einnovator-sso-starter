@@ -63,6 +63,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableCaching
 @Import({OAuth2ResourcesConfigurer.class})
 @Profile("!sso_exclude")
+@SuppressWarnings("deprecation")
 public class SsoClientSecurityConfigurer {
 
 
@@ -72,6 +73,7 @@ public class SsoClientSecurityConfigurer {
 	@Autowired
 	private SsoClientConfiguration config;
 	
+
 	@Autowired
 	private OAuth2ClientContext oauth2ClientContext;
 
@@ -143,6 +145,7 @@ public class SsoClientSecurityConfigurer {
 		return resource;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Bean
 	public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
